@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react'
-import Pokemon from './PokemonComponent';
+import Pokemon from './components/PokemonComponent';
 import './App.css'
+import gameStates from './utils/gameStates';
 
 function App() {
   const [pokemonList,setPokemonList] = useState([]);
@@ -9,6 +10,7 @@ function App() {
   const [currentUrl,setCurrentUrl] = useState("https://pokeapi.co/api/v2/pokemon");
   const [nextUrl,setNextUrl] = useState(null);
   const [previousUrl,setPreviousUrl] =useState(null);
+  const [currentGameState,setCurrentGameState] = useState("choose");
 
   useEffect(()=>{
     setPokemonData([]);
@@ -60,10 +62,15 @@ function App() {
   const goToPrevious = ()=>{
     setCurrentUrl(previousUrl);
   }
+  const handleStateChange = (newState) =>{
+    setCurrentGameState(newState);
+  }
+  const GameStateComponent = gameStates[currentGameState].component;
   return (
     <>
       <h1>Welcome to Reactmon</h1>
       <p className="error">{error}</p>
+      <GameStateComponent onFinish={handleStateChange}/>
       
       {pokemonData.length !== 0 && previousUrl && <button onClick={goToPrevious}>Previous</button>}
       {pokemonData.length !== 0 && nextUrl && <button onClick={goToNext}>Next</button>}
