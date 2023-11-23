@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import Pokemon from "../components/PokemonComponent";
 import { addPokemon } from "../utils/savePokemons";
-
-const pokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
+import { getPokemonData } from "../utils/fetchPokemons";
 
 const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
     const [pokemonList, setPokemonList] = useState([]);
@@ -16,9 +15,8 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
         try {
             const newPokemons = await Promise.all(
                 idList.map(async (id) => {
-                    const data = await fetch(pokemonUrl + id);
-                    const result = await data.json();
-                    return result;
+                    const pokemon = await getPokemonData(id,5);
+                    return pokemon;
                 })
             )
             setPokemonList(newPokemons);
@@ -38,7 +36,12 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
     }
 
     const pokemonComponents = pokemonList.map((pokemon) => {
-        return <Pokemon key={pokemon.id} data={pokemon} onClick={()=>handleSelectPokemon(pokemon)} />
+        return <Pokemon 
+            key={pokemon.id} 
+            data={pokemon} 
+            onClick={()=>handleSelectPokemon(pokemon)} 
+            isCombat={false}
+            />
     })
 
     return (

@@ -1,0 +1,19 @@
+
+.health-bar {
+    height:10px;
+    width: 500px;
+    border: 1px solid black;
+}
+
+.health-bar-fill {
+    height:100%;
+    background-color: green;
+}
+
+.medium-health {
+    background-color: yellow;
+}
+
+.low-health {
+    background-color: red;
+}

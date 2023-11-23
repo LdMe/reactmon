@@ -16,16 +16,13 @@ const addPokemon = (pokemon) => {
     if(pokemons.length >= 6){
         return false;
     }
-    const uniqueId = getLastPokemonUniqueId() + 1;
-    setLastPokemonUniqueId(uniqueId);
-    pokemon.uniqueId = uniqueId;
     pokemons.push(pokemon);
     savePokemons(pokemons);
     return true;
 }
 
 const getLastPokemonUniqueId = () =>{
-    const lastId = localStorage.getItem("lastUniqueId") || "1";
+    const lastId = localStorage.getItem("lastUniqueId") || "0";
     return parseInt(lastId);
 }
 const setLastPokemonUniqueId = (newUniqueId) =>{
@@ -41,5 +38,7 @@ const removePokemon = (pokemonToRemove) => {
 export {
     getPokemons,
     addPokemon,
-    removePokemon
+    removePokemon,
+    getLastPokemonUniqueId,
+    setLastPokemonUniqueId
 }
