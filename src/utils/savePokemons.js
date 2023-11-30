@@ -40,5 +40,6 @@ export {
     addPokemon,
     removePokemon,
     getLastPokemonUniqueId,
-    setLastPokemonUniqueId
+    setLastPokemonUniqueId,
+    savePokemons
 }

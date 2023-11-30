@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import Pokemon from "../components/PokemonComponent";
 import { addPokemon } from "../utils/savePokemons";
 import { getPokemonData } from "../utils/fetchPokemons";
+import PokemonContext from "../context/pokemonContext";
 
 const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
     const [pokemonList, setPokemonList] = useState([]);
     const [error, setError] = useState(null);
-
+    const {misPokemons,setMisPokemons} = useContext(PokemonContext);
     useEffect(() => {
         getPokemons();
-    }, [idList]);
+    }, []);
 
     const getPokemons = async () => {
         try {
@@ -27,6 +28,8 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
 
     const handleSelectPokemon = (pokemon) =>{
         if(addPokemon(pokemon)){
+            const newMisPokemons = [...misPokemons,pokemon];
+            setMisPokemons(newMisPokemons);
             alert(`has escogido el pokemon ${pokemon.name}, ¡cuídalo mucho!`);
         }
         else{

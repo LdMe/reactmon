@@ -8,7 +8,9 @@ const getPokemonData = async (pokemonId,level=5) => {
         const base_hp = result.stats[0].base_stat;
         const uniqueId = getLastPokemonUniqueId() + 1;
         setLastPokemonUniqueId(uniqueId);
+        console.log("pokemon data",result)
         const pokemonData = {
+            baseHp:base_hp,
             name: result.name,
             sprites: result.sprites,
             types:result.types,
@@ -17,7 +19,7 @@ const getPokemonData = async (pokemonId,level=5) => {
             hp:  base_hp * level,
             maxHp: base_hp * level,
             id:result.id,
-            uniqueId:uniqueId
+            uniqueId:uniqueId,
         }
         return pokemonData;
     } catch (error) {
@@ -30,10 +32,12 @@ const getMoveData = async(move) =>{
     try {
         const response  = await fetch(move.url);
         const data = await response.json();
+        console.log("move data",data)
         const moveData = {
             name: move.name,
             accuracy: data.accuracy || 100,
-            power: data.power || 0
+            power: data.power || 0,
+            type: data.type
         }
         return moveData;
     } catch (error) {
@@ -43,7 +47,24 @@ const getMoveData = async(move) =>{
 
 }
 
+const getTypeData = async(type) =>{
+    try {
+        const response  = await fetch(type.url);
+        const data = await response.json();
+        console.log("type data",data)
+        const typeData = {
+            name: type.name,
+            damage_relations: data.damage_relations,
+        }
+        return typeData;
+    } catch (error) {
+        console.error(error);
+        return null
+    }
+}
+
 export {
     getPokemonData,
-    getMoveData
+    getMoveData,
+    getTypeData
 }

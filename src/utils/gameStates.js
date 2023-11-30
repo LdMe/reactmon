@@ -1,6 +1,8 @@
 import ChoosePokemon from "../views/ChoosePokemon"
 import Map from "../views/Map";
 import WildCombat from "../views/WildCombat";
+import HealPokemons from "../views/HealPokemons";
+import MisPokemons from "../views/MisPokemons";
 
 const gameStates = {
     "choose": {
@@ -11,6 +13,12 @@ const gameStates = {
     },
     "wild":{
         component: WildCombat
+    },
+    "heal": {
+        component: HealPokemons
+    },
+    "list": {
+        component: MisPokemons
     }
 }
 
