@@ -1,6 +1,6 @@
 import { useState } from "react";
 import HealthBar from "./healthBar/HealthBar";
-import './Pokemon.css';
+import '../styles/Pokemon.css';
 const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false, children }) => {
     const [loaded, setLoaded] = useState(false);
     let className = "pokemon-card" + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat");

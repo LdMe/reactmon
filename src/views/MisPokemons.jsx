@@ -55,7 +55,7 @@ const MisPokemons = ({ onFinish, isView = true }) => {
                                 </section> */}
                                 <p><b>Tipos:</b> {
                                     pokemon.types.map((type) => {
-                                        return <span key={type.name} className={type.name}>{type.nameEs} </span>
+                                        return <span key={type.name} className={type.name + " type__name"}>{type.nameEs} </span>
                                     })
                                 }</p>
                                 <table >
@@ -77,20 +77,18 @@ const MisPokemons = ({ onFinish, isView = true }) => {
                                             )
                                         }
                                         )}
-                                        <tr>
+                                        <tr></tr>
+                                        <tr className="stat__row">
                                             <td>hp</td>
                                             <td>{getStatWithMultiplier(pokemon.stats[0])}</td>
-                                            <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr className="stat__row">
                                             <td>ataque</td>
                                             <td>{getStatWithMultiplier(pokemon.stats[1])}</td>
-                                            <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr className="stat__row">
                                             <td>defensa</td>
                                             <td>{getStatWithMultiplier(pokemon.stats[2])}</td>
-                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -103,7 +101,7 @@ const MisPokemons = ({ onFinish, isView = true }) => {
                 })}
             </section>
             {isView &&
-                <section className="pokemon-buttons">
+                <section className="pokemon-buttons button-footer">
                     <button onClick={() => onFinish("map")}>Volver</button>
                 </section>
             }
