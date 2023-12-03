@@ -1,7 +1,7 @@
 import { useState } from "react";
 import HealthBar from "./healthBar/HealthBar";
 import '../styles/Pokemon.css';
-const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false, children }) => {
+const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false,isEnemy=false, children }) => {
     const [loaded, setLoaded] = useState(false);
     let className = "pokemon-card" + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat");
     /* if(!loaded){
@@ -20,13 +20,13 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
                 {isCombat &&
                     <>
                         <div className="combat-info__stats">
-                            <p>hp: {data.hp}</p>
+                            {!isEnemy && <p>hp: {data.hp}</p>}
                             <p>nivel: {data.level}</p>
                         </div>
 
 
 
-                        <HealthBar maxHp={data.maxHp} hp={data.hp} />
+                        <HealthBar key={data._id} maxHp={data.maxHp} hp={data.hp} />
                     </>
                 }
             </section>

@@ -6,7 +6,7 @@ import '../styles/Combat.css';
 const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, buttons = [] }) => {
     const [firstPokemon, setFirstPokemon] = useState(pokemon1);
     const [secondPokemon, setSecondPokemon] = useState(pokemon2);
-    const [isAttacking, setIsAttacking] = useState(false);
+    const [isAttacking, setIsAttacking] = useState(true);
     const [turn, setTurn] = useState(0);
     const timeoutRef = useRef(null);
     useEffect(() => {
@@ -80,7 +80,7 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
 
     return (
         <>
-            <Pokemon data={pokemon2} />
+            <Pokemon data={pokemon2} isEnemy={true}/>
             <Pokemon data={pokemon1} isFront={false} />
             <section className="button-footer">
                 {!isAttacking ?

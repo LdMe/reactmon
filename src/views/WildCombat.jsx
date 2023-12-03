@@ -22,18 +22,24 @@ const WildCombat = ({ onFinish }) => {
     }, [isEnded,wildPokemon]);
 
     const finishCombat = async() => {
+        if (isEnded) {
+            return;
+        }
         if (wildPokemon!==null && wildPokemon.hp === 0) {
             const result = await addLevel(misPokemons[0]);
-            alert("Has ganado la pelea");
-            onFinish("map");
+            setIsEnded(true);
+                setTimeout(() => {
+                alert("Has ganado la pelea");
+                onFinish("map");
+                }, 1000);
         }
     }
     
     const getPokemonState = async () => {
         try {
             const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            const pokemonLevel = Math.floor(Math.random() * maxLevel *1.5) + 1;
-            //const pokemonLevel = 1;
+            //const pokemonLevel = Math.floor(Math.random() * maxLevel *1.5) + 1;
+            const pokemonLevel = 1;
             const id="random";
             const pokemonData = await getPokemon(id,pokemonLevel);
             

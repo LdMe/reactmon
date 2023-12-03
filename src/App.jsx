@@ -86,7 +86,10 @@ function App() {
       return null;
     }
     if (pokemons[0].hp === 0) {
+      dispatch({ type: "update", payload: newPokemon });
+      setTimeout(() => {
       handleAlivePokemons(pokemons);
+      }, 1000);
     }
     else {
       dispatch({ type: "update", payload: newPokemon });
