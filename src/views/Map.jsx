@@ -1,13 +1,27 @@
-
+import Logout from "../components/Logout";
+import { useContext } from "react";
+import loggedInContext from "../context/loggedInContext";
 const Map = ({ onFinish }) => {
 
+    const { isLogged } = useContext(loggedInContext);
     return (
         <>
             <h2>Mapa</h2>
-            <button onClick={()=>onFinish("choose")}>Elige un pokemon</button>
-            <button onClick={()=>onFinish("wild")}>Busca un pokemon salvaje</button>
-            <button onClick={()=>onFinish("heal")}>Curar pokemons</button>
-            <button onClick={()=>onFinish("list")}>Mis pokemons</button>
+            <section className="action-buttons">
+                {isLogged ?
+                    <>
+                        <button onClick={() => onFinish("wild")}>Busca un pokemon salvaje</button>
+                        <button onClick={() => onFinish("heal")}>Curar pokemons</button>
+                        <button onClick={() => onFinish("list")}>Mis pokemons</button>
+
+                        <Logout onFinish={onFinish} />
+
+                    </>
+                    :
+                    <button onClick={() => onFinish("login")}>Login</button>
+                }
+            </section>
+
         </>
     )
 }

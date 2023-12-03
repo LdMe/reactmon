@@ -7,7 +7,12 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true ,isSelected=fa
     /* if(!loaded){
         className += " hidden";
     } */
-    const frontOrBack = isFront ? "front_default" : "back_default";
+    let frontOrBack = isFront ? "front_default" : "back_default";
+    if(data.shiny){
+        frontOrBack = isFront ? "front_shiny" : "back_shiny";
+    }
+    let image = data.sprites.versions['generation-v']['black-white'].animated[frontOrBack];
+    
     return (
         <article className={className + (loaded ? "" : " hidden")} onClick={onClick} >
             <h2>{data.name}</h2>
@@ -19,7 +24,7 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true ,isSelected=fa
                     <HealthBar maxHp={data.maxHp} hp={data.hp} />
                 </section>
             }
-            <img src={data.sprites.versions['generation-v']['black-white'].animated[frontOrBack]} alt={`imagen de ${data.name}`} onLoad={() => setLoaded(true)} />
+            <img src={image} alt={`imagen de ${data.name}`} onLoad={() => setLoaded(true)} />
             {children}
         </article>
     )

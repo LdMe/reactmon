@@ -1,0 +1,23 @@
+.pokeball-heal {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    
+}
+.pokeball-heal.dark {
+    animation: darken 1s infinite;
+}
+
+@keyframes darken {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(0);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}

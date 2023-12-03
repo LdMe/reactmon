@@ -1,70 +1,147 @@
-import { getLastPokemonUniqueId,setLastPokemonUniqueId } from "./savePokemons";
-const pokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
+const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST || "http://localhost:3006";
 
-const getPokemonData = async (pokemonId,level=5) => {
+const addPokemon = async (pokemon) => {
     try {
-        const data = await fetch(pokemonUrl + pokemonId);
-        const result = await data.json();
-        const base_hp = result.stats[0].base_stat;
-        const uniqueId = getLastPokemonUniqueId() + 1;
-        setLastPokemonUniqueId(uniqueId);
-        console.log("pokemon data",result)
-        const pokemonData = {
-            baseHp:base_hp,
-            name: result.name,
-            sprites: result.sprites,
-            types:result.types,
-            moves:result.moves,
-            level:level,
-            hp:  base_hp * level,
-            maxHp: base_hp * level,
-            id:result.id,
-            uniqueId:uniqueId,
-        }
-        return pokemonData;
+        const data = await fetch(VITE_BACKEND_HOST+"/api/user/pokemons", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(pokemon)
+        });
+        const response = await data.json();
+        return response;
     } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
-
-const getMoveData = async(move) =>{
-    try {
-        const response  = await fetch(move.url);
-        const data = await response.json();
-        console.log("move data",data)
-        const moveData = {
-            name: move.name,
-            accuracy: data.accuracy || 100,
-            power: data.power || 0,
-            type: data.type
-        }
-        return moveData;
-    } catch (error) {
-        console.error(error);
         return null
     }
 
 }
 
-const getTypeData = async(type) =>{
-    try {
-        const response  = await fetch(type.url);
-        const data = await response.json();
-        console.log("type data",data)
-        const typeData = {
-            name: type.name,
-            damage_relations: data.damage_relations,
+const getPokemons = async () => {
+    const data = await fetch(VITE_BACKEND_HOST+"/api/user/pokemons", {
+        credentials: "include"
+    });
+    const errors = [
+        {
+            status: 401,
+            message: "No estas logeado"
+        },
+        {
+            status: 500,
+            message: "Error del servidor"
+        },
+        {
+            status: 404,
+            message: "No se encontraron pokemons"
+        },
+    ]
+    if (data.status !== 200) {
+        let error = errors.find((error) => error.status === data.status);
+        if (!error) {
+            error = {
+                status: data.status,
+                message: "Error desconocido"
+            }
         }
-        return typeData;
-    } catch (error) {
-        console.error(error);
-        return null
+        return [error,null];
     }
+    const pokemons = await data.json();
+    return [null,pokemons];
+}
+
+const getPokemon = async (id=null,level=5) => {
+    id =id || "random";
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/fetch/${id}?level=${level}`, {
+        credentials: "include"
+    });
+    const pokemon = await data.json();
+    return pokemon;
+}
+
+const removePokemon = async (pokemonToRemove) => {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/user/pokemons/${pokemonToRemove._id}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+    const response = await data.json();
+    return response;
+}
+
+const savePokemons = async(pokemons) => {
+    const data = await fetch(VITE_BACKEND_HOST+"/api/user/pokemons", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(pokemons)
+    });
+    console.log("data",data);
+    const response = await data.json();
+    console.log("response",response);
+    return response;
+}
+const healPokemons = async() => {
+    const data = await fetch(VITE_BACKEND_HOST+"/api/user/pokemons/heal", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    });
+    const response = await data.json();
+    return response;
+}
+
+const addLevel = async (pokemon) => {
+    console.log("pokemonApi",pokemon);
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/level`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({pokemon})
+    });
+    const response = await data.json();
+    return response;
+}
+
+const swapPokemons =async (id1,id2) => {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/user/pokemons/swap/`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({id1,id2})
+    });
+    const response = await data.json();
+    return response;
+}
+
+const attack = async (pokemon1,pokemon2,move) => {
+    const data = await fetch(VITE_BACKEND_HOST+"/api/pokemon/attack", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ pokemon1, pokemon2,move })
+    });
+    const response = await data.json();
+    return response;
 }
 
 export {
-    getPokemonData,
-    getMoveData,
-    getTypeData
+    getPokemons,
+    getPokemon,
+    addPokemon,
+    removePokemon,
+    savePokemons,
+    healPokemons,
+    addLevel,
+    swapPokemons,
+    attack
 }

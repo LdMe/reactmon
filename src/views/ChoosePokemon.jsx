@@ -1,36 +1,48 @@
 import { useState, useEffect,useContext } from "react";
 import Pokemon from "../components/PokemonComponent";
-import { addPokemon } from "../utils/savePokemons";
-import { getPokemonData } from "../utils/fetchPokemons";
 import PokemonContext from "../context/pokemonContext";
+import {addPokemon as addPokemonToUser} from "../utils/fetchPokemons";
+import Logout from "../components/Logout";
 
 const ChoosePokemon = ({ idList = [1, 4, 7], onFinish}) => {
     const [pokemonList, setPokemonList] = useState([]);
     const [error, setError] = useState(null);
-    const {misPokemons,setMisPokemons} = useContext(PokemonContext);
+    const {misPokemons,addPokemon} = useContext(PokemonContext);
     useEffect(() => {
         getPokemons();
     }, []);
 
     const getPokemons = async () => {
         try {
-            const newPokemons = await Promise.all(
-                idList.map(async (id) => {
-                    const pokemon = await getPokemonData(id,5);
-                    return pokemon;
-                })
-            )
+            const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
+            const response = await fetch(VITE_BACKEND_HOST+"/api/pokemon/starter",{
+                method:"GET",
+                credentials:"include"
+            })
+            const data = await response.json();
+            const newPokemons = data.map((pokemon) => {
+                return pokemon;
+            })
+            console.log(newPokemons);
             setPokemonList(newPokemons);
         } catch (error) {
+            console.log(error);
             setError("El profesor Oak no está disponible, vuelve más tarde.");
         }
     }
-
-    const handleSelectPokemon = (pokemon) =>{
-        if(addPokemon(pokemon)){
-            const newMisPokemons = [...misPokemons,pokemon];
-            setMisPokemons(newMisPokemons);
-            alert(`has escogido el pokemon ${pokemon.name}, ¡cuídalo mucho!`);
+    const choosePokemon = async (pokemon) =>{
+        const result = await addPokemon(pokemon);
+        if(result){
+            alert("Has elegido a " + pokemon.name +" como tu pokemon inicial, cuidalo bien");
+        }
+        else{
+            alert("No se ha podido añadir el pokemon");
+        }
+    }
+    const handleSelectPokemon = async (pokemon) =>{
+        
+        if(misPokemons.length < 6){
+            await choosePokemon(pokemon);
         }
         else{
             alert("Profesor Oak: ya tienes 6 pokemons, no te pases chaval")
