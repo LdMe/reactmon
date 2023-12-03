@@ -4,7 +4,7 @@
     margin: 10px;
     
 }
-.pokeball-heal.dark {
+.pokeball-heal.darker {
     animation: darken 1s infinite;
 }
 

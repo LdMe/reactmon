@@ -92,7 +92,7 @@ const WildCombat = ({ onFinish }) => {
                 pokemon2={wildPokemon} 
                 onChange={handleChange} 
                 onFinish={onFinish} 
-                buttons ={[{name:"Capturar",onClick:capture}]}
+                buttons ={[{name:"Capturar",onClick:capture,image:"/pokeball.svg"}]}
                 />
                 <MisPokemons onFinish={()=>{}} isView={false} />
             </>

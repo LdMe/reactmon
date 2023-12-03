@@ -61,28 +61,30 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
         <>
             <Pokemon data={pokemon2} />
             <Pokemon data={pokemon1} isFront={false} />
-            <h2>Selecciona una acción</h2>
+            <section className="button-footer">
             {!isAttacking ?
                 <section className="action-buttons">
-                    <button onClick={() => onFinish("map")} >Huir</button>
-                    <button onClick={handleAttack}>Pelear</button>
+                    <img onClick={() => onFinish("map")} className="pokeball-button" src="/running.svg" alt="run" />
+                    <img onClick={handleAttack} className="pokeball-button" src="/swords.svg" alt="attack" />
                     <>
                         {buttons.map((button) => {
-                            return <button key={button.name} onClick={() => button.onClick(firstPokemon, secondPokemon)}>{button.name}</button>
+                            return <img  className="pokeball-button" key={button.name} onClick={() => button.onClick(firstPokemon, secondPokemon)} src={button.image} alt={button.name} />
                         })}
                     </>
                 </section>
                 :
                 <section className="action-buttons">
-                    <button disabled={true} >Huir</button>
-                    <button disabled={true}>Pelear</button>
+                    <img  className="pokeball-button disabled" src="/running.svg" alt="run" />
+                    <img  className="pokeball-button disabled" src="/swords.svg" alt="attack" />
+
                     <>
-                        {buttons.map((button) => {
-                            return <button key={button.name} onClick={()=>{}} disabled={true}>{button.name}</button>
+                    {buttons.map((button) => {
+                            return <img  className="pokeball-button disabled" key={button.name} onClick={() => button.onClick(firstPokemon, secondPokemon)} src={button.image} alt={button.name} />
                         })}
                     </>
                 </section>
             }
+            </section>
         </>
     )
 }

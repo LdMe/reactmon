@@ -29,9 +29,6 @@ function App() {
     if (misPokemons.length === 0 && isLogged && isLoaded) {
       setCurrentGameState("choose");
     }
-    if (currentGameState === "login") {
-      setIsLoaded(true);
-    }
 
   }, [currentGameState, isLoaded]);
 
@@ -53,13 +50,14 @@ function App() {
         setCurrentGameState("choose");
         return;
       }
+      setIsLoaded(true);
       dispatch({ type: "set", payload: pokemons });
     }
     catch (error) {
       console.log("error", error);
       setError(error.message);
     }
-    setIsLoaded(true);
+    
 
   }
   const handleStateChange = (newState) => {

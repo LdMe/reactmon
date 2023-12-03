@@ -26,6 +26,9 @@ const MisPokemons = ({ onFinish, isView = true }) => {
             removePokemon(pokemon)
         }
     }
+    const getStatWithMultiplier = (stat) => {
+        return Math.round(stat.base_stat * stat.multiplier);
+    }
     return (
         <div className="mis-pokemons">
             <h2>Mis pokemons</h2>
@@ -40,13 +43,57 @@ const MisPokemons = ({ onFinish, isView = true }) => {
                     >
 
                         {isView &&
-                            <section className="pokemon-actions">
-                                <ul>
+                            <section className="pokemon-actions full">
+                                {/* <section className="pokemon-stats">
                                     {pokemon.activeMoves.map((move) => {
-                                        return <li key={move.name}>{move.name} | {move.power} | {move.type.name}</li>
+                                        return <div key={move.name}>{move.name} | {move.power} | {move.type.name}</div>
                                     })
                                     }
-                                </ul>
+                                    <div>hp: {getStatWithMultiplier(pokemon.stats[0])}</div>
+                                    <div>attack: {getStatWithMultiplier(pokemon.stats[1])}</div>
+                                    <div>defense: {getStatWithMultiplier(pokemon.stats[2])}</div>
+                                </section> */}
+                                <p><b>Tipos:</b> {
+                                    pokemon.types.map((type) => {
+                                        return <span key={type.name} className={type.name}>{type.nameEs} </span>
+                                    })
+                                }</p>
+                                <table >
+                                    <thead>
+                                        <tr>
+                                            <th>nombre</th>
+                                            <th>valor</th>
+                                            <th>tipo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {pokemon.activeMoves.map((move) => {
+                                            return (
+                                                <tr key={move.name}>
+                                                    <td>{move.nameEs}</td>
+                                                    <td>{move.power}</td>
+                                                    <td className={move.type.name}>{move.type.nameEs}</td>
+                                                </tr>
+                                            )
+                                        }
+                                        )}
+                                        <tr>
+                                            <td>hp</td>
+                                            <td>{getStatWithMultiplier(pokemon.stats[0])}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ataque</td>
+                                            <td>{getStatWithMultiplier(pokemon.stats[1])}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>defensa</td>
+                                            <td>{getStatWithMultiplier(pokemon.stats[2])}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <section className="pokemon-buttons">
                                     <button onClick={(e) => handleFreePokemon(e, pokemon)}>Soltar</button>
                                 </section>
@@ -55,9 +102,11 @@ const MisPokemons = ({ onFinish, isView = true }) => {
                     </Pokemon>
                 })}
             </section>
-            <section className="action-buttons">
-                {isView && <button onClick={() => onFinish("map")}>Volver</button>}
-            </section>
+            {isView &&
+                <section className="pokemon-buttons">
+                    <button onClick={() => onFinish("map")}>Volver</button>
+                </section>
+            }
         </div>
     )
 }

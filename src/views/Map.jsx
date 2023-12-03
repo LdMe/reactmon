@@ -7,7 +7,7 @@ const Map = ({ onFinish }) => {
     return (
         <>
             <h2>Mapa</h2>
-            <section className="action-buttons">
+            <section className="pokemon-buttons">
                 {isLogged ?
                     <>
                         <button onClick={() => onFinish("wild")}>Busca un pokemon salvaje</button>

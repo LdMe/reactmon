@@ -4,32 +4,32 @@ import './HealPokemons.css';
 const HealPokemons = ({ onFinish }) => {
     const { misPokemons, healPokemons } = useContext(pokemonContext);
     const [isHealing, setIsHealing] = useState(false);
-    useEffect(() => {
-        if (isHealing) {
-            healPokemons();
-        }
-    }, [isHealing]);
+
+    const handleHeal = () => {
+        setIsHealing(true);
+        healPokemons();
+    }
     return (
         <div>
             <h2>Centro reactMon</h2>
             {misPokemons.map((pokemon) => {
                 return (
-                    <img className={"pokeball-heal " + (isHealing && "dark")} key={pokemon._id} src="/pokeball.svg" alt={pokemon.name} />
+                    <img className={"pokeball-heal " + (isHealing && "darker")} key={pokemon._id} src="/pokeball.svg" alt={pokemon.name} />
                 )
             })
             }
             {isHealing ?
                 <section className="healing">
                     <p>Curando...</p>
-
+                    <section className="pokemon-buttons">
+                        <button onClick={() => onFinish("map")}>Volver</button>
+                    </section>
                     <audio
                         onEnded={() => {
                             healPokemons();
-                            setTimeout(() => {
-                                alert("Tus pokemons han sido curados");
-                                setIsHealing(false);
-                                onFinish("map");
-                            }, 1000);
+                            alert("Tus pokemons han sido curados");
+                            setIsHealing(false);
+                            onFinish("map");
                         }}
                         src="heal.mp3"
                         autoPlay />
@@ -37,8 +37,8 @@ const HealPokemons = ({ onFinish }) => {
                 :
                 <>
                     <p>¿Quieres curar a tus pokemons?</p>
-                    <section className="action-buttons">
-                        <button onClick={() => setIsHealing(true)}>Curar</button>
+                    <section className="pokemon-buttons">
+                        <button onClick={handleHeal}>Curar</button>
                         <button onClick={() => onFinish("map")}>Volver</button>
                     </section>
                 </>
