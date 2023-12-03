@@ -4,6 +4,7 @@ import WildCombat from "../views/WildCombat";
 import HealPokemons from "../views/healPokemons/HealPokemons";
 import MisPokemons from "../views/MisPokemons";
 import Login from "../views/Login";
+import Logout from "../components/Logout";
 
 const gameStates = {
     "choose": {
@@ -23,6 +24,9 @@ const gameStates = {
     },
     "login": {
         component: Login
+    },
+    "logout": {
+        component: Logout
     },
 }
 

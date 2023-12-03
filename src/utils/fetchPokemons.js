@@ -49,6 +49,24 @@ const getPokemons = async () => {
     const pokemons = await data.json();
     return [null,pokemons];
 }
+const getStarters = async () => {
+    try {
+        const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
+        const response = await fetch(VITE_BACKEND_HOST + "/api/pokemon/starter", {
+            method: "GET",
+            credentials: "include"
+        })
+        const data = await response.json();
+        const newPokemons = data.map((pokemon) => {
+            return pokemon;
+        })
+        return [null,newPokemons];
+    } catch (error) {
+        
+        console.error(error);
+        return [error,null]
+    }
+}
 
 const getPokemon = async (id=null,level=5) => {
     id =id || "random";
@@ -136,6 +154,7 @@ const attack = async (pokemon1,pokemon2,move) => {
 
 export {
     getPokemons,
+    getStarters,
     getPokemon,
     addPokemon,
     removePokemon,

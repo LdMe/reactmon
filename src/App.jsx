@@ -1,10 +1,11 @@
-import { useState, useEffect, useReducer } from 'react'
+import { useState, useEffect, useReducer, useRef } from 'react'
 import './App.css'
 import gameStates from './utils/gameStates';
 import PokemonContext from './context/pokemonContext';
-import loggedInContext from './context/loggedInContext.js';
-import misPokemonsReducer from './reducers/MispokemonsReducer.js';
-import { addPokemon, savePokemons, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons.js';
+import loggedInContext from './context/loggedInContext';
+import dialogContext from './context/dialogContext';
+import misPokemonsReducer from './reducers/MispokemonsReducer';
+import { addPokemon, savePokemons, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
 
 
 function App() {
@@ -12,14 +13,14 @@ function App() {
   const [error, setError] = useState("");
   const [currentGameState, setCurrentGameState] = useState("map");
   const [hardcoreMode, setHardcoreMode] = useState(false);
-  const [misPokemons, dispatch] = useReducer(misPokemonsReducer, []);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  const [misPokemons, dispatch] = useReducer(misPokemonsReducer, []);
 
   useEffect(() => {
     setIsLoaded(false);
     getMisPokemons();
-    
+
   }, [isLogged]);
 
   useEffect(() => {
@@ -39,25 +40,26 @@ function App() {
       if (error) {
         setError(error.message);
         if (error.status === 401) {
-          setCurrentGameState("login");
+          setCurrentGameState("logout");
           setIsLogged(false);
           return;
         }
         return;
       }
+      dispatch({ type: "set", payload: pokemons });
       setIsLogged(true);
+      setIsLoaded(true);
       if (pokemons.length === 0) {
         setCurrentGameState("choose");
         return;
       }
-      setIsLoaded(true);
-      dispatch({ type: "set", payload: pokemons });
+
     }
     catch (error) {
       console.log("error", error);
       setError(error.message);
     }
-    
+
 
   }
   const handleStateChange = (newState) => {
@@ -87,15 +89,16 @@ function App() {
     }
     if (pokemons[0].hp === 0) {
       dispatch({ type: "update", payload: newPokemon });
-      setTimeout(() => {
-      handleAlivePokemons(pokemons);
-      }, 1000);
+      await handleAlivePokemons(pokemons);
     }
     else {
       dispatch({ type: "update", payload: newPokemon });
+
     }
+    return newPokemon;
 
   }
+
   const handleAddLevel = async (pokemon) => {
     console.log("addLevel345", pokemon);
     const response = await addLevel(pokemon);
@@ -135,48 +138,58 @@ function App() {
     return data.pokemons;
   }
 
-  const handleAlivePokemons = (pokemons) => {
-    /*
-    si hay algun pokemon vivo, cambiamos el primer pokemon por el primero vivo
-    si no hay ninguno vivo, acabamos el juego y vamos a "heal" o a "choose" en caso de que esté en modo hardcore
-    */
+  const handleAlivePokemons = async (pokemons) => {
     const alivePokemons = pokemons.filter((pokemon) => pokemon.hp > 0);
     console.log("alivePokemons", alivePokemons);
     if (alivePokemons.length === 0) {
-      if (hardcoreMode) {
-        handleSetPokemons([]);
-        handleStateChange("choose");
-      }
-      else {
-        handleSetPokemons(pokemons);
-        handleStateChange("heal");
-      }
+      return new Promise( (resolve) => {
+        setTimeout(async () => {
+        if (hardcoreMode) {
+          alert("Has perdido todos tus pokemons");
+          await handleSetPokemons([]);
+          handleStateChange("choose");
+        }
+        else {
+          alert("Tus pokemons se han desmayado");
+          await handleSetPokemons(pokemons);
+          handleStateChange("heal");
+        }
+        resolve(null);
+      }, 1000);
+    });
     }
     else {
       const firstAlivePokemon = alivePokemons[0];
       const firstPokemon = pokemons[0];
       if (firstAlivePokemon._id !== firstPokemon._id) {
-        handleSwapPokemons(firstAlivePokemon._id, firstPokemon._id);
+        return new Promise((resolve) => {
+          setTimeout(async () => {
+            await handleSwapPokemons(firstAlivePokemon._id, firstPokemon._id);
+            resolve(null);
+          }, 1000);
+        });
       }
+      return null;
     }
 
   }
 
 
   const pokemonContextValue = {
-    misPokemons,
+    misPokemons: misPokemons,
     addPokemon: handleAddPokemon,
     removePokemon: handleRemovePokemon,
     setMisPokemons: handleSetPokemons,
     updatePokemon: handleUpdatePokemon,
     addLevel: handleAddLevel,
     swapPokemons: handleSwapPokemons,
-    healPokemons: handleHealPokemons
+    healPokemons: handleHealPokemons,
+    getMisPokemons,
   }
 
   const GameStateComponent = gameStates[currentGameState].component;
   return (
-    <loggedInContext.Provider value={{ isLogged,setIsLogged }}>
+    <loggedInContext.Provider value={{ isLogged, setIsLogged }}>
       <PokemonContext.Provider value={pokemonContextValue}>
         <img className="title-image" src='/reactmon.png' alt="titulo" />
         <p className="error">{error}</p>

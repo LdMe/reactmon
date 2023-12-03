@@ -9,10 +9,11 @@ const pokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
 
 const WildCombat = ({ onFinish }) => {
     const [wildPokemon, setWildPokemon] = useState(null);
-    const { misPokemons, updatePokemon,addPokemon,addLevel } = useContext(PokemonContext);
+    const { misPokemons, updatePokemon,addPokemon,addLevel,getMisPokemons } = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
     
     useEffect(() => {
+        getMisPokemons();
         getPokemonState();
     }, []);
 
@@ -38,8 +39,8 @@ const WildCombat = ({ onFinish }) => {
     const getPokemonState = async () => {
         try {
             const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            //const pokemonLevel = Math.floor(Math.random() * maxLevel *1.5) + 1;
-            const pokemonLevel = 1;
+            const pokemonLevel = Math.floor(Math.random() * maxLevel *1.5) + 1;
+            //const pokemonLevel = 1;
             const id="random";
             const pokemonData = await getPokemon(id,pokemonLevel);
             
@@ -75,10 +76,10 @@ const WildCombat = ({ onFinish }) => {
         }
     }
     
-    const handleChange = (pokemon) =>{
+    const handleChange = async (pokemon) =>{
         
         if(pokemon._id===misPokemons[0]._id){
-            updatePokemon(pokemon);
+            return await updatePokemon(pokemon);
         }
         else{
             setWildPokemon(pokemon);

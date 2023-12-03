@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import Pokemon from "../components/PokemonComponent";
 import PokemonContext from "../context/pokemonContext";
-import { addPokemon as addPokemonToUser } from "../utils/fetchPokemons";
+import { addPokemon as addPokemonToUser, getStarters} from "../utils/fetchPokemons";
 import Logout from "../components/Logout";
 
 const ChoosePokemon = ({ idList = [1, 4, 7], onFinish }) => {
@@ -13,22 +13,12 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish }) => {
     }, []);
 
     const getPokemons = async () => {
-        try {
-            const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
-            const response = await fetch(VITE_BACKEND_HOST + "/api/pokemon/starter", {
-                method: "GET",
-                credentials: "include"
-            })
-            const data = await response.json();
-            const newPokemons = data.map((pokemon) => {
-                return pokemon;
-            })
-            console.log(newPokemons);
-            setPokemonList(newPokemons);
-        } catch (error) {
-            console.log(error);
-            setError("El profesor Oak no está disponible, vuelve más tarde.");
+        const [error,starters] = await getStarters();
+        if (error) {
+            setError(error.message);
+            return;
         }
+        setPokemonList(starters);
     }
     const choosePokemon = async (pokemon) => {
         const result = await addPokemon(pokemon);

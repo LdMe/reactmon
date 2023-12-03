@@ -23,9 +23,6 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
                             {!isEnemy && <p>hp: {data.hp}</p>}
                             <p>nivel: {data.level}</p>
                         </div>
-
-
-
                         <HealthBar key={data._id} maxHp={data.maxHp} hp={data.hp} />
                     </>
                 }

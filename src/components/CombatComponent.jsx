@@ -4,24 +4,9 @@ import { attack as attackApi } from "../utils/fetchPokemons";
 
 import '../styles/Combat.css';
 const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, buttons = [] }) => {
-    const [firstPokemon, setFirstPokemon] = useState(pokemon1);
-    const [secondPokemon, setSecondPokemon] = useState(pokemon2);
-    const [isAttacking, setIsAttacking] = useState(true);
+    const [isAttacking, setIsAttacking] = useState(false);
     const [turn, setTurn] = useState(0);
-    const timeoutRef = useRef(null);
-    useEffect(() => {
-        setFirstPokemon(pokemon1);
-        setSecondPokemon(pokemon2);
-        timeoutRef.current = setTimeout(() => {
-            setIsAttacking(false);
-        }, 400);
-        return () => {
-            clearTimeout(timeoutRef.current);
-        }
-    }
-        , [pokemon1, pokemon2]);
-
-
+    
 
     const attack = async (attacker, defender) => {
         if (attacker.hp === 0 || defender.hp === 0) {
@@ -35,49 +20,31 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
             onFinish("map");
             return;
         }
-
         const newAttacker = data.attacker;
         const newDefender = data.defender;
-
-        if (newDefender._id === firstPokemon._id) {
-            setFirstPokemon(newDefender);
-        }
-        else {
-            setSecondPokemon(newDefender);
-        }
-        onChange(newDefender);
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve();
-            }, 200);
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = setTimeout(() => {
-                if(timeoutRef.current!==null){
-                setIsAttacking(false);
-                }
-            }, 400);
-        });
+        await onChange(newDefender);
+        const endAttackTimeout = setTimeout(() => {
+            setIsAttacking(false);
+        }, 1000);
+        
     }
 
     const handleAttack = async () => {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-        setIsAttacking(isAttacking => true);
+        setIsAttacking(true);
         if (aiOponent) {
-            await attack(firstPokemon, secondPokemon);
-            await attack(secondPokemon, firstPokemon);
+            await attack(pokemon1, pokemon2);
+            await attack(pokemon2, pokemon1);
             return;
         }
         if (turn === 0) {
-            await attack(firstPokemon, secondPokemon);
+            await attack(pokemon1, pokemon2);
             setTurn(1);
         }
         else {
-            await attack(secondPokemon, firstPokemon);
+            await attack(pokemon2, pokemon1);
             setTurn(0);
         }
     }
-
     return (
         <>
             <Pokemon data={pokemon2} isEnemy={true}/>
@@ -89,7 +56,7 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
                         <img onClick={handleAttack} className="pokeball-button" src="/swords.svg" alt="attack" />
                         <>
                             {buttons.map((button) => {
-                                return <img className="pokeball-button" key={button.name} onClick={() => button.onClick(firstPokemon, secondPokemon)} src={button.image} alt={button.name} />
+                                return <img className="pokeball-button" key={button.name} onClick={() => button.onClick(pokemon1, pokemon2)} src={button.image} alt={button.name} />
                             })}
                         </>
                     </section>
@@ -100,7 +67,7 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
 
                         <>
                             {buttons.map((button) => {
-                                return <img className="pokeball-button disabled" key={button.name} onClick={() => button.onClick(firstPokemon, secondPokemon)} src={button.image} alt={button.name} />
+                                return <img className="pokeball-button disabled" key={button.name} onClick={() => button.onClick(pokemon1, pokemon2)} src={button.image} alt={button.name} />
                             })}
                         </>
                     </section>

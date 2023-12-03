@@ -22,7 +22,7 @@
 animate the health bar using --from-width 
 */
 .health-bar-fill.animated {
-    animation: health-bar-fill 1s ease-out;
+    animation: health-bar-fill var(--duration) ease-out;
     animation-fill-mode: forwards;
 }
 

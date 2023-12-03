@@ -1,5 +1,5 @@
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import PokemonContext from "../context/pokemonContext";
 
@@ -8,22 +8,24 @@ import Pokemon from "../components/PokemonComponent";
 
 const MisPokemons = ({ onFinish, isView = true }) => {
 
-    const { misPokemons, swapPokemons, removePokemon } = useContext(PokemonContext);
+    const { misPokemons, swapPokemons, removePokemon,getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
-
-    const handlePokemonClick = (pokemon) => {
+    useEffect(() => {
+        getMisPokemons();
+    }, []);
+    const handlePokemonClick = async (pokemon) => {
         if (selectedPokemon === null) {
             setSelectedPokemon(pokemon);
         }
         else {
-            swapPokemons(selectedPokemon._id, pokemon._id);
+            await swapPokemons(selectedPokemon._id, pokemon._id);
             setSelectedPokemon(null);
         }
     }
-    const handleFreePokemon = (e, pokemon) => {
+    const handleFreePokemon = async(e, pokemon) => {
         e.stopPropagation();
         if (confirm(`¿Estás seguro de que quieres soltar a ${pokemon.name}?`)) {
-            removePokemon(pokemon)
+            await removePokemon(pokemon)
         }
     }
     const getStatWithMultiplier = (stat) => {

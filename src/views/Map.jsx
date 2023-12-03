@@ -14,7 +14,7 @@ const Map = ({ onFinish }) => {
                         <button onClick={() => onFinish("heal")}>Curar pokemons</button>
                         <button onClick={() => onFinish("list")}>Mis pokemons</button>
 
-                        <Logout onFinish={onFinish} />
+                        <Logout onFinish={onFinish} auto={false} />
 
                     </>
                     :
