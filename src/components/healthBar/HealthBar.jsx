@@ -31,7 +31,7 @@ const HealthBar = ({maxHp,hp})=>{
     const toColor = currentWidth > 50 ? green : currentWidth > 20 ? yellow : red
     const style = {width: prevWidth+"%", "--to-width":currentWidth+"%", "--from-width":prevWidth+"%", "--from-color":color,"--to-color":toColor}
     const speed = prevWidth - currentWidth;
-    const duration = Math.min(Math.abs(speed/10),1);
+    const duration = Math.min(Math.abs(speed/10),0.5);
     style["--duration"] = duration+"s";
     const isAnimatedClass = isAnimated ? " animated" : "";
     

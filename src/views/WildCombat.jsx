@@ -32,7 +32,7 @@ const WildCombat = ({ onFinish }) => {
                 setTimeout(() => {
                 alert("Has ganado la pelea");
                 onFinish("map");
-                }, 1000);
+                }, 600);
         }
     }
     
