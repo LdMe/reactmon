@@ -67,14 +67,17 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
             setTurn(0);
         }
     }
+    const style = {
+        backgroundImage:"url(/forest.png)"
+    }
     return (
-        <>
+        <section className="combat" style={style}>
             <Pokemon data={pokemon2} isEnemy={true}/>
             <Pokemon data={pokemon1} isFront={false} />
             <section className="button-footer">
                 {!isAttacking ?
                     <section className="action-buttons">
-                        <img onClick={() => onFinish("map")} className="pokeball-button" src="/running.svg" alt="run" />
+                        <img onClick={() => onFinish("map")} className="pokeball-button yellow" src="/running.png" alt="run" />
                         <img onClick={handleAttack} className="pokeball-button" src="/swords.svg" alt="attack" />
                         <>
                             {buttons.map((button) => {
@@ -84,7 +87,7 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
                     </section>
                     :
                     <section className="action-buttons">
-                        <img className="pokeball-button disabled" src="/running.svg" alt="run" />
+                        <img className="pokeball-button disabled" src="/running.png" alt="run" />
                         <img className="pokeball-button disabled" src="/swords.svg" alt="attack" />
 
                         <>
@@ -95,7 +98,7 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
                     </section>
                 }
             </section>
-        </>
+        </section>
     )
 }
 
