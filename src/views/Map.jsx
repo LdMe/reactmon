@@ -13,7 +13,7 @@ const Map = ({ onFinish }) => {
                         <button onClick={() => onFinish("wild")}>Busca un pokemon salvaje</button>
                         <button onClick={() => onFinish("heal")}>Curar pokemons</button>
                         <button onClick={() => onFinish("list")}>Mis pokemons</button>
-                        <button onClick={() => onFinish("chat")}>Chat</button>
+                        <button onClick={() => onFinish("stadium")}>Estadio Pokemon</button>
                         <Logout onFinish={onFinish} auto={false} />
 
                     </>
