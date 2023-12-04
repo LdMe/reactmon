@@ -76,6 +76,13 @@ const getPokemon = async (id=null,level=5) => {
     const pokemon = await data.json();
     return pokemon;
 }
+const getPokemonById = async (id) => {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/${id}`, {
+        credentials: "include"
+    });
+    const pokemon = await data.json();
+    return pokemon;
+}
 
 const removePokemon = async (pokemonToRemove) => {
     const data = await fetch(`${VITE_BACKEND_HOST}/api/user/pokemons/${pokemonToRemove._id}`, {
@@ -156,6 +163,7 @@ export {
     getPokemons,
     getStarters,
     getPokemon,
+    getPokemonById,
     addPokemon,
     removePokemon,
     savePokemons,

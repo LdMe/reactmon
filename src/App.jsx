@@ -15,6 +15,7 @@ function App() {
   const [hardcoreMode, setHardcoreMode] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  const [username, setUsername] = useState("");
   const [misPokemons, dispatch] = useReducer(misPokemonsReducer, []);
 
   useEffect(() => {
@@ -186,10 +187,32 @@ function App() {
     healPokemons: handleHealPokemons,
     getMisPokemons,
   }
+  const login = (username) => {
+    setIsLogged(true);
+    setUsername(username);
+    localStorage.setItem("username", username);
+  }
+  const logout = () => {
+    setIsLogged(false);
+    setUsername("");
+  }
+  const getUserName = () => {
+    let user = username || localStorage.getItem("username");
+    if (!user) {
+      user = "";
+    }
+    return user;
+  } 
+  const loggedInContextValue = {
+    isLogged,
+    login,
+    logout,
+    getUserName
+  }
 
   const GameStateComponent = gameStates[currentGameState].component;
   return (
-    <loggedInContext.Provider value={{ isLogged, setIsLogged }}>
+    <loggedInContext.Provider value={loggedInContextValue}>
       <PokemonContext.Provider value={pokemonContextValue}>
         <img className="title-image" src='/reactmon.png' alt="titulo" />
         <p className="error">{error}</p>

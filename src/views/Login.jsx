@@ -8,9 +8,11 @@ const Login = ({ onFinish }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
-    const { setIsLogged } = useContext(loggedInContext);
+    const { login } = useContext(loggedInContext);
 
     const handleLogin = async () => {
+        try{
+            
         const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
         const response = await fetch(VITE_BACKEND_HOST + "/api/user/login", {
             method: "POST",
@@ -21,13 +23,19 @@ const Login = ({ onFinish }) => {
             body: JSON.stringify({ username, password })
         });
         const data = await response.json();
+        console.log(data);
         if (data.error) {
             alert(data.error);
         }
         else {
-            setIsLogged(true);
+            login(data.result.username);
             onFinish("map");
         }
+    }
+    catch(e){
+        console.log(e);
+
+    }
     }
     const handleRegister = async () => {
         if (password !== passwordConfirm) {

@@ -5,6 +5,7 @@ import HealPokemons from "../views/healPokemons/HealPokemons";
 import MisPokemons from "../views/MisPokemons";
 import Login from "../views/Login";
 import Logout from "../components/Logout";
+import Chat from "../views/chat/ChatComponent";
 
 const gameStates = {
     "choose": {
@@ -28,6 +29,9 @@ const gameStates = {
     "logout": {
         component: Logout
     },
+    "chat": {
+        component: Chat
+    }
 }
 
 export default gameStates;
