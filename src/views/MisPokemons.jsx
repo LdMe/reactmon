@@ -32,7 +32,7 @@ const MisPokemons = ({ onFinish, isView = true }) => {
         return Math.round(stat.base_stat * stat.multiplier);
     }
     return (
-        <div className="mis-pokemons">
+        <div className={"mis-pokemons" + (isView ? " view" : "")}>
             <h2>Mis pokemons</h2>
             <section className="pokemons-container">
                 {misPokemons.map((pokemon) => {

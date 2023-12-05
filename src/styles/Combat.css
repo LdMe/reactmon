@@ -11,3 +11,29 @@ section.combat {
 section.combat .combat{
     background-color: #ffffffc1
 }
+
+.stadium .pokemons-container,  .mis-pokemons .pokemons-container {
+    display: flex;
+    overflow-x: auto;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 768px) {
+    .stadium .pokemons-container  {
+        height: 150px;
+        width: 100%;
+    }
+    .mis-pokemons .pokemons-container .pokemon-card{
+        min-width: 40%;
+    }
+    .mis-pokemons.view .pokemons-container .pokemon-card{
+        min-width: 80%;
+    }
+    .stadium .combat-info h2, .stadium .combat-info p{
+        margin: 0;
+    }
+    
+    
+}
