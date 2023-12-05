@@ -13,8 +13,7 @@
 
 
 .pokemon-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  
   margin: 10px auto;
   padding: 15px;
   text-align: center;
@@ -37,6 +36,10 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
 }
 
+.pokemon-card.disabled {
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
 
 .pokemon-card h3 {
   margin-bottom: 10px;

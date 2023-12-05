@@ -1,35 +1,42 @@
-import { useState, useEffect, useContext,useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import Pokemon from './PokemonComponent';
 import { attack as attackApi } from "../utils/fetchPokemons";
+import PokemonContext from "../context/pokemonContext";
 
 import '../styles/Combat.css';
-const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, buttons = [] }) => {
+const Combat = ({ pokemon1, pokemon2, onChange, onFinish, buttons = [] }) => {
     const [isAttacking, setIsAttacking] = useState(false);
     const [isStarted, setIsStarted] = useState(false);
-    const [turn, setTurn] = useState(0);
-    
+    const olfPokemonId = useRef(pokemon1._id);
+
     useEffect(() => {
         if (!isStarted) {
             setIsStarted(true);
             return;
         }
-        if(aiOponent){
-            attack(pokemon2, pokemon1);
-        }
+        attack(pokemon2, pokemon1);
     }, [pokemon2]);
 
     useEffect(() => {
+        if (pokemon1._id !== olfPokemonId.current) {
+            olfPokemonId.current = pokemon1._id;
+            if (!isAttacking) {
+                setIsAttacking(true);
+                attack(pokemon2, pokemon1);
+            }
+        }
         setTimeout(() => {
-            if(pokemon1.hp === 0 || pokemon2.hp === 0){
+            if (pokemon1.hp === 0 || pokemon2.hp === 0) {
                 return;
             }
             setIsAttacking(false);
-        }, 500);
-    },[pokemon1]);
 
-    
+        }, 500);
+    }, [pokemon1]);
+
+
     const attack = async (attacker, defender) => {
-        
+
         if (attacker.hp === 0 || defender.hp === 0) {
             return defender;
         }
@@ -44,35 +51,26 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, aiOponent = true, butt
         const newAttacker = data.attacker;
         const newDefender = data.defender;
         await onChange(newDefender);
-        
+
         return newDefender;
-        
+
     }
 
     const handleAttack = async () => {
-        if(isAttacking){
+        if (isAttacking) {
             return;
         }
         setIsAttacking(true);
-        if (aiOponent) {
-            const defender =await attack(pokemon1, pokemon2);
-            return;
-        }
-        if (turn === 0) {
-            await attack(pokemon1, pokemon2);
-            setTurn(1);
-        }
-        else {
-            await attack(pokemon2, pokemon1);
-            setTurn(0);
-        }
+        const defender = await attack(pokemon1, pokemon2);
+        return;
+
     }
     const style = {
-        backgroundImage:"url(/forest.png)"
+        backgroundImage: "url(/forest.png)"
     }
     return (
         <section className="combat" style={style}>
-            <Pokemon data={pokemon2} isEnemy={true}/>
+            <Pokemon data={pokemon2} isEnemy={true} />
             <Pokemon data={pokemon1} isFront={false} />
             <section className="button-footer">
                 {!isAttacking ?

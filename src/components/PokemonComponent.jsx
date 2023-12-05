@@ -1,9 +1,9 @@
 import { useState } from "react";
 import HealthBar from "./healthBar/HealthBar";
 import '../styles/Pokemon.css';
-const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false,isEnemy=false,showJustLevel=false, children }) => {
+const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false,isEnemy=false,showJustLevel=false, children, defaultClassName=""}) => {
     const [loaded, setLoaded] = useState(false);
-    let className = "pokemon-card" + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat");
+    let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat") 
     /* if(!loaded){
         className += " hidden";
     } */

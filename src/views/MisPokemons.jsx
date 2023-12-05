@@ -6,7 +6,7 @@ import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/PokemonComponent";
 
 
-const MisPokemons = ({ onFinish, isView = true }) => {
+const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
 
     const { misPokemons, swapPokemons, removePokemon,getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
@@ -14,10 +14,28 @@ const MisPokemons = ({ onFinish, isView = true }) => {
         getMisPokemons();
     }, []);
     const handlePokemonClick = async (pokemon) => {
+        
         if (selectedPokemon === null) {
             setSelectedPokemon(pokemon);
         }
         else {
+            if(!isView){
+                if(selectedPokemon._id === pokemon._id){
+                    
+                    setSelectedPokemon(null);
+                    if(pokemon.hp === 0){
+                        return;
+                    }
+                    await swapPokemons(pokemon._id, misPokemons[0]._id)
+                    setSelectedPokemon(null);
+                    //onUpdate();
+                }
+                else{
+                    await swapPokemons(selectedPokemon._id, pokemon._id);
+                    setSelectedPokemon(null);
+                }
+                return;
+            }
             await swapPokemons(selectedPokemon._id, pokemon._id);
             setSelectedPokemon(null);
         }
@@ -31,16 +49,21 @@ const MisPokemons = ({ onFinish, isView = true }) => {
     const getStatWithMultiplier = (stat) => {
         return Math.round(stat.base_stat * stat.multiplier);
     }
+    let filteredPokemons = misPokemons.map((pokemon) => pokemon);
+    if (!isView) {
+        filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
+    }
     return (
         <div className={"mis-pokemons" + (isView ? " view" : "")}>
             <h2>Mis pokemons</h2>
             <section className="pokemons-container">
-                {misPokemons.map((pokemon) => {
+                {filteredPokemons.map((pokemon) => {
                     return <Pokemon
                         key={pokemon._id}
                         data={pokemon}
                         onClick={() => handlePokemonClick(pokemon)}
                         isCombat={true}
+                        defaultClassName={!isView && pokemon.hp === 0 ? "disabled" : ""}
                         isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
                     >
 
