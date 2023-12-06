@@ -1,12 +1,24 @@
 import Pokemon from "../../components/PokemonComponent";
-import { useState } from "react";
-
-const StadiumUserComponent = ({ user, onClick }) => {
+import { useEffect, useState } from "react";
+import { getUserData } from "../../utils/fetchPokemons";
+const StadiumUserComponent = ({ username, onClick }) => {
     const [showPokemons, setShowPokemons] = useState(false);
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        getUser(username);
+    }, [username]);
     const toggleShowPokemons = () => {
         setShowPokemons(showPokemons => !showPokemons);
     }
-
+    const getUser = async (username) =>{
+        console.log("username", username)
+        const user = await getUserData(username);
+        console.log(user);
+        setUser(user);
+    }
+    if (user === null) {
+        return <div></div>
+    }
     return (
         <section className="user-card" key={user.username} onClick={toggleShowPokemons}>
             <h2>{user.username}</h2>

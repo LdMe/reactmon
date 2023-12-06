@@ -5,9 +5,8 @@ const Map = ({ onFinish }) => {
 
     const { isLogged } = useContext(loggedInContext);
     return (
-        <>
-            <h2>Mapa</h2>
-            <section className="pokemon-buttons">
+        <section className="map">
+            <section className={"pokemon-buttons "+ (isLogged ? "": "button-footer")}>
                 {isLogged ?
                     <>
                         <button onClick={() => onFinish("wild")}>Busca un pokemon salvaje</button>
@@ -22,7 +21,7 @@ const Map = ({ onFinish }) => {
                 }
             </section>
 
-        </>
+        </section>
     )
 }
 

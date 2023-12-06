@@ -10,40 +10,38 @@ const HealPokemons = ({ onFinish }) => {
         healPokemons();
     }
     return (
-        <div>
-            <h2>Centro reactMon</h2>
-            {misPokemons.map((pokemon) => {
-                return (
-                    <img className={"pokeball-heal " + (isHealing && "darker")} key={pokemon._id} src="/pokeball.svg" alt={pokemon.name} />
-                )
-            })
-            }
-            {isHealing ?
-                <section className="healing">
-                    <p>Curando...</p>
-                    <section className="pokemon-buttons">
-                        <button onClick={() => onFinish("map")}>Volver</button>
+        <div className="heal-pokemons">
+            <section className="heal-pokemons--pokeballs">
+                {misPokemons.map((pokemon) => {
+                    return (
+                        <img className={"pokeball-heal " + (isHealing && "darker")} key={pokemon._id} src="/pokeball.svg" alt={pokemon.name} />
+                    )
+                })
+                }
+                {isHealing ?
+                    <section className="healing">
+                        <section className="pokemon-buttons button-footer">
+                            <button onClick={() => onFinish("map")}>Volver</button>
+                        </section>
+                        <audio
+                            onEnded={() => {
+                                healPokemons();
+                                alert("Tus pokemons han sido curados");
+                                setIsHealing(false);
+                                onFinish("map");
+                            }}
+                            src="heal.mp3"
+                            autoPlay />
                     </section>
-                    <audio
-                        onEnded={() => {
-                            healPokemons();
-                            alert("Tus pokemons han sido curados");
-                            setIsHealing(false);
-                            onFinish("map");
-                        }}
-                        src="heal.mp3"
-                        autoPlay />
-                </section>
-                :
-                <>
-                    <p>¿Quieres curar a tus pokemons?</p>
-                    <section className="pokemon-buttons">
-                        <button onClick={handleHeal}>Curar</button>
-                        <button onClick={() => onFinish("map")}>Volver</button>
-                    </section>
-                </>
-            }
-
+                    :
+                    <>
+                        <section className="pokemon-buttons button-footer">
+                            <button onClick={handleHeal}>Curar</button>
+                            <button onClick={() => onFinish("map")}>Volver</button>
+                        </section>
+                    </>
+                }
+            </section>
         </div>
     )
 }

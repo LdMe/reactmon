@@ -13,7 +13,7 @@
     flex-direction: column;
     align-items: center;
     margin: 10px;
-    background-color: rgb(222, 233, 238);
+    background-color: #ffffffd5;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -24,8 +24,14 @@
 }
 
 .player-container > h2 {
-    background-color: #ffffffc5;
+    background-color: #ffffffd5;
     margin: 20px auto;
     justify-content: center;
     text-align: center;
+}
+
+section.stadium {
+    background-color: #ffffffd5;
+    height: 100%;
+    padding: 10px;
 }

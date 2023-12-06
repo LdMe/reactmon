@@ -59,24 +59,26 @@ const Login = ({ onFinish }) => {
         }
     }
     return (
-        <>
+        <section className="login">
             <h2>{isRegister ? "Registro" : "Login"}</h2>
             <form className="login-form">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Nombre de usuario</label>
                 <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Contraseña</label>
                 <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 {isRegister &&
                     <>
-                        <label htmlFor="passwordConfirm">Confirmar Password</label>
+                        <label htmlFor="passwordConfirm">Confirmar Contraseña</label>
                         <input type="password" id="passwordConfirm" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                     </>
                 }
+                <section className="button-footer">
                 <button type="button" onClick={isRegister ? handleRegister : handleLogin}>{isRegister ? "Registrarse" : "Login"}</button>
-                <button type="button" onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Ya tengo cuenta" : "Registrarse"}</button>
+                <button type="button" onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Ya tengo cuenta" : "Crear cuenta"}</button>
                 <button type="button" onClick={() => onFinish("map")}>Volver</button>
+                </section>
             </form>
-        </>
+        </section>
     )
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext,useRef } from "react";
+import { useEffect, useState, useContext,useRef, useLayoutEffect } from "react";
 import Pokemon from "../components/PokemonComponent";
 import PokemonContext from "../context/pokemonContext";
 import MisPokemons from "./MisPokemons";
@@ -11,11 +11,19 @@ const WildCombat = ({ onFinish }) => {
     const [wildPokemon, setWildPokemon] = useState(null);
     const { misPokemons, updatePokemon,addPokemon,addLevel,getMisPokemons } = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
+    const footerRef = useRef(null);
     
     useEffect(() => {
         getMisPokemons();
         getPokemonState();
+        setTimeout(() => {
+            if (footerRef.current === null) {
+                return;
+            }
+            footerRef.current.scrollIntoView({ behavior: "smooth" });
+        }, 1500);
     }, []);
+
 
     useEffect(() => {
         finishCombat();
@@ -88,12 +96,6 @@ const WildCombat = ({ onFinish }) => {
     if (wildPokemon) {
         return (
             <>
-                {/* <Pokemon data={wildPokemon} />
-                <Pokemon data={misPokemons[0]} isFront={false} />
-                <button onClick={() => onFinish("map")} >Huir</button>
-                <button onClick={handleAttack}>Pelear</button>
-                <button onClick={capture}>Capturar</button>
-                 */}
                 <Combat 
                 pokemon1={misPokemons[0]} 
                 pokemon2={wildPokemon} 
@@ -101,11 +103,19 @@ const WildCombat = ({ onFinish }) => {
                 onFinish={onFinish} 
                 buttons ={[{name:"Capturar",onClick:capture,image:"/pokeball.svg"}]}
                 />
-                <MisPokemons onFinish={()=>{}} isView={false} />
+                <MisPokemons 
+                onFinish={()=>{}} 
+                isView={false} 
+                />
+                <div ref={footerRef} />
             </>
         )
     }
-    return <p>Buscando pelea...</p>
+    return (
+        <section className="loading-section">
+            <img className="pokeball-loading rotate" src="/pokeball.svg"/>
+        </section>
+    )
 }
 
 export default WildCombat;

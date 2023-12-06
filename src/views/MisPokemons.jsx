@@ -6,31 +6,35 @@ import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/PokemonComponent";
 
 
-const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
+const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) => {
 
-    const { misPokemons, swapPokemons, removePokemon,getMisPokemons } = useContext(PokemonContext);
+    const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     useEffect(() => {
         getMisPokemons();
     }, []);
     const handlePokemonClick = async (pokemon) => {
-        
+
         if (selectedPokemon === null) {
             setSelectedPokemon(pokemon);
         }
         else {
-            if(!isView){
-                if(selectedPokemon._id === pokemon._id){
-                    
+            if (!isView) {
+                if (selectedPokemon._id === pokemon._id) {
+
                     setSelectedPokemon(null);
-                    if(pokemon.hp === 0){
+                    if (pokemon.hp === 0) {
+                        return;
+                    }
+                    if (disabled) {
+                        setSelectedPokemon(null);
                         return;
                     }
                     await swapPokemons(pokemon._id, misPokemons[0]._id)
                     setSelectedPokemon(null);
-                    //onUpdate();
+                    onUpdate();
                 }
-                else{
+                else {
                     await swapPokemons(selectedPokemon._id, pokemon._id);
                     setSelectedPokemon(null);
                 }
@@ -40,7 +44,7 @@ const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
             setSelectedPokemon(null);
         }
     }
-    const handleFreePokemon = async(e, pokemon) => {
+    const handleFreePokemon = async (e, pokemon) => {
         e.stopPropagation();
         if (confirm(`¿Estás seguro de que quieres soltar a ${pokemon.name}?`)) {
             await removePokemon(pokemon)
@@ -53,31 +57,36 @@ const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
     if (!isView) {
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }
+
     return (
         <div className={"mis-pokemons" + (isView ? " view" : "")}>
-            <h2>Mis pokemons</h2>
+            {misPokemons.length !== 1 &&
+                <h2>Mis pokemons</h2>
+            }
             <section className="pokemons-container">
                 {filteredPokemons.map((pokemon) => {
+                    const movesPad = [];
+                    for (let i = pokemon.activeMoves.length; i < 4; i++) {
+                        movesPad.push(
+                            <tr key={"pad" + i}>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        )
+                    }
                     return <Pokemon
                         key={pokemon._id}
                         data={pokemon}
                         onClick={() => handlePokemonClick(pokemon)}
                         isCombat={true}
-                        defaultClassName={!isView && pokemon.hp === 0 ? "disabled" : ""}
+                        defaultClassName={disabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
                         isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
                     >
 
                         {isView &&
                             <section className="pokemon-actions full">
-                                {/* <section className="pokemon-stats">
-                                    {pokemon.activeMoves.map((move) => {
-                                        return <div key={move.name}>{move.name} | {move.power} | {move.type.name}</div>
-                                    })
-                                    }
-                                    <div>hp: {getStatWithMultiplier(pokemon.stats[0])}</div>
-                                    <div>attack: {getStatWithMultiplier(pokemon.stats[1])}</div>
-                                    <div>defense: {getStatWithMultiplier(pokemon.stats[2])}</div>
-                                </section> */}
+
                                 <p><b>Tipos:</b> {
                                     pokemon.types.map((type) => {
                                         return <span key={type.name} className={type.name + " type__name"}>{type.nameEs} </span>
@@ -102,6 +111,10 @@ const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
                                             )
                                         }
                                         )}
+                                        {
+                                            movesPad
+                                        }
+
                                         <tr></tr>
                                         <tr className="stat__row">
                                             <td>hp</td>
@@ -117,7 +130,7 @@ const MisPokemons = ({ onFinish, isView = true,onUpdate }) => {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <section className="pokemon-buttons">
+                                <section className="pokemon-buttons ">
                                     <button onClick={(e) => handleFreePokemon(e, pokemon)}>Soltar</button>
                                 </section>
                             </section>

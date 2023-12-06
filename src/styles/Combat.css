@@ -19,11 +19,18 @@ section.combat .combat{
     width: 100%;
 }
 
-
+.mis-pokemons{
+    background-color: #ffffffc1;
+}
 @media screen and (max-width: 768px) {
     .stadium .pokemons-container  {
         height: 150px;
         width: 100%;
+    }
+    .mis-pokemons  h2{
+        margin-bottom: 0;
+        margin-top:5px;
+        font-size: 1.2em;
     }
     .mis-pokemons .pokemons-container .pokemon-card{
         min-width: 40%;
@@ -34,6 +41,36 @@ section.combat .combat{
     .stadium .combat-info h2, .stadium .combat-info p{
         margin: 0;
     }
+    .pokeball-button{
+        width: 30px;
+        height: 30px;
+    }
     
+    
+}
+
+.pokeball-loading {
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin: auto;
+    animation: rotate 1s infinite;
+
+}
+
+.loading-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg)
+    }
     
 }

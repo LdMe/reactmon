@@ -5,7 +5,7 @@ import loggedInContext from "../../context/loggedInContext";
 import Pokemon from "../../components/PokemonComponent";
 import StadiumUserComponent from "./StadiumUserComponent";
 import Combat from "./socketCombatComponent";
-import { getPokemonById } from "../../utils/fetchPokemons";
+import { getUserData,getPokemonById } from "../../utils/fetchPokemons";
 import "./Stadium.css";
 
 const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
@@ -14,11 +14,33 @@ const socket = io(VITE_BACKEND_HOST);
 const Stadium = ({ onFinish }) => {
     const { misPokemons, updatePokemon } = useContext(pokemonContext);
     const { getUserName } = useContext(loggedInContext);
+    const [myUsername, setMyUsername] = useState(getUserName());
+    
     const [users, setUsers] = useState([]);
     const [isCombat, setIsCombat] = useState(false);
-    const [rival, setRival] = useState(null);
+    const [rival, SetRival] = useState(null);
 
+    const setRival = async (username) => {
+        console.log("setRival", username)
+        const newRival = await getUserData(username);
+        console.log("newRival", newRival)
+        SetRival(newRival);
+    }
+    const updateRivalPokemon = async (pokemon) => {
+        console.log("updateRivalPokemon", pokemon)
+        const newPokemon = await getPokemonById(pokemon);
+        console.log("newPokemon", newPokemon)
+        const newPokemons = rival.pokemons;
+        newPokemons[0] = newPokemon;
+        SetRival({ ...rival, pokemons: newPokemons });
+        return newPokemon;
+    }
+    
     useEffect(() => {
+        if (myUsername === null) {
+            setMyUsername(getUserName());
+            return;
+        }
         const handleConnect = () => {
             console.log("connected");
         }
@@ -32,12 +54,12 @@ const Stadium = ({ onFinish }) => {
             console.log(user);
         }
         function handleUserLeft(username) {
-            console.log("usuario ha entrado:", user);
-            setUsers(users.filter((u) => u.username !== username));
+            console.log("usuario ha entrado:", username);
+            setUsers(users.filter((u) => u !== username));
         }
-        function handleUserJoined(user) {
-            console.log("usuario ha entrado:", user);
-            setUsers(users => [...users, user]);
+        function handleUserJoined(username) {
+            console.log("usuario ha entrado:", username);
+            setUsers(users => [...users, username]);
         }
         function handleUserList(users) {
             console.log(users);
@@ -46,25 +68,27 @@ const Stadium = ({ onFinish }) => {
             console.log(users);
             setUsers(users);
         }
-        const handleAskToFight = (user) => {
-            if (confirm(`El usuario ${user.username} quiere luchar`)) {
-                socket.emit("accept-fight", { room: "main", user });
-                setRival(user);
+        const handleAskToFight = async(username) => {
+            console.log("ask to fight", username)
+            if (confirm(`El usuario ${username} quiere luchar`)) {
+                socket.emit("accept-fight", { room: "main", username });
+                await setRival(username);
                 setIsCombat(true);
 
             }
             else {
-                socket.emit("reject-fight", { room: "main", user });
+                socket.emit("reject-fight", { room: "main", username });
             }
         }
-        const handleAcceptFight = (user) => {
-            alert(`El usuario ${user.username} ha aceptado luchar`);
-            setRival(user);
+        const handleAcceptFight = async (username) => {
+            console.log("accept fight", username)
+            alert(`El usuario ${username} ha aceptado luchar`);
+            await setRival(username);
             setIsCombat(true);
 
         }
-        const handleRejectFight = (user) => {
-            alert(`El usuario ${user.username} ha rechazado luchar`);
+        const handleRejectFight = (username) => {
+            alert(`El usuario ${username} ha rechazado luchar`);
         }
         socket.on("members", handleUsers)
         socket.on("message", handleNewMessage);
@@ -78,13 +102,10 @@ const Stadium = ({ onFinish }) => {
         socket.on("accept-fight", handleAcceptFight);
         socket.on("reject-fight", handleRejectFight);
 
-        const user = {
-            username: getUserName(),
-            pokemons: misPokemons
-        }
-        socket.emit("join", { room: "main", user });
+        
+        socket.emit("join", { room: "main", username:myUsername });
         return () => {
-            socket.emit("leave", { room: "main", user });
+            socket.emit("leave", { room: "main", username:myUsername });
             socket.off("new-message", handleNewMessage);
             socket.off("new-user", handleNewUser);
             socket.off("leave", handleUserLeft);
@@ -100,25 +121,24 @@ const Stadium = ({ onFinish }) => {
 
         }
     }
-        , []);
+        , [myUsername]);
 
-    const hancleUserClick = (user) => {
-        socket.emit("ask-to-fight", { room: "main", user });
+    const hancleUserClick = (username) => {
+        socket.emit("ask-to-fight", { room: "main", username });
     }
-    const handleAcceptFight = (user) => {
-        socket.emit("accept-fight", { room: "main", user });
-    }
+    
     const handleMiPokemonChange = async (pokemon) => {
         return await updatePokemon(pokemon);
     }
     const handleRivalPokemonChange = async (pokemon) => {
-        setRival({ ...rival, pokemons: [pokemon] });
-        return pokemon;
+        console.log("handleRivalPokemonChange", pokemon)
+        const newPokemon = await updateRivalPokemon(pokemon);
+        return newPokemon;
     }
-    const getUpdatedPokemon = async (pokemon) => {
+    /* const getUpdatedPokemon = async (pokemon) => {
         const pokemonData = await getPokemonById(pokemon._id);
         return pokemonData;
-    }
+    } */
     if (isCombat && rival) {
         return (
             <section className="combat">
@@ -151,8 +171,8 @@ const Stadium = ({ onFinish }) => {
             <h2>Usuarios</h2>
             {users.map((user) => (
                 <StadiumUserComponent
-                    key={user.username}
-                    user={user}
+                    key={user}
+                    username={user}
                     onClick={() => hancleUserClick(user)}
                 />
             ))}

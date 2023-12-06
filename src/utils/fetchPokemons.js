@@ -51,7 +51,6 @@ const getPokemons = async () => {
 }
 const getStarters = async () => {
     try {
-        const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
         const response = await fetch(VITE_BACKEND_HOST + "/api/pokemon/starter", {
             method: "GET",
             credentials: "include"
@@ -77,7 +76,7 @@ const getPokemon = async (id=null,level=5) => {
     return pokemon;
 }
 const getPokemonById = async (id) => {
-    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/${id}`, {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/fetch/${id}`, {
         credentials: "include"
     });
     const pokemon = await data.json();
@@ -158,6 +157,13 @@ const attack = async (pokemon1,pokemon2,move) => {
     const response = await data.json();
     return response;
 }
+const getUserData = async (username) => {
+    const data = await fetch(VITE_BACKEND_HOST+"/api/user/data/"+username, {
+        credentials: "include"
+    });
+    const user = await data.json();
+    return user;
+}
 
 export {
     getPokemons,
@@ -170,5 +176,6 @@ export {
     healPokemons,
     addLevel,
     swapPokemons,
-    attack
+    attack,
+    getUserData
 }

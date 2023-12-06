@@ -17,6 +17,7 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [username, setUsername] = useState("");
   const [misPokemons, dispatch] = useReducer(misPokemonsReducer, []);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     setIsLoaded(false);
@@ -31,6 +32,7 @@ function App() {
     if (misPokemons.length === 0 && isLogged && isLoaded) {
       setCurrentGameState("choose");
     }
+    scrollRef.current.scrollIntoView({ behavior: "smooth" });
 
   }, [currentGameState, isLoaded]);
 
@@ -43,22 +45,24 @@ function App() {
         if (error.status === 401) {
           setCurrentGameState("logout");
           setIsLogged(false);
-          return;
+          return [];
         }
-        return;
+        return [];
       }
       dispatch({ type: "set", payload: pokemons });
       setIsLogged(true);
       setIsLoaded(true);
       if (pokemons.length === 0) {
         setCurrentGameState("choose");
-        return;
+        return [];
       }
+      return pokemons;
 
     }
     catch (error) {
       console.log("error", error);
       setError(error.message);
+      return [];
     }
 
 
@@ -84,8 +88,31 @@ function App() {
     return data.pokemons;
   }
   const handleUpdatePokemon = async (newPokemon) => {
-    const [error, pokemons] = await getPokemons();
-    if (!pokemons || pokemons.length === 0) {
+    console.log("handleupdatePokemon", newPokemon);
+    dispatch({ type: "update", payload: newPokemon });
+    
+    const [error,pokemons] = await getPokemons();
+    if (error) {
+      setError(error.message);
+      if (error.status === 401) {
+        setCurrentGameState("logout");
+        setIsLogged(false);
+        return null;
+      }
+      return null;
+    } 
+    if(newPokemon.hp === 0) {
+      await handleAlivePokemons(pokemons);
+      return newPokemon;
+    }
+    
+    return newPokemon;
+  }
+  /* const handleUpdatePokemon = async (newPokemon) => {
+    await getMisPokemons();
+    const pokemons = misPokemons.map(pokemon => pokemon)
+    console.log("pokemons", pokemons);
+    if (pokemons.length === 0) {
       return null;
     }
     if (pokemons[0].hp === 0) {
@@ -98,7 +125,7 @@ function App() {
     }
     return newPokemon;
 
-  }
+  } */
 
   const handleAddLevel = async (pokemon) => {
     console.log("addLevel345", pokemon);
@@ -212,13 +239,16 @@ function App() {
 
   const GameStateComponent = gameStates[currentGameState].component;
   return (
+    <div className={`App ${currentGameState}`} >
     <loggedInContext.Provider value={loggedInContextValue}>
       <PokemonContext.Provider value={pokemonContextValue}>
+        <div ref={scrollRef} />
         <img className="title-image" src='/reactmon.png' alt="titulo" />
-        <p className="error">{error}</p>
+        {/* <p className="error">{error}</p> */}
         <GameStateComponent onFinish={handleStateChange} />
       </ PokemonContext.Provider>
     </loggedInContext.Provider>
+    </div>
   )
 }
 

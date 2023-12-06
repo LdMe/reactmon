@@ -2,8 +2,9 @@
     width: 100px;
     height: 100px;
     margin: 10px;
-    
+
 }
+
 .pokeball-heal.darker {
     animation: darken 1s infinite;
 }
@@ -20,4 +21,24 @@
     100% {
         filter: brightness(1);
     }
+}
+
+.heal {
+    background-color: #ffffffc3;
+}
+
+.heal-pokemons {
+    display: flex;
+    height: 80%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.heal-pokemons.pokeballs {
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    margin: auto;
+    gap: 15px;
 }

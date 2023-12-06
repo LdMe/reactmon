@@ -1,14 +1,11 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import Pokemon from './PokemonComponent';
 import { attack as attackApi } from "../utils/fetchPokemons";
-import PokemonContext from "../context/pokemonContext";
-
 import '../styles/Combat.css';
 const Combat = ({ pokemon1, pokemon2, onChange, onFinish, buttons = [] }) => {
     const [isAttacking, setIsAttacking] = useState(false);
     const [isStarted, setIsStarted] = useState(false);
-    const olfPokemonId = useRef(pokemon1._id);
-
+    const oldPokemonId = useRef(pokemon1._id);
     useEffect(() => {
         if (!isStarted) {
             setIsStarted(true);
@@ -18,8 +15,8 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, buttons = [] }) => {
     }, [pokemon2]);
 
     useEffect(() => {
-        if (pokemon1._id !== olfPokemonId.current) {
-            olfPokemonId.current = pokemon1._id;
+        if (pokemon1._id !== oldPokemonId.current) {
+            oldPokemonId.current = pokemon1._id;
             if (!isAttacking) {
                 setIsAttacking(true);
                 attack(pokemon2, pokemon1);
