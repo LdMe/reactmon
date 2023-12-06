@@ -8,7 +8,7 @@ const addPokemon = async (pokemon) => {
                 "Content-Type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify(pokemon)
+            body: JSON.stringify({pokemon:pokemon._id || pokemon.id})
         });
         const response = await data.json();
         return response;
@@ -91,6 +91,14 @@ const removePokemon = async (pokemonToRemove) => {
     const response = await data.json();
     return response;
 }
+const removeOwnerlessPokemon = async (idPokemonToRemove) => {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/pokemon/saved/${idPokemonToRemove}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+    const response = await data.json();
+    return response;
+}
 
 const savePokemons = async(pokemons) => {
     const data = await fetch(VITE_BACKEND_HOST+"/api/user/pokemons", {
@@ -126,7 +134,7 @@ const addLevel = async (pokemon) => {
             "Content-Type": "application/json"
         },
         credentials: "include",
-        body: JSON.stringify({pokemon})
+        body: JSON.stringify({pokemon:pokemon._id})
     });
     const response = await data.json();
     return response;
@@ -152,7 +160,7 @@ const attack = async (pokemon1,pokemon2,move) => {
             "Content-Type": "application/json"
         },
         credentials: "include",
-        body: JSON.stringify({ pokemon1, pokemon2,move })
+        body: JSON.stringify({ pokemon1:pokemon1._id, pokemon2:pokemon2._id,move })
     });
     const response = await data.json();
     return response;
@@ -177,5 +185,6 @@ export {
     addLevel,
     swapPokemons,
     attack,
-    getUserData
+    getUserData,
+    removeOwnerlessPokemon
 }

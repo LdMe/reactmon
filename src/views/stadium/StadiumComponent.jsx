@@ -7,14 +7,14 @@ import StadiumUserComponent from "./StadiumUserComponent";
 import Combat from "./socketCombatComponent";
 import { getUserData,getPokemonById } from "../../utils/fetchPokemons";
 import "./Stadium.css";
+import socketContext from "../../context/socketContext";
 
-const VITE_BACKEND_HOST = import.meta.env.VITE_BACKEND_HOST;
-const socket = io(VITE_BACKEND_HOST);
 
 const Stadium = ({ onFinish }) => {
     const { misPokemons, updatePokemon } = useContext(pokemonContext);
     const { getUserName } = useContext(loggedInContext);
     const [myUsername, setMyUsername] = useState(getUserName());
+    const socket = useContext(socketContext);
     
     const [users, setUsers] = useState([]);
     const [isCombat, setIsCombat] = useState(false);
@@ -66,7 +66,7 @@ const Stadium = ({ onFinish }) => {
         }
         const handleUsers = (users) => {
             console.log(users);
-            setUsers(users);
+            setUsers(users.filter((user) => user !== myUsername));
         }
         const handleAskToFight = async(username) => {
             console.log("ask to fight", username)

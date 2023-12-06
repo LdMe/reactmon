@@ -2,7 +2,7 @@ import { useEffect, useState, useContext,useRef, useLayoutEffect } from "react";
 import Pokemon from "../components/PokemonComponent";
 import PokemonContext from "../context/pokemonContext";
 import MisPokemons from "./MisPokemons";
-import { attack as attackApi,getPokemon } from "../utils/fetchPokemons";
+import { attack as attackApi,getPokemon,removeOwnerlessPokemon } from "../utils/fetchPokemons";
 import Combat from "../components/CombatComponent";
 
 const pokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
@@ -12,6 +12,7 @@ const WildCombat = ({ onFinish }) => {
     const { misPokemons, updatePokemon,addPokemon,addLevel,getMisPokemons } = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
     const footerRef = useRef(null);
+    const wildPokemonRef = useRef(null);
     
     useEffect(() => {
         getMisPokemons();
@@ -22,11 +23,20 @@ const WildCombat = ({ onFinish }) => {
             }
             footerRef.current.scrollIntoView({ behavior: "smooth" });
         }, 1500);
+        return () => {
+            console.log("exiting",wildPokemonRef.current);
+            if(wildPokemonRef.current!==null){
+                removeOwnerlessPokemon(wildPokemonRef.current);
+            }
+        }
     }, []);
 
 
     useEffect(() => {
         finishCombat();
+        if(wildPokemon){
+            wildPokemonRef.current = wildPokemon._id;
+        }
         
     }, [isEnded,wildPokemon]);
 
@@ -35,6 +45,8 @@ const WildCombat = ({ onFinish }) => {
             return;
         }
         if (wildPokemon!==null && wildPokemon.hp === 0) {
+            const deletedPokemon = await removeOwnerlessPokemon(wildPokemon._id);
+            console.log("deleted",deletedPokemon.name);
             const result = await addLevel(misPokemons[0]);
             setIsEnded(true);
                 setTimeout(() => {
@@ -63,6 +75,7 @@ const WildCombat = ({ onFinish }) => {
     const capture = () => {
         if (misPokemons.length === 6) {
             alert("No puedes capturar más pokemons");
+            setIsEnded(true);
             onFinish("map");
             return;
         }
@@ -70,7 +83,7 @@ const WildCombat = ({ onFinish }) => {
         console.log("probability",probability);
         if (Math.random() < probability) {
             alert("Has capturado al pokemon");
-
+            wildPokemonRef.current = null;
             const newPokemon = {...wildPokemon};
             if (newPokemon.hp === 0) {
                 newPokemon.hp = 1;

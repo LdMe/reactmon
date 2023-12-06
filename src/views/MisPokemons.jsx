@@ -54,6 +54,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
         return Math.round(stat.base_stat * stat.multiplier);
     }
     let filteredPokemons = misPokemons.map((pokemon) => pokemon);
+    console.log("filteredPokemons", filteredPokemons)
     if (!isView) {
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }
@@ -63,7 +64,22 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
         }
         return element.name;
     }
+    const getMultiplierColor = (multiplier) => {
+        // multiplier goes from 0.75 to 1.25
+        if (multiplier > 1) {
+            // return color between black and green
+            const green = (multiplier - 1)/0.25 * 255;
+            return "rgb(0," + green + ",0)";
 
+        }
+        if (multiplier < 1) {
+            // return color between black and red .
+            const red = (1 - multiplier)/0.25 * 255;
+            return "rgb(" + red + ",0,0)";
+
+        }
+        return "black";
+    }   
     return (
         <div className={"mis-pokemons" + (isView ? " view" : "")}>
             {misPokemons.length !== 1 &&
@@ -95,7 +111,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
 
                                 <p><b>Tipos:</b> {
                                     pokemon.types.map((type) => {
-                                        return <span key={type.name} className={type.name + " type__name"}>{type.nameEs} </span>
+                                        return <span key={type.name} className={type.name + " type__name"}>{getName(type,"es")} </span>
                                     })
                                 }</p>
                                 <table >
@@ -124,15 +140,15 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
                                         <tr></tr>
                                         <tr className="stat__row">
                                             <td>hp</td>
-                                            <td>{getStatWithMultiplier(pokemon.stats[0])}</td>
+                                            <td style={{color:getMultiplierColor(pokemon.stats[0].multiplier)}}>{getStatWithMultiplier(pokemon.stats[0])}</td>
                                         </tr>
                                         <tr className="stat__row">
                                             <td>ataque</td>
-                                            <td>{getStatWithMultiplier(pokemon.stats[1])}</td>
+                                            <td style={{color:getMultiplierColor(pokemon.stats[1].multiplier)}}>{getStatWithMultiplier(pokemon.stats[1])}</td>
                                         </tr>
                                         <tr className="stat__row">
                                             <td>defensa</td>
-                                            <td>{getStatWithMultiplier(pokemon.stats[2])}</td>
+                                            <td style={{color:getMultiplierColor(pokemon.stats[2].multiplier)}}>{getStatWithMultiplier(pokemon.stats[2])}</td>
                                         </tr>
                                     </tbody>
                                 </table>
