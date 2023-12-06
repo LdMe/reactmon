@@ -57,6 +57,12 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
     if (!isView) {
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }
+    const getName = (element,lang="es") => {
+        if(element.names && element.names.length>0){
+            return element.names.filter((name) => name.language.name === lang)[0].name;
+        }
+        return element.name;
+    }
 
     return (
         <div className={"mis-pokemons" + (isView ? " view" : "")}>
@@ -104,9 +110,9 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
                                         {pokemon.activeMoves.map((move) => {
                                             return (
                                                 <tr key={move.name}>
-                                                    <td>{move.nameEs}</td>
+                                                    <td>{getName(move,"es")}</td>
                                                     <td>{move.power}</td>
-                                                    <td className={move.type.name}>{move.type.nameEs}</td>
+                                                    <td className={move.type.name}>{getName(move.type,"es")}</td>
                                                 </tr>
                                             )
                                         }
