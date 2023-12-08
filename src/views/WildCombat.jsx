@@ -15,12 +15,12 @@ const WildCombat = ({ onFinish }) => {
     useEffect(() => {
         getMisPokemons();
         getPokemonState();
-        setTimeout(() => {
+        /* setTimeout(() => {
             if (footerRef.current === null) {
                 return;
             }
             footerRef.current.scrollIntoView({ behavior: "smooth" });
-        }, 1500);
+        }, 1500); */
         return () => {
             clearFight();
         }
@@ -53,7 +53,9 @@ const WildCombat = ({ onFinish }) => {
         }
         if (wildPokemon !== null && wildPokemon.hp === 0) {
             await clearFight();
-            const result = await addLevel(misPokemons[0]);
+            if (wildPokemon.level > misPokemons[0].level) {
+                const result = await addLevel(misPokemons[0]);
+            }
             setIsEnded(true);
             setTimeout(() => {
                 alert("Has ganado la pelea");
@@ -63,8 +65,9 @@ const WildCombat = ({ onFinish }) => {
     }
     const getPokemonState = async () => {
         try {
-            const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            const multiplier = Math.floor(Math.random() * maxLevel) + 3;
+            let maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
+            maxLevel = Math.max(maxLevel, 10);
+            const multiplier = Math.floor(Math.random() * maxLevel) + 1;
 
             const pokemonLevel = Math.min(maxLevel, multiplier);
             //const pokemonLevel = 1;
@@ -80,13 +83,13 @@ const WildCombat = ({ onFinish }) => {
     }
 
     const handleCapture = async () => {
-        if(!isPlayerTurn || isEnded){
+        if (!isPlayerTurn || isEnded) {
             return;
         }
         setIsEnded(true);
         if (misPokemons.length === 6) {
             alert("No puedes capturar más pokemons");
-            
+
             onFinish("map");
             return;
         }
@@ -97,6 +100,9 @@ const WildCombat = ({ onFinish }) => {
             onFinish("map");
             return;
         }
+        console.log("data", data)
+        const lastPokemon = data.pokemons[data.pokemons.length - 1];
+        const result = await addPokemon(lastPokemon);
         alert("Has capturado al pokemon");
         onFinish("map");
     }
@@ -111,15 +117,17 @@ const WildCombat = ({ onFinish }) => {
             return;
         }
         setTimeout(async () => {
-            try {
-                const result = await attack(wildPokemon, misPokemons[0]);
-                const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
-                updatePokemon(newPlayerPokemon);
-            } catch (error) {
-                console.error(error);
-            }
-
+            aiAttack();
         }, 400);
+    }
+    const aiAttack = async () => {
+        try {
+            const result = await attack(wildPokemon, misPokemons[0]);
+            const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
+            updatePokemon(newPlayerPokemon);
+        } catch (error) {
+            console.error(error);
+        }
     }
     const handleAttack = async () => {
         try {
@@ -128,8 +136,8 @@ const WildCombat = ({ onFinish }) => {
             }
             setIsPlayerTurn(false);
             const result = await attack(misPokemons[0], wildPokemon);
-            const newWildPokemon = { ...wildPokemon, hp: result.defender.hp };
-            setWildPokemon(newWildPokemon);
+            
+            setWildPokemon(result.defender);
         } catch (error) {
             setIsPlayerTurn(true);
 

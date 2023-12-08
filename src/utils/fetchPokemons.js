@@ -50,7 +50,6 @@ const getPokemons = async () => {
         const pokemons = await data.json();
         return [null, pokemons];
     } catch (error) {
-        console.error(error);
         return [error, null]
     }
 
@@ -68,7 +67,6 @@ const getStarters = async () => {
         return [null, newPokemons];
     } catch (error) {
 
-        console.error(error);
         return [error, null]
     }
 }

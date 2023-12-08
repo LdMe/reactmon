@@ -3,7 +3,7 @@ import Pokemon from '../PokemonComponent';
 import './Combat.css';
 const Combat = ({ playerPokemon, enemyPokemon, handleAttack, onFinish,  canExit=true,isPlayerTurn = true,  buttons = [] }) => {
     const style = {
-        backgroundImage: "url(/forest.png)"
+        backgroundImage: "url(/forest.jpg)"
     }
 
     return (

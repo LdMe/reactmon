@@ -66,7 +66,6 @@ function App() {
 
     }
     catch (error) {
-      console.error("error", error);
       setError(error.message);
       return [];
     }
@@ -77,13 +76,8 @@ function App() {
     setCurrentGameState(newState);
   }
   const handleAddPokemon = async (newPokemon) => {
-    const data = await addPokemon(newPokemon);
-    if (!data) {
-      return null;
-    }
-    const pokemon = data.pokemons[data.pokemons.length - 1];
-    dispatch({ type: "add", payload: pokemon });
-    return pokemon;
+    dispatch({ type: "add", payload: newPokemon });
+    return newPokemon;
   }
   const handleRemovePokemon = async (pokemonId) => {
     dispatch({ type: "remove", payload: pokemonId });
@@ -96,7 +90,6 @@ function App() {
   }
   const handleUpdatePokemon = async (newPokemon) => {
     dispatch({ type: "update", payload: newPokemon });
-
     const [error, pokemons] = await getPokemons();
     if (error) {
       setError(error.message);
@@ -111,6 +104,7 @@ function App() {
       await handleAlivePokemons(pokemons);
       return newPokemon;
     }
+    
 
     return newPokemon;
   }
@@ -179,7 +173,9 @@ function App() {
     }
 
   }
-
+  const handleSetPokemons = async (pokemons) => {
+    dispatch({ type: "set", payload: pokemons });
+  }
 
   const pokemonContextValue = {
     misPokemons: misPokemons,
@@ -190,6 +186,7 @@ function App() {
     swapPokemons: handleSwapPokemons,
     healPokemons: handleHealPokemons,
     getMisPokemons,
+    setPokemons: handleSetPokemons,
   }
   const login = (username) => {
     setIsLogged(true);

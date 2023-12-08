@@ -45,6 +45,15 @@ const StadiumCombat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onCha
         socket.on("swap", async (data) => {
             setIsAttacking(false);
         });
+        socket.on("leave", async (data) => {
+            if (!isWinner.current) {
+                if (data === rivalName) {
+                    alert("El rival se ha desconectado");
+                    isWinner.current = true;
+                    onFinish("stadium");
+                }
+            }
+        });
         return () => {
             if (!isWinner.current) {
                 socket.emit("combat-end", { room: "main", username: rivalName });
@@ -95,14 +104,14 @@ const StadiumCombat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onCha
         socket.emit("swap", { room: "main", username: rivalName });
         setIsAttacking(true);
     }
-    
+
     const style = {
-        backgroundImage: "url('/stadium.png')",
+        backgroundImage: "url('/stadium.jpg')",
     }
     return (
         <>
             <section className="combat" style={style}>
-                
+
                 <Combat
                     playerPokemon={pokemon1}
                     enemyPokemon={pokemon2}
@@ -116,11 +125,11 @@ const StadiumCombat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onCha
 
 
             </section>
-            <MisPokemons 
-            onFinish={() => { }} 
-            isView={false} 
-            onUpdate={handleSwap}
-            disabled={isAttacking}
+            <MisPokemons
+                onFinish={() => { }}
+                isView={false}
+                onUpdate={handleSwap}
+                disabled={isAttacking}
             />
             <div ref={footerRef}></div>
         </>

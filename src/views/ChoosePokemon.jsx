@@ -7,6 +7,7 @@ import Logout from "../components/Logout";
 const ChoosePokemon = ({ idList = [1, 4, 7], onFinish }) => {
     const [pokemonList, setPokemonList] = useState([]);
     const [error, setError] = useState(null);
+    const [selectedPokemon, setSelectedPokemon] = useState(null);
     const { misPokemons, addPokemon } = useContext(PokemonContext);
     useEffect(() => {
         getPokemons();
@@ -21,12 +22,23 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish }) => {
         setPokemonList(starters);
     }
     const choosePokemon = async (pokemon) => {
+        if (selectedPokemon !== null) {
+            return;
+        }
+        setSelectedPokemon(pokemon);
+        const data = await addPokemonToUser(pokemon);
+        if (!data) {
+            alert("No se ha podido añadir el pokemon");
+            return;
+        }
+
         const result = await addPokemon(pokemon);
         if (result) {
             alert("Has elegido a " + pokemon.name + " como tu pokemon inicial, cuidalo bien");
         }
         else {
             alert("No se ha podido añadir el pokemon");
+            setSelectedPokemon(null);
         }
     }
     const handleSelectPokemon = async (pokemon) => {

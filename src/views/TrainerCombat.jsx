@@ -100,13 +100,12 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
             if (result === null) {
                 return;
             }
-            const newTrainerPokemon = { ...trainer.pokemons[0], hp: result.defender.hp };
+            const newTrainerPokemon = { ...result.defender };
             const newPokemons = [...trainer.pokemons];
             newPokemons[0] = newTrainerPokemon;
             setTrainer({ ...trainer, pokemons: newPokemons });
 
         } catch (error) {
-            console.error(error);
             setIsPlayerTurn(true);
 
         }
@@ -115,14 +114,21 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     const handleEnemyAttack = async () => {
         setTimeout(async () => {
             try {
-                const result = await attack(trainer.pokemons[0], misPokemons[0]);
-                const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
-                updatePokemon(newPlayerPokemon);
+                aiAttack();
             } catch (error) {
                 console.error(error);
             }
 
         }, 400);
+    }
+    const aiAttack = async () => {
+        try {
+            const result = await attack(trainer.pokemons[0], misPokemons[0]);
+            const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
+            updatePokemon(newPlayerPokemon);
+        } catch (error) {
+            console.error(error);
+        }
     }
     const handleSwapPokemons = () => {
         setIsPlayerTurn(false);
