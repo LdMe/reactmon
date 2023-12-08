@@ -23,7 +23,6 @@ const Login = ({ onFinish }) => {
             body: JSON.stringify({ username, password })
         });
         const data = await response.json();
-        console.log(data);
         if (data.error) {
             alert(data.error);
         }
@@ -33,7 +32,7 @@ const Login = ({ onFinish }) => {
         }
     }
     catch(e){
-        console.log(e);
+        console.error(e);
 
     }
     }
@@ -72,11 +71,10 @@ const Login = ({ onFinish }) => {
                         <input type="password" id="passwordConfirm" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                     </>
                 }
-                <section className="button-footer">
                 <button type="button" onClick={isRegister ? handleRegister : handleLogin}>{isRegister ? "Registrarse" : "Login"}</button>
                 <button type="button" onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Ya tengo cuenta" : "Crear cuenta"}</button>
                 <button type="button" onClick={() => onFinish("map")}>Volver</button>
-                </section>
+                
             </form>
         </section>
     )

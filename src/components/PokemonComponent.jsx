@@ -11,7 +11,7 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
     if (data.shiny) {
         frontOrBack = isFront ? "front_shiny" : "back_shiny";
     }
-    let image = data.sprites.versions['generation-v']['black-white'].animated[frontOrBack];
+    let image = data.sprites[frontOrBack];
 
     return (
         <article className={className + (loaded ? "" : " hidden")} onClick={onClick} >

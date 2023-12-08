@@ -1,10 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import { io } from "socket.io-client";
 import pokemonContext from "../../context/pokemonContext";
 import loggedInContext from "../../context/loggedInContext";
 import Pokemon from "../../components/PokemonComponent";
 import StadiumUserComponent from "./StadiumUserComponent";
-import Combat from "./socketCombatComponent";
+import Combat from "./StadiumCombatComponent";
 import { getUserData,getPokemonById } from "../../utils/fetchPokemons";
 import "./Stadium.css";
 import socketContext from "../../context/socketContext";
@@ -21,15 +20,11 @@ const Stadium = ({ onFinish }) => {
     const [rival, SetRival] = useState(null);
 
     const setRival = async (username) => {
-        console.log("setRival", username)
         const newRival = await getUserData(username);
-        console.log("newRival", newRival)
         SetRival(newRival);
     }
     const updateRivalPokemon = async (pokemon) => {
-        console.log("updateRivalPokemon", pokemon)
         const newPokemon = await getPokemonById(pokemon);
-        console.log("newPokemon", newPokemon)
         const newPokemons = rival.pokemons;
         newPokemons[0] = newPokemon;
         SetRival({ ...rival, pokemons: newPokemons });
@@ -131,7 +126,6 @@ const Stadium = ({ onFinish }) => {
         return await updatePokemon(pokemon);
     }
     const handleRivalPokemonChange = async (pokemon) => {
-        console.log("handleRivalPokemonChange", pokemon)
         const newPokemon = await updateRivalPokemon(pokemon);
         return newPokemon;
     }

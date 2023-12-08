@@ -1,19 +1,17 @@
-import { useEffect, useState, useContext,useRef, useLayoutEffect } from "react";
-import Pokemon from "../components/PokemonComponent";
+import { useEffect, useState, useContext, useRef, useLayoutEffect } from "react";
 import PokemonContext from "../context/pokemonContext";
 import MisPokemons from "./MisPokemons";
-import { attack as attackApi,getPokemon,removeOwnerlessPokemon } from "../utils/fetchPokemons";
-import Combat from "../components/CombatComponent";
+import { getPokemon, clearFight, attack, capture } from "../utils/fetchPokemons";
+import Combat from "../components/combat/CombatComponent";
 
-const pokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
 
 const WildCombat = ({ onFinish }) => {
     const [wildPokemon, setWildPokemon] = useState(null);
-    const { misPokemons, updatePokemon,addPokemon,addLevel,getMisPokemons } = useContext(PokemonContext);
+    const { misPokemons, updatePokemon, addPokemon, addLevel, getMisPokemons } = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
+    const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const footerRef = useRef(null);
-    const wildPokemonRef = useRef(null);
-    
+
     useEffect(() => {
         getMisPokemons();
         getPokemonState();
@@ -24,46 +22,55 @@ const WildCombat = ({ onFinish }) => {
             footerRef.current.scrollIntoView({ behavior: "smooth" });
         }, 1500);
         return () => {
-            console.log("exiting",wildPokemonRef.current);
-            if(wildPokemonRef.current!==null){
-                removeOwnerlessPokemon(wildPokemonRef.current);
-            }
+            clearFight();
         }
     }, []);
-
-
+    useEffect(() => {
+        if (misPokemons[0].hp === 0) {
+            if (isPlayerTurn) {
+                setIsPlayerTurn(false);
+            }
+            return;
+        }
+        setTimeout(() => {
+            setIsPlayerTurn(true);
+        }, 400);
+    }, [misPokemons[0]]);
     useEffect(() => {
         finishCombat();
-        if(wildPokemon){
-            wildPokemonRef.current = wildPokemon._id;
-        }
-        
-    }, [isEnded,wildPokemon]);
 
-    const finishCombat = async() => {
+    }, [isEnded, wildPokemon]);
+
+    useEffect(() => {
+        if (!isPlayerTurn) {
+            handleEnemyAttack();
+        }
+    }, [isPlayerTurn]);
+
+    const finishCombat = async () => {
         if (isEnded) {
             return;
         }
-        if (wildPokemon!==null && wildPokemon.hp === 0) {
-            const deletedPokemon = await removeOwnerlessPokemon(wildPokemon._id);
-            console.log("deleted",deletedPokemon.name);
+        if (wildPokemon !== null && wildPokemon.hp === 0) {
+            await clearFight();
             const result = await addLevel(misPokemons[0]);
             setIsEnded(true);
-                setTimeout(() => {
+            setTimeout(() => {
                 alert("Has ganado la pelea");
                 onFinish("map");
-                }, 600);
+            }, 600);
         }
     }
-    
     const getPokemonState = async () => {
         try {
             const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            const pokemonLevel = Math.floor(Math.random() * maxLevel *1.5) + 1;
+            const multiplier = Math.floor(Math.random() * maxLevel) + 3;
+
+            const pokemonLevel = Math.min(maxLevel, multiplier);
             //const pokemonLevel = 1;
-            const id="random";
-            const pokemonData = await getPokemon(id,pokemonLevel);
-            
+            const id = "random";
+            const pokemonData = await getPokemon(id, pokemonLevel);
+
             setWildPokemon(pokemonData);
         } catch (error) {
             console.error(error);
@@ -71,54 +78,80 @@ const WildCombat = ({ onFinish }) => {
             onFinish("map");
         }
     }
-    
-    const capture = () => {
+
+    const handleCapture = async () => {
+        if(!isPlayerTurn || isEnded){
+            return;
+        }
+        setIsEnded(true);
         if (misPokemons.length === 6) {
             alert("No puedes capturar más pokemons");
-            setIsEnded(true);
+            
             onFinish("map");
             return;
         }
-        const probability = 1.05 - wildPokemon.hp / wildPokemon.maxHp;
-        console.log("probability",probability);
-        if (Math.random() < probability) {
-            alert("Has capturado al pokemon");
-            wildPokemonRef.current = null;
-            const newPokemon = {...wildPokemon};
-            if (newPokemon.hp === 0) {
-                newPokemon.hp = 1;
+        setIsPlayerTurn(false);
+        const data = await capture(wildPokemon);
+        if (data === null) {
+            alert("el pokemon se ha escapado");
+            onFinish("map");
+            return;
+        }
+        alert("Has capturado al pokemon");
+        onFinish("map");
+    }
+
+
+    const handleSwapPokemons = () => {
+        setIsPlayerTurn(false);
+        //setWildPokemon(wildPokemon => wildPokemon);
+    }
+    const handleEnemyAttack = async () => {
+        if (isEnded) {
+            return;
+        }
+        setTimeout(async () => {
+            try {
+                const result = await attack(wildPokemon, misPokemons[0]);
+                const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
+                updatePokemon(newPlayerPokemon);
+            } catch (error) {
+                console.error(error);
             }
-            addPokemon(newPokemon);
-            onFinish("map");
-        }
-        else {
-            alert("El pokemon se ha escapado");
-            onFinish("map");
-        }
+
+        }, 400);
     }
-    
-    const handleChange = async (pokemon) =>{
-        
-        if(pokemon._id===misPokemons[0]._id){
-            return await updatePokemon(pokemon);
+    const handleAttack = async () => {
+        try {
+            if (!isPlayerTurn || isEnded) {
+                return;
+            }
+            setIsPlayerTurn(false);
+            const result = await attack(misPokemons[0], wildPokemon);
+            const newWildPokemon = { ...wildPokemon, hp: result.defender.hp };
+            setWildPokemon(newWildPokemon);
+        } catch (error) {
+            setIsPlayerTurn(true);
+
         }
-        else{
-            setWildPokemon(pokemon);
-        }
+
     }
+
     if (wildPokemon) {
         return (
             <>
-                <Combat 
-                pokemon1={misPokemons[0]} 
-                pokemon2={wildPokemon} 
-                onChange={handleChange} 
-                onFinish={onFinish} 
-                buttons ={[{name:"Capturar",onClick:capture,image:"/pokeball.svg"}]}
+                <Combat
+                    playerPokemon={misPokemons[0]}
+                    enemyPokemon={wildPokemon}
+                    onFinish={onFinish}
+                    isPlayerTurn={isPlayerTurn}
+                    handleAttack={handleAttack}
+                    buttons={[{ name: "Capturar", onClick: handleCapture, image: "/pokeball.svg" }]}
                 />
-                <MisPokemons 
-                onFinish={()=>{}} 
-                isView={false} 
+                <MisPokemons
+                    onFinish={() => { }}
+                    isView={false}
+                    onUpdate={handleSwapPokemons}
                 />
                 <div ref={footerRef} />
             </>
@@ -126,7 +159,7 @@ const WildCombat = ({ onFinish }) => {
     }
     return (
         <section className="loading-section">
-            <img className="pokeball-loading rotate" src="/pokeball.svg"/>
+            <img className="pokeball-loading rotate" src="/pokeball.svg" />
         </section>
     )
 }

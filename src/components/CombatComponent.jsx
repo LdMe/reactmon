@@ -39,7 +39,6 @@ const Combat = ({ pokemon1, pokemon2, onChange, onFinish, buttons = [] }) => {
         }
         const move = attacker.activeMoves[Math.floor(Math.random() * attacker.activeMoves.length)];
         const data = await attackApi(attacker, defender, move);
-        console.log("attack", data)
         if (data.error) {
             alert(data.error);
             onFinish("map");

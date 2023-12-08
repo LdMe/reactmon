@@ -74,7 +74,16 @@
   width: 100%;
   text-align: center;
   padding-top:0;
-
+  margin: 5px;
+}
+.combat-info__stats {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top:0;
 }
 .pokemon-actions {
   width:60%;

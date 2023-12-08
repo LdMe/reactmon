@@ -5,7 +5,7 @@ import PokemonContext from './context/pokemonContext';
 import loggedInContext from './context/loggedInContext';
 import dialogContext from './context/dialogContext';
 import misPokemonsReducer from './reducers/MispokemonsReducer';
-import { addPokemon, savePokemons, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
+import { addPokemon,  healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
 
 import socket from './utils/socket';
 import SocketContext from './context/socketContext';
@@ -46,7 +46,6 @@ function App() {
   const getMisPokemons = async () => {
     try {
       const [error, pokemons] = await getPokemons();
-      console.log("pokemons", pokemons)
       if (error) {
         setError(error.message);
         if (error.status === 401) {
@@ -67,7 +66,7 @@ function App() {
 
     }
     catch (error) {
-      console.log("error", error);
+      console.error("error", error);
       setError(error.message);
       return [];
     }
@@ -87,6 +86,7 @@ function App() {
     return pokemon;
   }
   const handleRemovePokemon = async (pokemonId) => {
+    dispatch({ type: "remove", payload: pokemonId });
     const data = await removePokemon(pokemonId);
     if (!data) {
       return null;
@@ -95,7 +95,6 @@ function App() {
     return data.pokemons;
   }
   const handleUpdatePokemon = async (newPokemon) => {
-    console.log("handleupdatePokemon", newPokemon);
     dispatch({ type: "update", payload: newPokemon });
 
     const [error, pokemons] = await getPokemons();
@@ -115,48 +114,21 @@ function App() {
 
     return newPokemon;
   }
-  /* const handleUpdatePokemon = async (newPokemon) => {
-    await getMisPokemons();
-    const pokemons = misPokemons.map(pokemon => pokemon)
-    console.log("pokemons", pokemons);
-    if (pokemons.length === 0) {
-      return null;
-    }
-    if (pokemons[0].hp === 0) {
-      dispatch({ type: "update", payload: newPokemon });
-      await handleAlivePokemons(pokemons);
-    }
-    else {
-      dispatch({ type: "update", payload: newPokemon });
-
-    }
-    return newPokemon;
-
-  } */
+  
 
   const handleAddLevel = async (pokemon) => {
-    console.log("addLevel345", pokemon);
     const response = await addLevel(pokemon);
-    console.log("addLevel", response);
     if (!response) {
       return null;
     }
     dispatch({ type: "update", payload: response });
     return response;
   }
-  const handleSetPokemons = async (newPokemons) => {
-    for (const pokemon of newPokemons) {
-      console.log("pokemon", pokemon);
-    }
-    const data = await savePokemons(newPokemons);
-    console.log("data", data)
-    if (!data) {
+  
+  const handleSwapPokemons = async (id1, id2) => {
+    if (id1 === id2) {
       return null;
     }
-    dispatch({ type: "set", payload: data.pokemons });
-    return data.pokemons;
-  }
-  const handleSwapPokemons = async (id1, id2) => {
     const data = await swapPokemons(id1, id2);
     if (!data) {
       return null;
@@ -175,7 +147,6 @@ function App() {
 
   const handleAlivePokemons = async (pokemons) => {
     const alivePokemons = pokemons.filter((pokemon) => pokemon.hp > 0);
-    console.log("alivePokemons", alivePokemons);
     if (alivePokemons.length === 0) {
       return new Promise((resolve) => {
         setTimeout(async () => {

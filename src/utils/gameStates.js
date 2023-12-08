@@ -6,6 +6,7 @@ import MisPokemons from "../views/MisPokemons";
 import Login from "../views/Login";
 import Logout from "../components/Logout";
 import Stadium from "../views/stadium/StadiumComponent";
+import TrainerCombat from "../views/TrainerCombat";
 
 const gameStates = {
     "choose": {
@@ -16,6 +17,9 @@ const gameStates = {
     },
     "wild":{
         component: WildCombat
+    },
+    "trainer":{
+        component: TrainerCombat
     },
     "heal": {
         component: HealPokemons

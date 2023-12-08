@@ -8,9 +8,10 @@ import Pokemon from '../../components/PokemonComponent'
 import { attack as attackApi, getPokemonById } from "../../utils/fetchPokemons";
 import PokemonContext from "../../context/pokemonContext";
 import MisPokemons from '../MisPokemons';
+import Combat from '../../components/combat/CombatComponent';
 
-import '../../styles/Combat.css';
-const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, onFinish, buttons = [] }) => {
+import '../../components/combat/Combat.css';
+const StadiumCombat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, onFinish, buttons = [] }) => {
     const [isAttacking, setIsAttacking] = useState(false);
     const isWinner = useRef(false);
     const footerRef = useRef(null);
@@ -23,14 +24,11 @@ const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, o
             footerRef.current.scrollIntoView({ behavior: "smooth" });
         }, 1500);
         socket.on("attack", async (data) => {
-            console.log("attack", data)
             const pokemon = await getPokemonById(data.pokemon);
             const newPokemon = await onChange1(pokemon);
             const alivePokemons = misPokemons.filter((pokemon) => pokemon.hp > 0);
-            console.log("alivePokemons", alivePokemons)
             if (alivePokemons.length <= 1 && newPokemon.hp === 0) {
                 socket.emit("combat-end", { room: "main", username: rivalName });
-                alert("Has perdido");
                 return;
             }
             setIsAttacking(false);
@@ -41,13 +39,10 @@ const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, o
             onFinish("stadium");
         });
         socket.on("update", async (data) => {
-            console.log("update data", data)
             onChange2(data.pokemon);
-            // onChange(data.pokemon);
         });
         // si llega un mensaje de swap, el pokemon rival ha cambiado, por lo que es nuestro turno
         socket.on("swap", async (data) => {
-            console.log("swap data", data)
             setIsAttacking(false);
         });
         return () => {
@@ -76,9 +71,9 @@ const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, o
         }
         const move = attacker.activeMoves[Math.floor(Math.random() * attacker.activeMoves.length)];
         const data = await attackApi(attacker, defender, move);
-        console.log("attack", data.defender._id)
         socket.emit("attack", { pokemon: data.defender._id, username: rivalName });
         if (data.error) {
+            socket.emit("combat-end", { room: "main", username: rivalName });
             alert(data.error);
             onFinish("map");
             return defender;
@@ -107,36 +102,17 @@ const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, o
     return (
         <>
             <section className="combat" style={style}>
-                <article className="player-container enemy">
-                    <h2>{rivalName}</h2>
-                    <Pokemon data={pokemon2} isEnemy={true} />
-                </article>
-                <article className="player-container">
-                    <h2>Tú</h2>
-                    <Pokemon data={pokemon1} isFront={false} />
-                </article>
-                <section className="button-footer">
-                    {!isAttacking ?
-                        <section className="action-buttons center">
-                            <img onClick={handleAttack} className="pokeball-button" src="/swords.svg" alt="attack" />
-                            <>
-                                {buttons.map((button) => {
-                                    return <img className="pokeball-button" key={button.name} onClick={() => button.onClick(pokemon1, pokemon2)} src={button.image} alt={button.name} />
-                                })}
-                            </>
-                        </section>
-                        :
-                        <section className="action-buttons center">
-                            <img className="pokeball-button disabled" src="/swords.svg" alt="attack" />
+                
+                <Combat
+                    playerPokemon={pokemon1}
+                    enemyPokemon={pokemon2}
+                    onFinish={onFinish}
+                    isPlayerTurn={!isAttacking}
+                    handleAttack={handleAttack}
+                    canExit={false}
+                    buttons={buttons}
+                />
 
-                            <>
-                                {buttons.map((button) => {
-                                    return <img className="pokeball-button disabled" key={button.name} onClick={() => button.onClick(pokemon1, pokemon2)} src={button.image} alt={button.name} />
-                                })}
-                            </>
-                        </section>
-                    }
-                </section>
 
 
             </section>
@@ -151,4 +127,4 @@ const Combat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onChange2, o
     )
 }
 
-export default Combat;
+export default StadiumCombat;

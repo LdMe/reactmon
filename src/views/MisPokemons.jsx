@@ -54,7 +54,6 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
         return Math.round(stat.base_stat * stat.multiplier);
     }
     let filteredPokemons = misPokemons.map((pokemon) => pokemon);
-    console.log("filteredPokemons", filteredPokemons)
     if (!isView) {
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }

@@ -10,19 +10,16 @@ const HealPokemons = ({ onFinish }) => {
         healPokemons();
     }
     return (
-        <div className="heal-pokemons">
-            <section className="heal-pokemons--pokeballs">
+        <div className="heal-pokemons" onClick={isHealing ? ()=>onFinish("map"): handleHeal}>
+            <section className="heal-pokemons--pokeballs" >
                 {misPokemons.map((pokemon) => {
                     return (
                         <img className={"pokeball-heal " + (isHealing && "darker")} key={pokemon._id} src="/pokeball.svg" alt={pokemon.name} />
                     )
                 })
                 }
-                {isHealing ?
+                {isHealing &&
                     <section className="healing">
-                        <section className="pokemon-buttons button-footer">
-                            <button onClick={() => onFinish("map")}>Volver</button>
-                        </section>
                         <audio
                             onEnded={() => {
                                 healPokemons();
@@ -33,13 +30,7 @@ const HealPokemons = ({ onFinish }) => {
                             src="heal.mp3"
                             autoPlay />
                     </section>
-                    :
-                    <>
-                        <section className="pokemon-buttons button-footer">
-                            <button onClick={handleHeal}>Curar</button>
-                            <button onClick={() => onFinish("map")}>Volver</button>
-                        </section>
-                    </>
+                    
                 }
             </section>
         </div>

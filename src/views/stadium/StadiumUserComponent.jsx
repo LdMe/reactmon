@@ -11,9 +11,7 @@ const StadiumUserComponent = ({ username, onClick }) => {
         setShowPokemons(showPokemons => !showPokemons);
     }
     const getUser = async (username) =>{
-        console.log("username", username)
         const user = await getUserData(username);
-        console.log(user);
         setUser(user);
     }
     if (user === null) {
