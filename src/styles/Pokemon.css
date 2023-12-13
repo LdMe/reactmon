@@ -106,6 +106,43 @@
   padding-top:0;
 }
 
+.mis-pokemons {
+  margin-bottom: 100px;
+}
+.pc-pokemons {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  text-align: start;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top:0;
+  width: 100%;
+  background-color: #ffffffd5;
+}
+.pokemons--title {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+  align-items: center;
+  padding-top:0;
+  margin: 5px;
+}
+.pc-pokemons .pokemon-card {
+  min-width: 20%;
+  max-width: 50%;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-wrap: wrap;
+  vertical-align: middle;
+  justify-content: end;
+  background-color: #ffffffd5;
+}
 .choose-pokemon {
   display: flex;
   justify-content: space-between;

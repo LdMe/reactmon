@@ -181,6 +181,33 @@ const capture = async (pokemon) => {
         return null;
     }
 }
+const saveToPc = async (pokemon) => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/user/pokemons/pc", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ pokemon: pokemon._id })
+    });
+    const response = await data.json();
+    return response;
+}
+const getPc = async () => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/user/pokemons/pc", {
+        credentials: "include"
+    });
+    const pokemons = await data.json();
+    return pokemons;
+}
+const removeFromPc = async (pokemon) => {
+    const data = await fetch(`${VITE_BACKEND_HOST}/api/user/pokemons/pc/${pokemon._id}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+    const response = await data.json();
+    return response;
+}
 
 export {
     getPokemons,
@@ -195,5 +222,8 @@ export {
     attack,
     getUserData,
     clearFight,
-    capture
+    capture,
+    saveToPc,
+    getPc,
+    removeFromPc
 }

@@ -79,8 +79,11 @@ function App() {
     dispatch({ type: "add", payload: newPokemon });
     return newPokemon;
   }
-  const handleRemovePokemon = async (pokemonId) => {
+  const handleRemovePokemon = async (pokemonId, sync=true) => {
     dispatch({ type: "remove", payload: pokemonId });
+    if(!sync){
+      return null;
+    }
     const data = await removePokemon(pokemonId);
     if (!data) {
       return null;
@@ -128,7 +131,7 @@ function App() {
       return null;
     }
     dispatch({ type: "set", payload: data.pokemons });
-    return data.pokemons;
+    return data;
   }
   const handleHealPokemons = async () => {
     const data = await healPokemons();
