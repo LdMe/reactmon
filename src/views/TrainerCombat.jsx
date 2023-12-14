@@ -83,8 +83,8 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         const pokemons = [];
         for (let i = 0; i < numOfPokemons; i++) {
             const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            const randomLevel = Math.floor(maxLevel * 0.75 + Math.random() * maxLevel * 0.50);
-            pokemons.push(getPokemon(null,randomLevel));
+            const randomLevel = Math.max(1,Math.floor(maxLevel * 0.75 + Math.random() * maxLevel * 0.50));
+            pokemons.push(getPokemon(null,randomLevel,true));
         }
         await Promise.all(pokemons).then((values) => {
             setTrainer({ pokemons: values });
