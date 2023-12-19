@@ -5,7 +5,7 @@ import PokemonContext from './context/pokemonContext';
 import loggedInContext from './context/loggedInContext';
 import dialogContext from './context/dialogContext';
 import misPokemonsReducer from './reducers/MispokemonsReducer';
-import { addPokemon,  healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
+import { addPokemon, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
 
 import socket from './utils/socket';
 import SocketContext from './context/socketContext';
@@ -27,7 +27,7 @@ function App() {
     getMisPokemons();
     if (isLogged) {
       socket.connect();
-      socket.emit("login", {username:getUserName()});
+      socket.emit("login", { username: getUserName() });
     }
   }, [isLogged]);
 
@@ -79,9 +79,9 @@ function App() {
     dispatch({ type: "add", payload: newPokemon });
     return newPokemon;
   }
-  const handleRemovePokemon = async (pokemonId, sync=true) => {
+  const handleRemovePokemon = async (pokemonId, sync = true) => {
     dispatch({ type: "remove", payload: pokemonId });
-    if(!sync){
+    if (!sync) {
       return null;
     }
     const data = await removePokemon(pokemonId);
@@ -107,11 +107,11 @@ function App() {
       await handleAlivePokemons(pokemons);
       return newPokemon;
     }
-    
+
 
     return newPokemon;
   }
-  
+
 
   const handleAddLevel = async (pokemon) => {
     const response = await addLevel(pokemon);
@@ -121,7 +121,7 @@ function App() {
     dispatch({ type: "update", payload: response });
     return response;
   }
-  
+
   const handleSwapPokemons = async (id1, id2) => {
     if (id1 === id2) {
       return null;
@@ -221,7 +221,9 @@ function App() {
         <SocketContext.Provider value={socket}>
           <PokemonContext.Provider value={pokemonContextValue}>
             <div ref={scrollRef} />
-            <img className="title-image" src='/reactmon.png' alt="titulo" />
+            <div className='title'>
+              <img className="title-image" src='/reactmon.png' alt="titulo" />
+            </div>
             {/* <p className="error">{error}</p> */}
             <GameStateComponent onFinish={handleStateChange} />
           </ PokemonContext.Provider>

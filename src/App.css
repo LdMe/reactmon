@@ -1,7 +1,4 @@
 
-.App {
-  height: 100vh;
-}
 .card {
   padding: 2em;
 }
@@ -32,7 +29,7 @@
   font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  padding: 20px;
+  padding: 10px;
   transition: transform 0.3s ease-in-out;
 }
 .action-buttons button:hover, .pokemon-buttons button:hover {
@@ -40,6 +37,11 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.title {
+  max-height: 10vh;
+  margin: 0;
+  padding: 5px;
+}
 
 .title-image {
   display: flex;
@@ -47,13 +49,15 @@
   align-items: center;
   text-align: center;
   margin:auto;
-  margin-bottom: 20px;
   width:50%;
-  max-width: 100%;
+  max-height: 10vh;
 }
 body {
   margin:0;
+  width: 100%;
+  overflow-x: hidden;
 }
+
 .pokeball-button {
   width: 50px;
   height: 50px;
@@ -76,11 +80,14 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 
 }
 .App {
   height: 100vh;
   overflow-y: scroll;
+  width: 100%;
+  overflow-x: hidden;
   
 }
 
@@ -129,3 +136,4 @@ section.login {
   background-color: #ffffffc1;
   padding: 10px;
 }
+

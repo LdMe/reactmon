@@ -6,6 +6,7 @@ section.combat {
     background-size: cover;
     background-position-y: bottom;
     padding: 10px;
+    max-height: 50vh;
 }
 
 section.combat .combat{
@@ -21,6 +22,12 @@ section.combat .combat{
 
 .mis-pokemons{
     background-color: #ffffffc1;
+    height: 40vh;
+}
+.mis-pokemons.view {
+    height: 80vh ;
+    width: 100%;
+    box-sizing: border-box;
 }
 @media screen and (max-width: 768px) {
     .stadium .pokemons-container  {
@@ -34,6 +41,7 @@ section.combat .combat{
     }
     .mis-pokemons .pokemons-container .pokemon-card{
         min-width: 40%;
+        max-width: 50%;
     }
     .mis-pokemons.view .pokemons-container .pokemon-card{
         min-width: 80%;
