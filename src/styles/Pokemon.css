@@ -74,7 +74,7 @@
   width: 100%;
   text-align: center;
   padding-top:0;
-  margin: 5px;
+  margin: 0;
 }
 .combat-info__stats {
   width: 100%;
@@ -120,13 +120,17 @@
   background-color: #ffffffd5;
 }
 .pokemons--title {
+  background-color: #ffffffd5;
   width: 100%;
   display: flex;
   justify-content: space-evenly;
   gap: 10px;
   align-items: center;
   padding-top:0;
-  max-height: 3vh;
+}
+.pokemons--title h2, .pokemons--title p {
+  margin: 0;
+  padding: 2px;
 }
 .pc-pokemons .pokemon-card {
   margin: 5px;
@@ -136,8 +140,6 @@
   transition: transform 0.3s ease-in-out;
   display: flex;
   flex-wrap: wrap;
-  vertical-align: middle;
-  justify-content: end;
   background-color: #ffffffd5;
 }
 .choose-pokemon {
@@ -181,26 +183,30 @@
   width: 100%;
   background-color: #f5f5f5;
   z-index: 100;
-  max-height: 10vh;
+}
+.no-combat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top:0;
+  width: 100%;
+  background-color: #ffffffd5;
 }
 
-@media screen and (max-width: 768px) {
-  .no-combat .combat-info {
-    width: 100%;
-  }
-  .no-combat .combat-info h2 {
-    width: 100%;
-    text-align: center;
-    padding-top:0;
-  }
+.no-combat .combat-info {
+  width: 100%;
+}
+.no-combat .combat-info h2 {
+  width: 100%;
+  text-align: center;
+  padding-top:0;
 }
 
 @media screen and (max-width: 480px) {
   .no-combat .combat-info h2 {
     font-size: 0.8em;
-    width: 100%;
-    text-align: center;
-    padding-top:0;
   }
 }
 

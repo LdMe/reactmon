@@ -11,11 +11,16 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
     const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [pcPokemons, setPcPokemons] = useState([]);
+    const [waitingOrDisabled, setWaitingOrDisabled] = useState(disabled);
     useEffect(() => {
         getMisPokemons();
         handleGetPc();
 
     }, []);
+    useEffect(() => {
+        setWaitingOrDisabled(disabled);
+    }, [disabled]);
+
     useEffect(() => {
         setSelectedPokemon(null);
     }, [misPokemons, pcPokemons]);
@@ -30,51 +35,58 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
         }
     }
     const handlePokemonClick = async (pokemon) => {
-
+        if (waitingOrDisabled) {
+            return;
+        }
         if (selectedPokemon === null) {
             setSelectedPokemon(pokemon);
+            return;
         }
-        else {
-            setSelectedPokemon(null);
-            if (!isView) {
-                if (selectedPokemon._id === pokemon._id) {
 
+        setSelectedPokemon(null);
+        setWaitingOrDisabled(true);
+        // si es una vista, 
+        if (!isView) {
 
-                    if (pokemon.hp === 0) {
-                        return;
-                    }
-                    if (disabled) {
-                        return;
-                    }
-                    await swapPokemons(pokemon._id, misPokemons[0]._id)
-                    onUpdate();
-                }
-                else {
-                    await swapPokemons(selectedPokemon._id, pokemon._id);
-
-                }
-                return;
-            }
-            else if (selectedPokemon._id === pokemon._id) {
-                const pcPokemonsIndex = pcPokemons.findIndex((pokemon) => pokemon._id === selectedPokemon._id);
-                if (pcPokemonsIndex !== -1) {
-                    const { error, savedPokemons } = await removeFromPc(selectedPokemon);
-                    if (error) {
-                        console.log(error);
-                        return;
-                    }
-                    console.log("savedPokemons", savedPokemons);
-                    setPcPokemons(savedPokemons);
-                    await getMisPokemons();
+            if (selectedPokemon._id === pokemon._id) {
+                if (pokemon.hp === 0) {
+                    setWaitingOrDisabled(false);
                     return;
                 }
+                await swapPokemons(pokemon._id, misPokemons[0]._id)
+                onUpdate();
             }
+            else {
 
-            const data = await swapPokemons(selectedPokemon._id, pokemon._id);
-            if (data) {
-                setPcPokemons(data.savedPokemons);
+                await swapPokemons(selectedPokemon._id, pokemon._id);
+
+
+            }
+            setWaitingOrDisabled(false);
+            return;
+        }
+        else if (selectedPokemon._id === pokemon._id) {
+            const pcPokemonsIndex = pcPokemons.findIndex((pokemon) => pokemon._id === selectedPokemon._id);
+            if (pcPokemonsIndex !== -1) {
+                const { error, savedPokemons } = await removeFromPc(selectedPokemon);
+                if (error) {
+                    console.log(error);
+                    setWaitingOrDisabled(false);
+                    return;
+                }
+                setPcPokemons(savedPokemons);
+                await getMisPokemons();
+                setWaitingOrDisabled(false);
+                return;
             }
         }
+
+        const data = await swapPokemons(selectedPokemon._id, pokemon._id);
+        if (data) {
+            setPcPokemons(data.savedPokemons);
+        }
+        setWaitingOrDisabled(false);
+
     }
     const handleFreePokemon = async (e, pokemon) => {
         e.stopPropagation();
@@ -84,14 +96,17 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
     }
     const handleSaveToPc = async (e, pokemon) => {
         e.stopPropagation();
+        setWaitingOrDisabled(true);
         const { error, savedPokemons } = await saveToPc(pokemon);
         if (error) {
             alert(error);
             console.log(error);
+            setWaitingOrDisabled(false);
             return;
         }
         setPcPokemons(savedPokemons);
         await removePokemon(pokemon, false);
+        setWaitingOrDisabled(false);
     }
 
     const getStatWithMultiplier = (stat) => {
@@ -149,7 +164,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
                         data={pokemon}
                         onClick={() => handlePokemonClick(pokemon)}
                         isCombat={true}
-                        defaultClassName={disabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
+                        defaultClassName={waitingOrDisabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
                         isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
                     >
 
@@ -221,7 +236,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
                                 data={pokemon}
                                 onClick={() => handlePokemonClick(pokemon)}
                                 isCombat={false}
-                                defaultClassName={disabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
+                                defaultClassName={waitingOrDisabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
                                 isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
                             />
                         ))
