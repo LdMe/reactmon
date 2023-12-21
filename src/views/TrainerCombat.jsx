@@ -12,6 +12,8 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     const [trainer, setTrainer] = useState(null);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const footerRef = useRef(null);
+    const myPokemonRef = useRef(null);
+    const trainerRef = useRef(null);
 
     useEffect(() => {
         if (trainer !== null) {
@@ -30,6 +32,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [misPokemons[0]]);
 
     useEffect(() => {
+        myPokemonRef.current = myPokemon;
         if (myPokemon.hp === 0) {
             if (isPlayerTurn) {
                 setIsPlayerTurn(false);
@@ -47,6 +50,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [isPlayerTurn]);
 
     useEffect(() => {
+        trainerRef.current = trainer;
         if (trainer && trainer.pokemons.length > 0 && trainer.pokemons[0].hp === 0) {
             setTimeout(() => {
 
@@ -56,9 +60,9 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [trainer]);
 
     const onTrainerPokemonDead = async () => {
-        const firstPokemon = trainer.pokemons[0];
-        const firstAlivePokemon = trainer.pokemons.find((pokemon) => pokemon.hp > 0);
-        await addLevel(myPokemon);
+        const firstPokemon = trainerRef.current.pokemons[0];
+        const firstAlivePokemon = trainerRef.current.pokemons.find((pokemon) => pokemon.hp > 0);
+        await addLevel(myPokemonRef.current);
         if (firstAlivePokemon === undefined) {
 
             alert("Has ganado");
@@ -68,13 +72,13 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         swapTrainerPokemons(firstPokemon, firstAlivePokemon);
     }
     const swapTrainerPokemons = async (pokemon1, pokemon2) => {
-        const newTrainerPokemons = [...trainer.pokemons];
+        const newTrainerPokemons = [...trainerRef.current.pokemons];
         const index1 = newTrainerPokemons.findIndex((pokemon) => pokemon._id === pokemon1._id);
         const index2 = newTrainerPokemons.findIndex((pokemon) => pokemon._id === pokemon2._id);
         const temp = newTrainerPokemons[index1];
         newTrainerPokemons[index1] = newTrainerPokemons[index2];
         newTrainerPokemons[index2] = temp;
-        setTrainer({ ...trainer, pokemons: newTrainerPokemons });
+        setTrainer({ ...trainerRef.current, pokemons: newTrainerPokemons });
     }
     const getTrainerPokemons = async () => {
         if (pokemons === null) {
@@ -131,8 +135,8 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }
     const aiAttack = async () => {
         try {
-            const result = await attack(trainer.pokemons[0], myPokemon);
-            const newPlayerPokemon = { ...myPokemon, hp: result.defender.hp };
+            const result = await attack(trainerRef.current.pokemons[0], myPokemonRef.current);
+            const newPlayerPokemon = { ...myPokemonRef.current, hp: result.defender.hp };
             updatePokemon(newPlayerPokemon);
         } catch (error) {
             console.error(error);

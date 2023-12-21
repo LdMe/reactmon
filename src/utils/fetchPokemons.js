@@ -209,6 +209,14 @@ const removeFromPc = async (pokemon) => {
     return response;
 }
 
+const getUsers = async () => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/admin/users", {
+        credentials: "include"
+    });
+    const users = await data.json();
+    return users;
+}
+
 export {
     getPokemons,
     getStarters,
@@ -225,5 +233,6 @@ export {
     capture,
     saveToPc,
     getPc,
-    removeFromPc
+    removeFromPc,
+    getUsers
 }

@@ -17,7 +17,7 @@ function App() {
   const [hardcoreMode, setHardcoreMode] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
   const [misPokemons, dispatch] = useReducer(misPokemonsReducer, []);
   const scrollRef = useRef(null);
 
@@ -191,27 +191,29 @@ function App() {
     getMisPokemons,
     setPokemons: handleSetPokemons,
   }
-  const login = (username) => {
+  const login = (user) => {
     setIsLogged(true);
-    setUsername(username);
-    localStorage.setItem("username", username);
+    setUser(user);
+    localStorage.setItem("username", user.username);
+    localStorage.setItem("role", user.role);
   }
   const logout = () => {
     setIsLogged(false);
-    setUsername("");
+    setUser(null)
   }
   const getUserName = () => {
-    let user = username || localStorage.getItem("username");
-    if (!user) {
-      user = "";
-    }
-    return user;
+    let username = user?.username || localStorage.getItem("username");
+    return username;
+  }
+  const getUserRole = () => {
+    return user?.role || localStorage.getItem("role");
   }
   const loggedInContextValue = {
     isLogged,
     login,
     logout,
-    getUserName
+    getUserName,
+    getUserRole,
   }
 
   const GameStateComponent = gameStates[currentGameState].component;

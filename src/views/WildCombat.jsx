@@ -11,6 +11,10 @@ const WildCombat = ({ onFinish }) => {
     const [myPokemon, setMyPokemon] = useState(misPokemons[0]);
     const [isEnded, setIsEnded] = useState(false);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
+    const myPokemonRef = useRef(null);
+    const wildPokemonRef = useRef(null);
+
     const footerRef = useRef(null);
 
     /**
@@ -41,6 +45,7 @@ const WildCombat = ({ onFinish }) => {
      * sino, el turno pasa al jugador despues de 400ms
      */
     useEffect(() => {
+        myPokemonRef.current = myPokemon;
         if (myPokemon.hp === 0) {
             if (isPlayerTurn) {
                 setIsPlayerTurn(false);
@@ -54,6 +59,7 @@ const WildCombat = ({ onFinish }) => {
 
     
     useEffect(() => {
+        wildPokemonRef.current = wildPokemon;
         finishCombat();
 
     }, [isEnded, wildPokemon]);
@@ -63,6 +69,8 @@ const WildCombat = ({ onFinish }) => {
             handleEnemyAttack();
         }
     }, [isPlayerTurn]);
+
+   
 
     /**
      * Si el pokemon salvaje muere, se limpia el combate y se añade un nivel al pokemon del jugador
@@ -147,8 +155,8 @@ const WildCombat = ({ onFinish }) => {
 
     const aiAttack = async () => {
         try {
-            const result = await attack(wildPokemon, myPokemon);
-            const newPlayerPokemon = { ...myPokemon, hp: result.defender.hp };
+            const result = await attack(wildPokemonRef.current, myPokemonRef.current);
+            const newPlayerPokemon = { ...myPokemonRef.current, hp: result.defender.hp };
             updatePokemon(newPlayerPokemon);
         } catch (error) {
             console.error(error);

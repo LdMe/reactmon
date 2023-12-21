@@ -36,7 +36,7 @@ const Login = ({ onFinish }) => {
                 alert(data.error);
             }
             else {
-                login(data.result.username);
+                login(data.user);
                 onFinish("map");
             }
         }

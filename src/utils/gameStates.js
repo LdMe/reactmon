@@ -7,6 +7,7 @@ import Login from "../views/Login";
 import Logout from "../components/Logout";
 import Stadium from "../views/stadium/StadiumComponent";
 import TrainerCombat from "../views/TrainerCombat";
+import AdminView from "../views/Admin";
 
 const gameStates = {
     "choose": {
@@ -35,6 +36,9 @@ const gameStates = {
     },
     "stadium": {
         component: Stadium
+    },
+    "admin": {
+        component: AdminView
     }
 }
 
