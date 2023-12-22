@@ -17,7 +17,7 @@ const Map = ({ onFinish }) => {
                         <button onClick={() => onFinish("heal")}>Curar pokemons</button>
                         <button onClick={() => onFinish("list")}>Mis pokemons</button>
                         {getUserRole() === "admin" &&
-                            <button onClick={() => onFinish("admin")}>Usuarios</button>
+                            <button onClick={() => onFinish("admin")}>Admin</button>
                         }
                         <Logout onFinish={onFinish} auto={false} />
 

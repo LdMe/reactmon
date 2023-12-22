@@ -21,8 +21,8 @@
   padding: 0 40px;
   margin-top: 5px;
 }
-.pokemon-buttons button {
-  width: 100%;
+
+.pokemon-buttons button, .pokemon-navbar button {
   border: none;
   border-radius: 8px;
   background-color: #e8e8e8;
@@ -32,7 +32,10 @@
   padding: 10px;
   transition: transform 0.3s ease-in-out;
 }
-.action-buttons button:hover, .pokemon-buttons button:hover {
+.pokemon-buttons button {
+  width: 100%;
+}
+.action-buttons button:hover, .pokemon-buttons button:hover, .pokemon-navbar button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -138,3 +141,9 @@ section.login {
   padding: 10px;
 }
 
+.pokemon-list {
+  display: flex;
+  overflow-x:scroll;
+  background-color: #ffffffc1;
+  user-select: none;
+}

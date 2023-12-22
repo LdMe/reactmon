@@ -216,6 +216,48 @@ const getUsers = async () => {
     const users = await data.json();
     return users;
 }
+const getTemplatePokemons = async () => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/pokemon/templates", {
+        credentials: "include"
+    });
+    const pokemons = await data.json();
+    return pokemons;
+}
+
+const getGyms = async () => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/gyms/", {
+        credentials: "include"
+    });
+    const gyms = await data.json();
+    return gyms;
+}
+
+const createGym = async (gym) => {
+    console.log(gym);
+    const data = await fetch(VITE_BACKEND_HOST + "/api/gyms/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(gym)
+    });
+    const response = await data.json();
+    return response;
+}
+
+const updateGym = async (gym) => {
+    const data = await fetch(VITE_BACKEND_HOST + "/api/gyms/"+gym._id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(gym)
+    });
+    const response = await data.json();
+    return response;
+}
 
 export {
     getPokemons,
@@ -234,5 +276,9 @@ export {
     saveToPc,
     getPc,
     removeFromPc,
-    getUsers
+    getUsers,
+    getTemplatePokemons,
+    getGyms,
+    createGym,
+    updateGym
 }
