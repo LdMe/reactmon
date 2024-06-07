@@ -1,4 +1,4 @@
-import Pokemon from "../../components/PokemonComponent";
+import Pokemon from "../../components/pokemon/PokemonComponent";
 import { useEffect, useState } from "react";
 import { getUserData } from "../../utils/fetchPokemons";
 const StadiumUserComponent = ({ username, onClick }) => {

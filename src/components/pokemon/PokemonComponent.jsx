@@ -1,9 +1,13 @@
 import { useState } from "react";
-import HealthBar from "./healthBar/HealthBar";
-import '../styles/Pokemon.css';
-const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false,isEnemy=false,showJustLevel=false, children, defaultClassName=""}) => {
+import HealthBar from "../healthBar/HealthBar";
+import Moves from "../moves/Moves";
+import Types from "../types/Types";
+import Stats from "../stats/Stats";
+
+import './Pokemon.css';
+const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false}) => {
     const [loaded, setLoaded] = useState(false);
-    let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat") 
+    let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat")
     /* if(!loaded){
         className += " hidden";
     } */
@@ -31,7 +35,14 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
             <section className="combat-info">
                 <img src={image} alt={`imagen de ${data.name}`} onLoad={() => setLoaded(true)} />
             </section>
-            {children}
+            {fullInfo &&
+                <section className="pokemon-actions full">
+                    <Types types={data.types} />
+                    <Moves moves={data.activeMoves} />
+                    <Stats stats={data.stats} />
+                    {children}
+                </section>
+            }
         </article>
     )
 

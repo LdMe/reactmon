@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import pokemonContext from "../../context/pokemonContext";
 import loggedInContext from "../../context/loggedInContext";
-import Pokemon from "../../components/PokemonComponent";
+import Pokemon from "../../components/pokemon/PokemonComponent";
 import StadiumUserComponent from "./StadiumUserComponent";
 import Combat from "./StadiumCombatComponent";
 import { getUserData,getPokemonById } from "../../utils/fetchPokemons";

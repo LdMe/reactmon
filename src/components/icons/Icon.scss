@@ -1,0 +1,14 @@
+
+.icon__circle{
+    border-radius: 50%;
+    border: 1px solid black;
+    width: 0.5rem;
+    height: 0.5rem;
+    display: inline-block;
+    &.connected {
+        background-color: green;
+    }
+    &.disconnected {
+        background-color: red;
+    }
+}

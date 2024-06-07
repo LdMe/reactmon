@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import Pokemon from "../components/PokemonComponent";
+import Pokemon from "../components/pokemon/PokemonComponent";
 import PokemonContext from "../context/pokemonContext";
 import { addPokemon as addPokemonToUser, getStarters} from "../utils/fetchPokemons";
 import Logout from "../components/Logout";
@@ -14,7 +14,8 @@ const ChoosePokemon = ({ idList = [1, 4, 7], onFinish }) => {
     }, []);
 
     const getPokemons = async () => {
-        const [error,starters] = await getStarters();
+        const starters = await getStarters();
+        const error = starters.error;
         if (error) {
             setError(error.message);
             return;

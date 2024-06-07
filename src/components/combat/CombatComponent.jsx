@@ -1,5 +1,5 @@
 
-import Pokemon from '../PokemonComponent';
+import Pokemon from '../pokemon/PokemonComponent';
 import './Combat.css';
 const Combat = ({ playerPokemon, enemyPokemon, handleAttack, onFinish,  canExit=true,isPlayerTurn = true,  buttons = [] }) => {
     const style = {

@@ -45,9 +45,10 @@ function App() {
 
   const getMisPokemons = async () => {
     try {
-      const [error, pokemons] = await getPokemons();
+      const pokemons = await getPokemons();
+      const error = pokemons.error;
       if (error) {
-        setError(error.message);
+        setError(message);
         if (error.status === 401) {
           setCurrentGameState("logout");
           setIsLogged(false);
@@ -93,7 +94,8 @@ function App() {
   }
   const handleUpdatePokemon = async (newPokemon) => {
     dispatch({ type: "update", payload: newPokemon });
-    const [error, pokemons] = await getPokemons();
+    const pokemons = await getPokemons();
+    const error = pokemons.error;
     if (error) {
       setError(error.message);
       if (error.status === 401) {

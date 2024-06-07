@@ -1,19 +1,15 @@
 import { useEffect, useState, useContext, useRef, useLayoutEffect } from "react";
-import Pokemon from "../components/PokemonComponent";
 import PokemonContext from "../context/pokemonContext";
 import MisPokemons from "./MisPokemons";
-import { attack, getPokemon, clearFight } from "../utils/fetchPokemons";
+import { attack, getPokemon, clearFight,getTrainerPokemons as getTrainerPkmns } from "../utils/fetchPokemons";
 import Combat from "../components/combat/CombatComponent";
 
 
 const TrainerCombat = ({ pokemons = null, onFinish }) => {
-    const { misPokemons, swapPokemons, removePokemon, getMisPokemons, addLevel, updatePokemon } = useContext(PokemonContext);
-    const [myPokemon, setMyPokemon] = useState(misPokemons[0]);
+    const { misPokemons, addLevel, updatePokemon } = useContext(PokemonContext);
     const [trainer, setTrainer] = useState(null);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const footerRef = useRef(null);
-    const myPokemonRef = useRef(null);
-    const trainerRef = useRef(null);
 
     useEffect(() => {
         if (trainer !== null) {
@@ -26,14 +22,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [pokemons]);
 
     useEffect(() => {
-        if (misPokemons.length > 0) {
-            setMyPokemon(misPokemons[0]);
-        }
-    }, [misPokemons[0]]);
-
-    useEffect(() => {
-        myPokemonRef.current = myPokemon;
-        if (myPokemon.hp === 0) {
+        if (misPokemons[0].hp === 0) {
             if (isPlayerTurn) {
                 setIsPlayerTurn(false);
             }
@@ -42,7 +31,8 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         setTimeout(() => {
             setIsPlayerTurn(true);
         }, 400);
-    }, [myPokemon]);
+    }, [misPokemons[0]]);
+
     useEffect(() => {
         if (!isPlayerTurn) {
             handleEnemyAttack();
@@ -50,19 +40,17 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [isPlayerTurn]);
 
     useEffect(() => {
-        trainerRef.current = trainer;
         if (trainer && trainer.pokemons.length > 0 && trainer.pokemons[0].hp === 0) {
             setTimeout(() => {
-
                 onTrainerPokemonDead();
             }, 600);
         }
     }, [trainer]);
 
     const onTrainerPokemonDead = async () => {
-        const firstPokemon = trainerRef.current.pokemons[0];
-        const firstAlivePokemon = trainerRef.current.pokemons.find((pokemon) => pokemon.hp > 0);
-        await addLevel(myPokemonRef.current);
+        const firstPokemon = trainer.pokemons[0];
+        const firstAlivePokemon = trainer.pokemons.find((pokemon) => pokemon.hp > 0);
+        await addLevel(misPokemons[0]);
         if (firstAlivePokemon === undefined) {
 
             alert("Has ganado");
@@ -72,35 +60,20 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         swapTrainerPokemons(firstPokemon, firstAlivePokemon);
     }
     const swapTrainerPokemons = async (pokemon1, pokemon2) => {
-        const newTrainerPokemons = [...trainerRef.current.pokemons];
+        const newTrainerPokemons = [...trainer.pokemons];
         const index1 = newTrainerPokemons.findIndex((pokemon) => pokemon._id === pokemon1._id);
         const index2 = newTrainerPokemons.findIndex((pokemon) => pokemon._id === pokemon2._id);
         const temp = newTrainerPokemons[index1];
         newTrainerPokemons[index1] = newTrainerPokemons[index2];
         newTrainerPokemons[index2] = temp;
-        setTrainer({ ...trainerRef.current, pokemons: newTrainerPokemons });
+        setTrainer({ ...trainer, pokemons: newTrainerPokemons });
     }
     const getTrainerPokemons = async () => {
-        if (pokemons === null) {
-            const numMyPokemons = misPokemons.length;
-            const n = Math.min(6, Math.floor(Math.random() * numMyPokemons) + 2);
-            return getRandomTrainerPokemons(n);
-        }
-        const newPokemons = await Promise.all(pokemons.map(async (pokemon) => {
-            return await getPokemon(pokemon.id, pokemon.level, true);
-        }));
-        setTrainer({ pokemons: newPokemons });
-    }
-    const getRandomTrainerPokemons = async (numOfPokemons) => {
-        const pokemons = [];
-        for (let i = 0; i < numOfPokemons; i++) {
-            const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-            const randomLevel = Math.max(1, Math.floor(maxLevel * 0.75 + Math.random() * maxLevel * 0.50));
-            pokemons.push(getPokemon(null, randomLevel, true));
-        }
-        await Promise.all(pokemons).then((values) => {
-            setTrainer({ pokemons: values });
-        });
+
+        const numMyPokemons = misPokemons.length;
+        const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
+        const trainerPokemons = await getTrainerPkmns(pokemons,numMyPokemons,maxLevel);
+        setTrainer({ pokemons: trainerPokemons });
     }
     const handleAttack = async () => {
         try {
@@ -108,7 +81,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
                 return;
             }
             setIsPlayerTurn(false);
-            const result = await attack(myPokemon, trainer.pokemons[0]);
+            const result = await attack(misPokemons[0], trainer.pokemons[0]);
             if (result === null) {
                 return;
             }
@@ -135,8 +108,8 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }
     const aiAttack = async () => {
         try {
-            const result = await attack(trainerRef.current.pokemons[0], myPokemonRef.current);
-            const newPlayerPokemon = { ...myPokemonRef.current, hp: result.defender.hp };
+            const result = await attack(trainer.pokemons[0], misPokemons[0]);
+            const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
             updatePokemon(newPlayerPokemon);
         } catch (error) {
             console.error(error);
@@ -157,7 +130,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
                 })}
 
                 <Combat
-                    playerPokemon={myPokemon}
+                    playerPokemon={misPokemons[0]}
                     enemyPokemon={trainer.pokemons[0]}
                     onFinish={onFinish}
                     isPlayerTurn={isPlayerTurn}

@@ -4,7 +4,6 @@ componente que tiene un socket como prop y controla la batalla de dos usuarios
 
 
 import { useState, useEffect, useContext, useRef } from 'react';
-import Pokemon from '../../components/PokemonComponent'
 import { attack as attackApi, getPokemonById } from "../../utils/fetchPokemons";
 import PokemonContext from "../../context/pokemonContext";
 import MisPokemons from '../MisPokemons';
