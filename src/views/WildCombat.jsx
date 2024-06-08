@@ -10,6 +10,7 @@ const WildCombat = ({ onFinish }) => {
     const { misPokemons, updatePokemon, addPokemon, addLevel, getMisPokemons } = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
+    const [isWaiting, setIsWaiting] = useState(false);
 
     /**
      * useEffect inicial que carga los pokemons del usuario y el pokemon salvaje
@@ -46,10 +47,10 @@ const WildCombat = ({ onFinish }) => {
     }, [isEnded, wildPokemon]);
 
     useEffect(() => {
-        if (!isPlayerTurn) {
+        if (!isPlayerTurn && !isWaiting) {
             handleEnemyAttack();
         }
-    }, [isPlayerTurn]);
+    }, [isPlayerTurn,isWaiting]);
 
     /**
      * Si el pokemon salvaje muere, se limpia el combate y se añade un nivel al pokemon del jugador
@@ -108,9 +109,11 @@ const WildCombat = ({ onFinish }) => {
      * Funcion que se ejecuta cuando el jugador cambia de pokemon, el turno pasa al pokemon salvaje
      */
     const handleSwapPokemons = () => {
-        console.log("swapping pokemons");
-        console.log("actual pokemon", misPokemons[0]);
-        console.log("player turn", isPlayerTurn);
+        setIsWaiting(false);
+    }
+    const handleWaitNextTurn = () => {
+        console.log("waiting next turn");
+        setIsWaiting(true);
         setIsPlayerTurn(false);
     }
     
@@ -125,8 +128,12 @@ const WildCombat = ({ onFinish }) => {
 
     const aiAttack = async () => {
         try {
-            console.log("my pokemon", misPokemons[0])
+            
             const result = await attack(wildPokemon, misPokemons[0]);
+            if(result.error) {
+                console.error(result.error);
+                return;
+            }
             const newPlayerPokemon = { ...misPokemons[0], hp: result.defender.hp };
             updatePokemon(newPlayerPokemon);
         } catch (error) {
@@ -156,13 +163,14 @@ const WildCombat = ({ onFinish }) => {
                     enemyPokemon={wildPokemon}
                     onFinish={onFinish}
                     isPlayerTurn={isPlayerTurn}
-                    handleAttack={handleAttack}
+                    onAttack={handleAttack}
                     buttons={[{ name: "Capturar", onClick: handleCapture, image: "/pokeball.svg" }]}
                 />
                 <MisPokemons
                     onFinish={() => { }}
                     isView={false}
                     onUpdate={handleSwapPokemons}
+                    onUpdateStart={handleWaitNextTurn}
                     disabled={!isPlayerTurn}
                 />
             </>

@@ -25,7 +25,7 @@ const fetchData = async(route,method,inputData=null)=>{
         const data  = await result.json();
         return data;
     } catch (error) {
-        console.error("errors",error.status);
+        console.log("error",error);
         return ({error:error.message})
     }
 }

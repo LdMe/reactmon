@@ -1,20 +1,22 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 
 import PokemonSelector from '../../components/pokemon/PokemonSelector';
-import {getGyms,createGym,updateGym}  from '../../utils/fetchPokemons';
+import TypeSelector from '../../components/types/TypeSelector';
+import { getGyms, createGym, updateGym } from '../../utils/fetchPokemons';
 
 const GymEditor = ({ onFinish, originalGym = null }) => {
-    const [gymId, setGymId] = useState(null);
-    const [gymName, setGymName] = useState("");
-    const [maxLevel, setMaxLevel] = useState(5);
-    const [leaderPokemons, setLeaderPokemons] = useState([]);
+    const [gymId, setGymId] = useState(originalGym ? originalGym._id : null);
+    const [gymName, setGymName] = useState(originalGym ? originalGym.name : "");
+    const [maxLevel, setMaxLevel] = useState(originalGym ? originalGym.maxLevel : 5);
+    const [leaderPokemons, setLeaderPokemons] = useState(originalGym ? originalGym.leaderPokemons : []);
+    const [types, setTypes] = useState(originalGym ? originalGym.types : []);
     const handleAddPokemon = (pokemon) => {
-        if(leaderPokemons.length >= 6){
+        if (leaderPokemons.length >= 6) {
             alert("No puede haber más de 6 pokemons");
             return;
         }
         const newPokemonString = JSON.stringify(pokemon);
-        const newPokemon = JSON.parse(newPokemonString); 
+        const newPokemon = JSON.parse(newPokemonString);
         newPokemon.level = maxLevel || 5;
         setLeaderPokemons([...leaderPokemons, newPokemon]);
     }
@@ -30,35 +32,36 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
     }
     const handlePokemonLevelChange = (index, level) => {
         console.log("index", index, "level", level)
-        if(level < 1 || level > 100){
+        if (level < 1 || level > 100) {
             return;
         }
         const newPokemons = [...leaderPokemons];
         newPokemons[index].level = level;
         setLeaderPokemons(newPokemons);
     }
-    const handleCreateGym = async () => {  
+    const handleCreateGym = async () => {
         const gymData = {
             name: gymName,
             maxLevel,
-            leaderPokemons
+            leaderPokemons,
+            types
         }
         console.log("gymData", gymData);
         let data = null;
-        if(gymId !== null){
+        if (gymId !== null) {
             gymData._id = gymId;
-            data = await updateGym( gymData);
+            data = await updateGym(gymData);
         }
-        else{
+        else {
             data = await createGym(gymData);
         }
         console.log("data", data)
-        if(data.error){
+        if (data.error) {
             alert(data.error);
             return;
         }
         setGymId(data._id);
-        if(gymId !== null){
+        if (gymId !== null) {
             alert("Gimnasio actualizado correctamente");
             return;
         }
@@ -66,16 +69,18 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
     }
     return (
         <>
+            <TypeSelector onChange={(types) => setTypes(types)} selectedTypes={types}/>
             <PokemonSelector
                 onFinish={handleAddPokemon}
+                types={types}
             />
             <h2>Gimnasio {gymName}</h2>
             <label htmlFor="gymName">Nombre del gimnasio</label>
             <input type="text" placeholder="Nombre del gimnasio" value={gymName} onChange={(e) => setGymName(e.target.value)} />
             <label htmlFor="maxLevel">Nivel máximo</label>
-            <input type="number" placeholder="Nivel máximo" value={maxLevel || 5} onChange={(e) => setMaxLevel(e.target.value)}  min={1} max={100}/>
+            <input type="number" placeholder="Nivel máximo" value={maxLevel || 5} onChange={(e) => setMaxLevel(e.target.value)} min={1} max={100} />
             <h3>Pokemons</h3>
-            {leaderPokemons.map((pokemon,index) => (
+            {leaderPokemons.map((pokemon, index) => (
                 <article key={index}>
                     <h3>{pokemon.name}</h3>
                     <img src={pokemon.sprites.front_default} alt={pokemon.name} />

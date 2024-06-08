@@ -9,6 +9,7 @@ import ShowUsers from "../../components/users/ShowUsers";
 const AdminView = ({ onFinish }) => {
     const [users, setUsers] = useState([]);
     const [state, setState] = useState("users");
+    const [selectedGym, setSelectedGym] = useState(null);
     const { getUserRole } = useContext(loggedInContext);
 
     useEffect(() => {
@@ -20,7 +21,11 @@ const AdminView = ({ onFinish }) => {
         handleGetUsers();
     }
         , []);
-
+        useEffect(() => {
+            if (selectedGym) {
+                setState("new-gym");
+            }
+        }, [selectedGym]);
     const handleGetUsers = async () => {
         try {
             const users = await getUsers();
@@ -34,6 +39,10 @@ const AdminView = ({ onFinish }) => {
             alert(e.message);
         }
 
+    }
+    const handleGymClick = (gym) => {
+        console.log("gym", gym);
+        setSelectedGym(gym);
     }
 
     return (
@@ -49,10 +58,10 @@ const AdminView = ({ onFinish }) => {
                 <ShowUsers users={users} />
             }
             {state === "new-gym" &&
-                <GymEditor onFinish={onFinish} />
+                <GymEditor onFinish={onFinish} originalGym={selectedGym} />
             }
             {state === "show-gym" &&
-                <Gyms onFinish={onFinish} />
+                <Gyms onFinish={onFinish} onSelect={handleGymClick} />
             }
             <section className="pokemon-buttons button-footer">
                 <button onClick={() => onFinish("map")}>Volver</button>

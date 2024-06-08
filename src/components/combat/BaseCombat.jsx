@@ -1,37 +1,27 @@
 
 import Pokemon from '../pokemon/PokemonComponent';
+import { attack as attackApi } from "../../utils/fetchPokemons";
 import './Combat.css';
-const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = true, isPlayerTurn = true, buttons = [] }) => {
+const Combat = ({ playerPokemon, enemyPokemon, handleAttack, onFinish,  canExit=true,isPlayerTurn = true,  buttons = [] }) => {
     const style = {
         backgroundImage: "url(/forest.jpg)"
     }
-    const handleAttack = () => {
+
+    const attack = async () => {
+        let attacker = playerPokemon;
+        let defender = enemyPokemon;
         if (!isPlayerTurn) {
-            return;
+            attacker = enemyPokemon;
+            defender = playerPokemon;
         }
-        onAttack();
-    }
-    const handleFinish = () => {
-        if (isPlayerTurn) {
-            onFinish("map");
-            return;
-        }
+        const result = await attackApi(attacker, defender);
     }
     return (
         <section className="combat" style={style}>
             <Pokemon data={enemyPokemon} isEnemy={true} />
             <Pokemon data={playerPokemon} isFront={false} />
             <section className="button-footer">
-                <section className={"action-buttons" + (!canExit && buttons.length === 0 ? " center" : "")}>
-                    {canExit && <img onClick={() => onFinish("map")} className={"pokeball-button " + (isPlayerTurn ? "yellow" : "disabled")} src="/running.png" alt="run" />}
-                    <img onClick={handleAttack} className={"pokeball-button " + (isPlayerTurn ? "" : "disabled")} src="/swords.svg" alt="attack" />
-                    <>
-                        {buttons.map((button) => {
-                            return <img className={"pokeball-button"+(isPlayerTurn ? "" : " disabled")} key={button.name} onClick={() => button.onClick(playerPokemon, enemyPokemon)} src={button.image} alt={button.name} />
-                        })}
-                    </>
-                </section>
-                {/* {isPlayerTurn ?
+                {isPlayerTurn ?
                     <section className={"action-buttons" + (!canExit && buttons.length === 0 ? " center" : "")}>
                         {canExit && <img onClick={() => onFinish("map")} className="pokeball-button yellow" src="/running.png" alt="run" />}
                         <img onClick={handleAttack} className="pokeball-button" src="/swords.svg" alt="attack" />
@@ -52,7 +42,7 @@ const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = tru
                             })}
                         </>
                     </section>
-                } */}
+                }
             </section>
         </section>
     )

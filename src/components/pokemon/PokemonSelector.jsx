@@ -2,7 +2,7 @@ import { useState,useEffect } from "react";
 
 import { getTemplatePokemons } from "../../utils/fetchPokemons";
 
-const PokemonSelector = ({onFinish, pokemons=null}) => {
+const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
     const [templatePokemons, setTemplatePokemons] = useState([]);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [filter, setFilter] = useState("");
@@ -32,7 +32,16 @@ const PokemonSelector = ({onFinish, pokemons=null}) => {
         }
         setSelectedPokemon(pokemon);
     }
-
+    const filterByType = (pokemons) => {
+        if(types.length === 0){
+            return pokemons;
+        }
+        return pokemons.filter((pokemon) => types.some((type) => pokemonHasType(pokemon,type)));
+    }
+    const pokemonHasType = (pokemon,type) => {
+        console.log("pokemonHasType", pokemon, type);
+        return pokemon.types.some((pokemonType) => pokemonType.name === type.name);
+    }
     const handleNext = () => {
         if(selectedPokemon === null){
             return;
@@ -41,7 +50,7 @@ const PokemonSelector = ({onFinish, pokemons=null}) => {
         setFilter("");
         setSelectedPokemon(null);
     }
-    const filteredPokemons = templatePokemons.filter((pokemon) => pokemon.name.includes(filter) || pokemon.id.toString().includes(filter));
+    const filteredPokemons = filterByType(templatePokemons.filter((pokemon) => pokemon.name.includes(filter) || pokemon.id.toString().includes(filter)));
     if(!loaded){
         return <h1>Cargando Pokemons...</h1>
     }

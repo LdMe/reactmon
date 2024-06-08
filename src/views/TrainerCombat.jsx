@@ -9,7 +9,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     const { misPokemons, addLevel, updatePokemon } = useContext(PokemonContext);
     const [trainer, setTrainer] = useState(null);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-    const footerRef = useRef(null);
+    const [isWaiting, setIsWaiting] = useState(false);
 
     useEffect(() => {
         if (trainer !== null) {
@@ -34,10 +34,10 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     }, [misPokemons[0]]);
 
     useEffect(() => {
-        if (!isPlayerTurn) {
+        if (!isPlayerTurn && !isWaiting) {
             handleEnemyAttack();
         }
-    }, [isPlayerTurn]);
+    }, [isPlayerTurn,isWaiting]);
 
     useEffect(() => {
         if (trainer && trainer.pokemons.length > 0 && trainer.pokemons[0].hp === 0) {
@@ -51,7 +51,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         const firstPokemon = trainer.pokemons[0];
         const firstAlivePokemon = trainer.pokemons.find((pokemon) => pokemon.hp > 0);
         await addLevel(misPokemons[0]);
-        if (firstAlivePokemon === undefined) {
+        if (!firstAlivePokemon) {
 
             alert("Has ganado");
             onFinish("map");
@@ -116,8 +116,12 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         }
     }
     const handleSwapPokemons = () => {
+        setIsWaiting(false);
+    }
+    const handleWaitNextTurn = () => {
+        console.log("waiting next turn");
+        setIsWaiting(true);
         setIsPlayerTurn(false);
-        //setWildPokemon(wildPokemon => wildPokemon);
     }
     if (trainer !== null) {
         return (
@@ -134,16 +138,16 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
                     enemyPokemon={trainer.pokemons[0]}
                     onFinish={onFinish}
                     isPlayerTurn={isPlayerTurn}
-                    handleAttack={handleAttack}
+                    onAttack={handleAttack}
                     canExit={false}
                 />
                 <MisPokemons
                     onFinish={() => { }}
                     isView={false}
                     onUpdate={handleSwapPokemons}
+                    onUpdateStart={handleWaitNextTurn}
                     disabled={!isPlayerTurn}
                 />
-                <div ref={footerRef} />
             </section>
         );
     }

@@ -116,7 +116,7 @@ const StadiumCombat = ({ socket, pokemon1, pokemon2, rivalName, onChange1, onCha
                     enemyPokemon={pokemon2}
                     onFinish={onFinish}
                     isPlayerTurn={!isAttacking}
-                    handleAttack={handleAttack}
+                    onAttack={handleAttack}
                     canExit={false}
                     buttons={buttons}
                 />

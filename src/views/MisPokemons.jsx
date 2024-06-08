@@ -5,7 +5,7 @@ import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/pokemon/PokemonComponent";
 import { getPc, saveToPc, removeFromPc } from "../utils/fetchPokemons";
 
-const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) => {
+const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled = false }) => {
 
     const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
@@ -50,6 +50,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, disabled = false }) =>
                     setWaitingOrDisabled(false);
                     return;
                 }
+                onUpdateStart && onUpdateStart();
                 await swapPokemons(pokemon._id, misPokemons[0]._id)
                 onUpdate(misPokemons[0]);
             }

@@ -153,6 +153,11 @@ const updateGym = async (gym) => {
     const data = await fetchData("/api/gyms/" + gym._id, "put", gym);
     return data;
 }
+
+const getTypes = async () => {
+    const data = await fetchData("/api/pokemon/types", "get");
+    return data;
+}
 export {
     getPokemons,
     getStarters,
@@ -176,5 +181,6 @@ export {
     getTemplatePokemons,
     getGyms,
     createGym,
-    updateGym
+    updateGym,
+    getTypes
 }
