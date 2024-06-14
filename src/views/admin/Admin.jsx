@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { getUsers } from "../../utils/fetchPokemons";
 import loggedInContext from "../../context/loggedInContext";
-import GymEditor from "./GymEditor";
-import Gyms from "./Gyms";
+import GymEditor from "../../components/gym/GymEditor";
+import Gyms from "../../components/gym/Gyms";
 import '../../styles/Admin.css';
 import ShowUsers from "../../components/users/ShowUsers";
-
+import './Admin.css';
 const AdminView = ({ onFinish }) => {
     const [users, setUsers] = useState([]);
     const [state, setState] = useState("users");
@@ -46,7 +46,7 @@ const AdminView = ({ onFinish }) => {
     }
 
     return (
-        <div>
+        <div className="admin-view">
             <section className="pokemon-navbar ">
                 <button onClick={() => setState("show-gym")}>Mostrar gimnasios</button>
                 <button onClick={() => setState("new-gym")}>Crear gimnasio</button>

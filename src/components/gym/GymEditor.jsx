@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 
-import PokemonSelector from '../../components/pokemon/PokemonSelector';
-import TypeSelector from '../../components/types/TypeSelector';
+import PokemonSelector from '../pokemon/PokemonSelector';
+import TypeSelector from '../types/TypeSelector';
 import { getGyms, createGym, updateGym } from '../../utils/fetchPokemons';
+import "./Gym.css";
 
 const GymEditor = ({ onFinish, originalGym = null }) => {
     const [gymId, setGymId] = useState(originalGym ? originalGym._id : null);
@@ -68,7 +69,7 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
         alert("Gimnasio creado correctamente");
     }
     return (
-        <>
+        <div className="gym">
             <TypeSelector onChange={(types) => setTypes(types)} selectedTypes={types}/>
             <PokemonSelector
                 onFinish={handleAddPokemon}
@@ -98,7 +99,7 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
                 <button onClick={handleCreateGym}>Guardar</button>
                 <button onClick={() => onFinish("map")}>Volver</button>
             </section>
-        </>
+        </div>
     )
 }
 

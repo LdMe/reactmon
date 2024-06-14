@@ -1,0 +1,12 @@
+
+.gym,.gyms {
+    background-color: #ffffffc1;
+}
+
+.gym-instance{
+    cursor: pointer;
+}
+
+.gym-instance:hover{
+    background-color: #ffffff;
+}
