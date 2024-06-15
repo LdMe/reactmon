@@ -1,0 +1,15 @@
+.selected-pokemons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.pokemon-card--with-level{
+    width:40%;
+    box-sizing: border-box;
+}
+
+.trainers-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}

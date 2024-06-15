@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 
-import PokemonSelector from '../pokemon/PokemonSelector';
+import Trainers from '../trainer/Trainers';
+import TrainerCreator from '../trainer/TrainerCreator';
 import TypeSelector from '../types/TypeSelector';
 import { getGyms, createGym, updateGym } from '../../utils/fetchPokemons';
 import "./Gym.css";
@@ -9,42 +10,15 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
     const [gymId, setGymId] = useState(originalGym ? originalGym._id : null);
     const [gymName, setGymName] = useState(originalGym ? originalGym.name : "");
     const [maxLevel, setMaxLevel] = useState(originalGym ? originalGym.maxLevel : 5);
-    const [leaderPokemons, setLeaderPokemons] = useState(originalGym ? originalGym.leaderPokemons : []);
+    const [trainers, setTrainers] = useState(originalGym ? originalGym.trainers.filter((t) => t) : []);
+    const [selectedTrainer, setSelectedTrainer] = useState(null);
     const [types, setTypes] = useState(originalGym ? originalGym.types : []);
-    const handleAddPokemon = (pokemon) => {
-        if (leaderPokemons.length >= 6) {
-            alert("No puede haber más de 6 pokemons");
-            return;
-        }
-        const newPokemonString = JSON.stringify(pokemon);
-        const newPokemon = JSON.parse(newPokemonString);
-        newPokemon.level = maxLevel || 5;
-        setLeaderPokemons([...leaderPokemons, newPokemon]);
-    }
-    const handleSetGym = (gym) => {
-        setGymName(gym.name);
-        setMaxLevel(gym.maxLevel);
-        setLeaderPokemons(gym.leaderPokemons);
-    }
-    const handleRemovePokemon = (index) => {
-        const newPokemons = [...leaderPokemons];
-        newPokemons.splice(index, 1);
-        setLeaderPokemons(newPokemons);
-    }
-    const handlePokemonLevelChange = (index, level) => {
-        console.log("index", index, "level", level)
-        if (level < 1 || level > 100) {
-            return;
-        }
-        const newPokemons = [...leaderPokemons];
-        newPokemons[index].level = level;
-        setLeaderPokemons(newPokemons);
-    }
+
     const handleCreateGym = async () => {
         const gymData = {
             name: gymName,
             maxLevel,
-            leaderPokemons,
+            trainers,
             types
         }
         console.log("gymData", gymData);
@@ -68,33 +42,38 @@ const GymEditor = ({ onFinish, originalGym = null }) => {
         }
         alert("Gimnasio creado correctamente");
     }
+    const handleAddTrainer = (trainer) => {
+        if(selectedTrainer) {
+            const oldTrainer = trainers.find(t => t._id === selectedTrainer._id);
+            const filteredTrainers = trainers.filter(t => t !== selectedTrainer);
+            setSelectedTrainer(null);
+            setTrainers([...filteredTrainers, trainer]);
+            return;
+        }
+        setTrainers([...trainers, trainer]);
+    }
+    const onDeleteTrainer = (trainer) => {
+        const filteredTrainers = trainers.filter(t => t !== trainer);
+        setTrainers(filteredTrainers);
+    }
+    const onSelectTrainer = (trainer) => {
+        setSelectedTrainer(trainer);
+    }
     return (
         <div className="gym">
             <TypeSelector onChange={(types) => setTypes(types)} selectedTypes={types}/>
-            <PokemonSelector
+            {/* <PokemonSelector
                 onFinish={handleAddPokemon}
                 types={types}
-            />
+            /> */}
             <h2>Gimnasio {gymName}</h2>
             <label htmlFor="gymName">Nombre del gimnasio</label>
             <input type="text" placeholder="Nombre del gimnasio" value={gymName} onChange={(e) => setGymName(e.target.value)} />
             <label htmlFor="maxLevel">Nivel máximo</label>
             <input type="number" placeholder="Nivel máximo" value={maxLevel || 5} onChange={(e) => setMaxLevel(e.target.value)} min={1} max={100} />
-            <h3>Pokemons</h3>
-            {leaderPokemons.map((pokemon, index) => (
-                <article key={index}>
-                    <h3>{pokemon.name}</h3>
-                    <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-                    <label htmlFor="level">Nivel</label>
-                    <input type="number" placeholder="Nivel"
-                        value={pokemon.level || 5}
-                        onChange={(e) => handlePokemonLevelChange(index, e.target.value)}
-                        min={1}
-                        max={100}
-                    />
-                    <button onClick={() => handleRemovePokemon(index)}>Eliminar</button>
-                </article>
-            ))}
+            <h3>Entrenadores</h3>
+            <TrainerCreator  onFinish={handleAddTrainer} types={types} oldTrainer={selectedTrainer} onClose={() => setSelectedTrainer(null)}/>
+            <Trainers trainers={trainers} onSelect={onSelectTrainer} onDelete={onDeleteTrainer}/>
             <section className="pokemon-buttons button-footer">
                 <button onClick={handleCreateGym}>Guardar</button>
                 <button onClick={() => onFinish("map")}>Volver</button>

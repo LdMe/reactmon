@@ -33,14 +33,15 @@ const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
         setSelectedPokemon(pokemon);
     }
     const filterByType = (pokemons) => {
+        console.log("types", types);
         if(types.length === 0){
             return pokemons;
         }
         return pokemons.filter((pokemon) => types.some((type) => pokemonHasType(pokemon,type)));
     }
     const pokemonHasType = (pokemon,type) => {
-        console.log("pokemonHasType", pokemon, type);
-        return pokemon.types.some((pokemonType) => pokemonType.name === type.name);
+        console.log("pokemonHasType", pokemon.types, type);
+        return pokemon.types.some((pokemonType) => pokemonType === type.name);
     }
     const handleNext = () => {
         if(selectedPokemon === null){
