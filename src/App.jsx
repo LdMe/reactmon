@@ -5,7 +5,7 @@ import PokemonContext from './context/pokemonContext';
 import loggedInContext from './context/loggedInContext';
 import dialogContext from './context/dialogContext';
 import misPokemonsReducer from './reducers/MispokemonsReducer';
-import { addPokemon, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons } from './utils/fetchPokemons';
+import { addPokemon, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons,getUserData } from './utils/fetchPokemons';
 
 import socket from './utils/socket';
 import SocketContext from './context/socketContext';
@@ -25,6 +25,7 @@ function App() {
   useEffect(() => {
     setIsLoaded(false);
     getMisPokemons();
+    handleGetUserData();
     if (isLogged) {
       socket.connect();
       socket.emit("login", { username: getUserName() });
@@ -43,6 +44,10 @@ function App() {
   }, [currentGameState, isLoaded]);
 
 
+  const handleGetUserData = async () => {
+    const data = await getUserData(getUserName());
+    setUser(data);
+  }
   const getMisPokemons = async () => {
     try {
       const pokemons = await getPokemons();
@@ -210,12 +215,20 @@ function App() {
   const getUserRole = () => {
     return user?.role || localStorage.getItem("role");
   }
+  const getMaxLevel = () => {
+    return user.maxLevel;
+  }
+  const setMaxLevel = (level) => {
+    user.maxLevel = level;
+  }
   const loggedInContextValue = {
     isLogged,
     login,
     logout,
     getUserName,
     getUserRole,
+    getMaxLevel,
+    setMaxLevel
   }
 
   const GameStateComponent = gameStates[currentGameState].component;

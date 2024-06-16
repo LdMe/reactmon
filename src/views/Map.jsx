@@ -12,6 +12,7 @@ const Map = ({ onFinish }) => {
                     <>
                         <button onClick={() => onFinish("wild")}>Busca un pokemon salvaje</button>
                         <button onClick={() => onFinish("trainer")}>Busca un entrenador</button>
+                        <button onClick={() => onFinish("gym")}>Ir al gimnasio</button>
                         <button onClick={() => onFinish("heal")}>Curar pokemons</button>
                         <button onClick={() => onFinish("stadium")}>Estadio Pokemon</button>
                         {/* <button                                    >Gimnasio </button> */}

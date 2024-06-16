@@ -16,13 +16,16 @@ const getStarters = async () => {
     return data;
 }
 
-const getPokemon = async (id = null, level = 5, trainer = false) => {
+const getPokemon = async (id = null, level = 5, trainer = false,save=false) => {
     id = id || "random";
     const data = {
         level: level,
-        trainer: trainer
+        trainer: trainer,
+        save:save
     }
+    console.log("datass", data);
     const result = await fetchData(`/api/pokemon/fetch/${id}`, "get", data);
+    console.log("result", result);
     return result;
 }
 
@@ -108,7 +111,7 @@ const getTrainerPokemons = async (pokemons=null,maxQuantity=6,maxLevel=10) => {
         return  await getRandomTrainerPokemons(n,maxLevel);
     }
     const newPokemons = await Promise.all(pokemons.map(async (pokemon) => {
-        return  await getPokemon(pokemon.id, pokemon.level, true);
+        return  await getPokemon(pokemon.id, pokemon.level, true,true);
     }));
     return newPokemons;
 }
@@ -158,6 +161,11 @@ const getTypes = async () => {
     const data = await fetchData("/api/pokemon/types", "get");
     return data;
 }
+const setMaxLevel = async (maxLevel) => {
+    console.log("maxLevel", maxLevel);
+    const data = await fetchData("/api/user/maxlevel", "put", { maxLevel });
+    return data;
+}
 export {
     getPokemons,
     getStarters,
@@ -182,5 +190,6 @@ export {
     getGyms,
     createGym,
     updateGym,
-    getTypes
+    getTypes,
+    setMaxLevel
 }

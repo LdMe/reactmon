@@ -22,6 +22,7 @@ const Gyms = ({onSelect}) => {
                     <h3>{gym.name}</h3>
                     <p>Entrenadores: {gym.trainers.length}</p>
                     <p>Tipos: {gym.types.map((t) => <Type key={t.name} type={t} />)}</p>
+                    <p>Nivel maximo: {gym.maxLevel}</p>
                 </div>
             ))}
         </div>

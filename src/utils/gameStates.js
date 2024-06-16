@@ -7,6 +7,7 @@ import Login from "../views/Login";
 import Logout from "../components/Logout";
 import Stadium from "../views/stadium/StadiumComponent";
 import TrainerCombat from "../views/TrainerCombat";
+import GymsView from "../views/GymsView";
 import AdminView from "../views/admin/Admin";
 
 const gameStates = {
@@ -21,6 +22,9 @@ const gameStates = {
     },
     "trainer":{
         component: TrainerCombat
+    },
+    "gym":{
+        component: GymsView
     },
     "heal": {
         component: HealPokemons

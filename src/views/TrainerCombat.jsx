@@ -12,9 +12,10 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     const [isWaiting, setIsWaiting] = useState(false);
 
     useEffect(() => {
-        if (trainer !== null) {
+
+        /* if (trainer !== null) {
             return;
-        }
+        } */
         getTrainerPokemons();
         return () => {
             clearFight();
@@ -73,6 +74,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         const numMyPokemons = misPokemons.length;
         const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
         const trainerPokemons = await getTrainerPkmns(pokemons,numMyPokemons,maxLevel);
+        console.log("trainerPokemons", trainerPokemons);
         setTrainer({ pokemons: trainerPokemons });
     }
     const handleAttack = async () => {

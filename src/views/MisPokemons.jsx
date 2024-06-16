@@ -4,9 +4,9 @@ import { useContext, useEffect, useState } from "react";
 import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/pokemon/PokemonComponent";
 import { getPc, saveToPc, removeFromPc } from "../utils/fetchPokemons";
-
+import loggedInContext from "../context/loggedInContext";
 const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled = false }) => {
-
+    const {getMaxLevel} = useContext(loggedInContext);
     const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [pcPokemons, setPcPokemons] = useState([]);
@@ -117,6 +117,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled
                 <section className="pokemons--title">
                     <h2>Mis pokemons</h2>
                     <p>{misPokemons.length} / 6</p>
+                    <p>Nivel máximo:{getMaxLevel()}</p>
                 </section>
             }
             <section className="pokemons-container">

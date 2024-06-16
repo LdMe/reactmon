@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import HealthBar from "../healthBar/HealthBar";
 import Moves from "../moves/Moves";
 import Types from "../types/Types";
 import Stats from "../stats/Stats";
-
+import loggedInContext from "../../context/loggedInContext";
 import './Pokemon.css';
 const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false}) => {
     const [loaded, setLoaded] = useState(false);
+    const {getMaxLevel, setMaxLevel} = useContext(loggedInContext);
     let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat")
     /* if(!loaded){
         className += " hidden";
@@ -25,12 +26,12 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
                     <>
                         <div className="combat-info__stats">
                             {!isEnemy && <p>hp: {data.hp}</p>}
-                            <p>nivel: {data.level}</p>
+                            <p>nivel: <span className={ data.level >= getMaxLevel() ? "max" : ""}>{data.level}</span></p>
                         </div>
                         <HealthBar key={data._id} maxHp={data.maxHp} hp={data.hp} />
                     </>
                 }
-                {showJustLevel && <p>nivel: {data.level}</p>}
+                {showJustLevel && <p>nivel: <span className={!isEnemy && (data.level >= getMaxLevel() ? "max" : "")}>{data.level}</span></p>}
             </section>
             <section className="combat-info">
                 <img src={image} alt={`imagen de ${data.name}`} onLoad={() => setLoaded(true)} />
