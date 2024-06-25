@@ -13,3 +13,20 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
+.trainer-pokemon-level{
+    width: 100%;
+}
+.trainer-pokemon-level input{
+    width: 100%;
+}
+
+.trainer {
+    width: 100%;
+}
+.trainer__pokemons {
+    display: flex;
+    overflow-x: auto;
+    justify-content: space-between;
+    width: 100%;
+}

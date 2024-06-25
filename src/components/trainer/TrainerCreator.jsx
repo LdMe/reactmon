@@ -87,6 +87,7 @@ const trainerCreator = ({ onFinish,types,onClose=null,oldTrainer = null }) => {
                                     data={pokemon}
                                     isCombat={false}
                                 />
+                                <section className="trainer-pokemon-level">
                                 <label htmlFor="level">Nivel</label>
                                 <input type="number" placeholder="Nivel"
                                     value={pokemon.level || 5}
@@ -94,6 +95,7 @@ const trainerCreator = ({ onFinish,types,onClose=null,oldTrainer = null }) => {
                                     min={1}
                                     max={100}
                                 />
+                                </section>
                                 <button onClick={() => handleRemovePokemon(index)}>Eliminar</button>
                             </article>
                         ))}

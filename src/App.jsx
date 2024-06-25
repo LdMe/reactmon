@@ -61,6 +61,10 @@ function App() {
         }
         return [];
       }
+      
+      if (!Array.isArray(pokemons)) {
+        return [];
+      }
       dispatch({ type: "set", payload: pokemons });
       setIsLogged(true);
       setIsLoaded(true);

@@ -11,11 +11,12 @@
 }
 .modal-body {
     background-color: white;
-    width:50%;
+    width:90%;
     margin: auto;
-    min-height:50%;
+    height:60vh;
+    overflow-y: scroll;
     border-radius:15px;
-    padding:2rem;
+    padding:1rem;
     position: relative;
 
 }
