@@ -5,8 +5,9 @@ import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/pokemon/PokemonComponent";
 import { getPc, saveToPc, removeFromPc } from "../utils/fetchPokemons";
 import loggedInContext from "../context/loggedInContext";
-const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled = false }) => {
-    const {getMaxLevel} = useContext(loggedInContext);
+import PokemonCarousel from "../components/pokemon/carousel/PokemonCarousel";
+const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disabled = false ,isCombat = false}) => {
+    const { getMaxLevel } = useContext(loggedInContext);
     const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [pcPokemons, setPcPokemons] = useState([]);
@@ -111,6 +112,19 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled
     if (!isView) {
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }
+    const getPokemonManagementButtons = (pokemon) => {
+        console.log("manage pokemon",pokemon);
+        if (isView) {
+            return (
+                <section className="pokemon-buttons">
+                    <button onClick={(e) => handleSaveToPc(e, pokemon)}>Guardar en el PC</button>
+                    <button onClick={(e) => handleFreePokemon(e, pokemon)}>Soltar</button>
+                </section>
+            )
+        }
+        return null;
+    }
+   
     return (
         <div className={"mis-pokemons" + (isView ? " view" : "")}>
             {misPokemons.length !== 1 &&
@@ -120,45 +134,35 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate,onUpdateStart, disabled
                     <p>Nivel máximo:{getMaxLevel()}</p>
                 </section>
             }
-            <section className="pokemons-container">
-                {filteredPokemons.map((pokemon) => (
-                    <Pokemon
-                        key={pokemon._id}
-                        data={pokemon}
-                        onClick={() => handlePokemonClick(pokemon)}
-                        isCombat={true}
-                        defaultClassName={waitingOrDisabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
-                        isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
-                        fullInfo={isView}
-                    >
-                        {isView &&
-                            <section className="pokemon-buttons ">
-                                <button onClick={(e) => handleSaveToPc(e, pokemon)}>Guardar en el PC</button>
-                                <button onClick={(e) => handleFreePokemon(e, pokemon)}>Soltar</button>
-                            </section>
-                        }
-                    </Pokemon>
-                ))}
-            </section>
+            <PokemonCarousel
+                pokemons={filteredPokemons}
+                onSelect={handlePokemonClick}
+                selected={selectedPokemon}
+                disabled={waitingOrDisabled}
+                isView={isView}
+                fullInfo={isView}
+                isCombat={isCombat}
+                children={getPokemonManagementButtons}
+                className={"pokemon-container" + (isCombat ? " combat" : "")}
+            />
+            
             {isView &&
-                <section className="pc-pokemons-section">
+                <section className="pc-pokemons">
                     <section className="pokemons--title">
                         <h2>PC</h2>
                         <p>{pcPokemons.length} / 30</p>
                     </section>
                     <section className="pc-pokemons">
-                        {pcPokemons.map((pokemon) => (
-                            <Pokemon
-                                key={pokemon._id}
-                                data={pokemon}
-                                onClick={() => handlePokemonClick(pokemon)}
-                                isCombat={false}
-                                defaultClassName={waitingOrDisabled || (!isView && pokemon.hp === 0) ? "disabled" : ""}
-                                isSelected={selectedPokemon !== null && selectedPokemon._id === pokemon._id}
-                                showJustLevel={true}
-                            />
-                        ))
-                        }
+                        <PokemonCarousel
+                            pokemons={pcPokemons}
+                            onSelect={handlePokemonClick}
+                            selected={selectedPokemon}
+                            disabled={waitingOrDisabled}
+                            isView={isView}
+                            showHp={false}
+                            isCombat={isCombat}
+                        />
+                        
                     </section>
                     <section className="pokemon-buttons button-footer">
                         <button onClick={() => onFinish("map")}>Volver</button>

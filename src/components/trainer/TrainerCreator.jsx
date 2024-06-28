@@ -85,7 +85,6 @@ const trainerCreator = ({ onFinish,types,onClose=null,oldTrainer = null }) => {
                             <article className="pokemon-card pokemon-card--with-level" key={index}>
                                 <PokemonComponent
                                     data={pokemon}
-                                    isCombat={false}
                                 />
                                 <section className="trainer-pokemon-level">
                                 <label htmlFor="level">Nivel</label>

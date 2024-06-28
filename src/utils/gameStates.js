@@ -1,4 +1,4 @@
-import ChoosePokemon from "../views/ChoosePokemon"
+import ChoosePokemon from "../views/initial/ChoosePokemon"
 import Map from "../views/Map";
 import WildCombat from "../views/WildCombat";
 import HealPokemons from "../views/healPokemons/HealPokemons";

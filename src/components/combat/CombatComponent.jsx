@@ -19,8 +19,8 @@ const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = tru
     }
     return (
         <section className="combat" style={style}>
-            <Pokemon data={enemyPokemon} isEnemy={true} />
-            <Pokemon data={playerPokemon} isFront={false} />
+            <Pokemon data={enemyPokemon} isEnemy={true} isCombat={true} />
+            <Pokemon data={playerPokemon} isFront={false} isCombat={true}/>
             <section className="button-footer">
                 <section className={"action-buttons" + (!canExit && buttons.length === 0 ? " center" : "")}>
                     {canExit && <img onClick={() => onFinish("map")} className={"pokeball-button " + (isPlayerTurn ? "yellow" : "disabled")} src="/running.png" alt="run" />}

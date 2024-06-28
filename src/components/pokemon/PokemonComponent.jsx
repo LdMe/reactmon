@@ -4,11 +4,11 @@ import Moves from "../moves/Moves";
 import Types from "../types/Types";
 import Stats from "../stats/Stats";
 import loggedInContext from "../../context/loggedInContext";
-import './Pokemon.css';
-const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false}) => {
+import './Pokemon.scss';
+const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false}) => {
     const [loaded, setLoaded] = useState(false);
     const {getMaxLevel, setMaxLevel} = useContext(loggedInContext);
-    let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (isCombat ? " combat" : " no-combat")
+    let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (showHp ? " hp" : "no-hp") + (fullInfo ? " full-info" : "") + (isCombat ? " combat" : "") + (isEnemy ? " enemy" : "");
     /* if(!loaded){
         className += " hidden";
     } */
@@ -22,7 +22,7 @@ const Pokemon = ({ data, onClick, isFront = true, isCombat = true, isSelected = 
         <article className={className + (loaded ? "" : " hidden")} onClick={onClick} >
             <section className="combat-info">
                 <h2>{data.name}</h2>
-                {isCombat &&
+                {showHp &&
                     <>
                         <div className="combat-info__stats">
                             {!isEnemy && <p>hp: {data.hp}</p>}

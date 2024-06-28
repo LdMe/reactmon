@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer, useRef } from 'react'
-import './App.css'
+import './App.scss'
 import gameStates from './utils/gameStates';
 import PokemonContext from './context/pokemonContext';
 import loggedInContext from './context/loggedInContext';

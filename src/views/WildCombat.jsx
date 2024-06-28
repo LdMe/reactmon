@@ -169,6 +169,7 @@ const WildCombat = ({ onFinish }) => {
                 <MisPokemons
                     onFinish={() => { }}
                     isView={false}
+                    isCombat={true}
                     onUpdate={handleSwapPokemons}
                     onUpdateStart={handleWaitNextTurn}
                     disabled={!isPlayerTurn}

@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 
 import { getTemplatePokemons } from "../../utils/fetchPokemons";
-
+import PokemonCarousel from "./carousel/PokemonCarousel";
 const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
     const [templatePokemons, setTemplatePokemons] = useState([]);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
@@ -59,12 +59,18 @@ const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
         <div className="pokemon-selector">
             
             <section className="pokemon-list">
-                {filteredPokemons.map((pokemon) => (
+                <PokemonCarousel 
+                pokemons={filteredPokemons} 
+                onSelect={handleSelectPokemon} 
+                selected={selectedPokemon} 
+                showHp={false}
+                />
+                {/* {filteredPokemons.map((pokemon) => (
                     <article key={pokemon._id} className={`pokemon-card no-combat ${selectedPokemon?.id === pokemon.id ? "selected" : ""}`} onClick={() => handleSelectPokemon(pokemon)}>
                         <h3>#{pokemon.id} {pokemon.name} </h3>
                         <img src={pokemon.sprites.front_default} alt={pokemon.name} />
                     </article>
-                ))}
+                ))} */}
             </section>
             <section className="pokemon-buttons ">
                 <input type="text" placeholder="Buscar pokemon" value={filter} onChange={(e) => setFilter(e.target.value)} />

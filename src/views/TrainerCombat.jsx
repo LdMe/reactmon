@@ -128,12 +128,13 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
     if (trainer !== null) {
         return (
             <section className="combat-section">
-
+                <section className="pokeballs-section">
                 {trainer.pokemons.map((pokemon) => {
                     const isDead = pokemon.hp === 0;
                     return <img key={pokemon._id} className={"pokeball-button " + (isDead && "disabled")} src="/pokeball.svg" alt="pokemon" />
 
                 })}
+                </section>
 
                 <Combat
                     playerPokemon={misPokemons[0]}
@@ -146,6 +147,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
                 <MisPokemons
                     onFinish={() => { }}
                     isView={false}
+                    isCombat={true}
                     onUpdate={handleSwapPokemons}
                     onUpdateStart={handleWaitNextTurn}
                     disabled={!isPlayerTurn}

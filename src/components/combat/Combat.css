@@ -1,16 +1,4 @@
-section.combat {
 
-    
-    background-image : var(--background-image);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position-y: bottom;
-    padding: 10px;
-}
-
-section.combat .combat{
-    background-color: #ffffffc1
-}
 
 .stadium .pokemons-container,  .mis-pokemons .pokemons-container {
     display: flex;
@@ -44,10 +32,6 @@ section.combat .combat{
     }
     .stadium .combat-info h2, .stadium .combat-info p{
         margin: 0;
-    }
-    .pokeball-button{
-        width: 30px;
-        height: 30px;
     }
     
     
