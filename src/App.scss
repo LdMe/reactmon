@@ -1,0 +1,159 @@
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+
+.pokemon-buttons,.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0.5rem;
+  margin-top: 5px;
+}
+
+.pokemon-buttons button, .pokemon-navbar button {
+  border: none;
+  border-radius: 8px;
+  background-color: #e8e8e8;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+.pokemon-buttons button {
+  width: 100%;
+}
+.action-buttons button:hover, .pokemon-buttons button:hover, .pokemon-navbar button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+	margin: 0;
+	padding: 5px;
+	height: 7vh;
+	box-sizing: border-box;
+  
+}
+
+.title-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin:auto;
+  max-width:50%;
+  height:100%;
+}
+body {
+  margin:0;
+  width: 100%;
+  overflow-x: hidden;
+}
+.pokeballs-section {
+  display: flex;
+  justify-content: center;
+  gap:1rem;
+  align-items: center;
+  height: 7vh;
+}
+
+.pokeball-button {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 10%;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pokeball-button.disabled {
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
+.pokeball-button:hover {
+  transform: scale(1.05);
+}
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+
+}
+.App {
+  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  box-sizing: border-box;
+  
+}
+
+.App.map, .App {
+
+  background-image: url("/forest2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.App.login {
+  background-image: url("/forest3.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.App.heal {
+  background-image: url("/heal.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.heal-component {
+  height: 100%;
+}
+
+section.map {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+}
+.App.stadium {
+  background-image: url("/stadium2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.App.choose {
+  background-image: url("/lab.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+section.login {
+  background-color: #ffffffc1;
+  padding: 10px;
+}
+
+.pokemon-list {
+  display: flex;
+  overflow-x:scroll;
+  background-color: #ffffffc1;
+  user-select: none;
+}
