@@ -136,8 +136,8 @@ const getUsers = async () => {
     return data;
 }
 
-const getTemplatePokemons = async () => {
-    const data = await fetchData("/api/pokemon/templates", "get");
+const getTemplatePokemons = async (idList = null) => {
+    const data = await fetchData("/api/pokemon/templates", "get", {ids:idList });
     return data;
 }
 

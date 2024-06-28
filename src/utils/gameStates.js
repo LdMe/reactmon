@@ -9,6 +9,7 @@ import Stadium from "../views/stadium/StadiumComponent";
 import TrainerCombat from "../views/TrainerCombat";
 import GymsView from "../views/GymsView";
 import AdminView from "../views/admin/Admin";
+import Pokedex from "../components/pokedex/Pokedex";
 
 const gameStates = {
     "choose": {
@@ -43,6 +44,9 @@ const gameStates = {
     },
     "admin": {
         component: AdminView
+    },
+    "pokedex": {
+        component: Pokedex
     }
 }
 

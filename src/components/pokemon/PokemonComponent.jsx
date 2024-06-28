@@ -16,8 +16,18 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
     if (data.shiny) {
         frontOrBack = isFront ? "front_shiny" : "back_shiny";
     }
+    const handleTypes = (types) => {
+        console.log("handle types",types)
+        if(types.length > 0){
+            if(!types[0].name){
+                return types.map((type) => {
+                    return {name: type}
+                })
+            }
+            return types
+        }
+    }
     let image = data.sprites[frontOrBack];
-
     return (
         <article className={className + (loaded ? "" : " hidden")} onClick={onClick} >
             <section className="combat-info">
@@ -38,12 +48,12 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
             </section>
             {fullInfo &&
                 <section className="pokemon-actions full">
-                    <Types types={data.types} />
-                    <Moves moves={data.activeMoves} />
+                   {data.types.length && <Types types={handleTypes(data.types)} /> }
+                    {data.activeMoves.lengt && <Moves moves={data.activeMoves} />}
                     <Stats stats={data.stats} />
-                    {children}
                 </section>
             }
+            {children}
         </article>
     )
 

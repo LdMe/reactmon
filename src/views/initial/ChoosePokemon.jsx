@@ -3,6 +3,7 @@ import Pokemon from "../../components/pokemon/PokemonComponent";
 import PokemonContext from "../../context/pokemonContext";
 import { addPokemon as addPokemonToUser, getStarters} from "../../utils/fetchPokemons";
 import "./ChoosePokemon.scss";
+import PokemonCarousel from "../../components/pokemon/carousel/PokemonCarousel";
 
 const ChoosePokemon = ({ onFinish }) => {
     const [pokemonList, setPokemonList] = useState([]);
@@ -59,6 +60,7 @@ const ChoosePokemon = ({ onFinish }) => {
             data={pokemon}
             onClick={() => handleSelectPokemon(pokemon)}
             isCombat={false}
+            showHp={false}
         />
     })
 
@@ -71,7 +73,16 @@ const ChoosePokemon = ({ onFinish }) => {
             </div>
             <div>
             <section className="pokemon-container">
-                {pokemonComponents}
+                <PokemonCarousel
+                    pokemons={pokemonList}
+                    onSelect={handleSelectPokemon}
+                    selected={selectedPokemon}
+                    disabled={false}
+                    isView={false}
+                    fullInfo={false}
+                    isCombat={false}
+                    showHp={false}
+                />
             </section>
             </div>
         </section>

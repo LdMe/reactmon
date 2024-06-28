@@ -5,6 +5,7 @@ const getName = (element, lang = "es") => {
     return element.name;
 }
 const getMultiplierColor = (multiplier) => {
+    if(!multiplier) return "black";
     // multiplier goes from 0.75 to 1.25
     if (multiplier > 1) {
         // return color between black and green
@@ -21,6 +22,6 @@ const getMultiplierColor = (multiplier) => {
     return "black";
 }
 const getStatWithMultiplier = (stat) => {
-    return Math.round(stat.base_stat * stat.multiplier);
+    return Math.round(stat.base_stat * (stat.multiplier || 1));
 }
 export { getName, getMultiplierColor, getStatWithMultiplier }

@@ -226,13 +226,15 @@ function App() {
     user.maxLevel = level;
   }
   const loggedInContextValue = {
+    user,
     isLogged,
     login,
     logout,
     getUserName,
     getUserRole,
     getMaxLevel,
-    setMaxLevel
+    setMaxLevel,
+    refreshUserData: handleGetUserData,
   }
 
   const GameStateComponent = gameStates[currentGameState].component;

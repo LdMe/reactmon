@@ -1,10 +1,12 @@
 import Logout from "../components/Logout";
-import { useContext } from "react";
+import { useContext,useEffect } from "react";
 import loggedInContext from "../context/loggedInContext";
 const Map = ({ onFinish }) => {
-    const { getUserRole } = useContext(loggedInContext);
-
-    const { isLogged } = useContext(loggedInContext);
+    const { isLogged,getUserRole,refreshUserData } = useContext(loggedInContext);
+    useEffect(() => {
+        
+        refreshUserData();
+    }, []);
     return (
         <section className="map">
             <section className={"pokemon-buttons " + (isLogged ? "" : "button-footer")}>
@@ -14,6 +16,7 @@ const Map = ({ onFinish }) => {
                         <button onClick={() => onFinish("trainer")}>Busca un entrenador</button>
                         <button onClick={() => onFinish("gym")}>Ir al gimnasio</button>
                         <button onClick={() => onFinish("heal")}>Curar pokemons</button>
+                        <button onClick={() => onFinish("pokedex")}>Pokedex</button>
                         <button onClick={() => onFinish("stadium")}>Estadio Pokemon</button>
                         {/* <button                                    >Gimnasio </button> */}
                         <button onClick={() => onFinish("list")}>Mis pokemons</button>
