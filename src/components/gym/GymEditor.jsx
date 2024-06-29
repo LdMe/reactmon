@@ -21,6 +21,13 @@ const GymEditor = ({ onFinish, onCreate=null,originalGym = null , zone=null}) =>
             setTrainers(originalGym.trainers || []);
             setTypes(originalGym.types);
         }
+        else{
+            setGymId(null);
+            setGymName("");
+            setMaxLevel(5);
+            setTrainers([]);
+            setTypes([]);
+        }
     },[originalGym])
     const handleCreateGym = async () => {
         const gymData = {

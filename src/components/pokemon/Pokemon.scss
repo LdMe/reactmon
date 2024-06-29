@@ -58,10 +58,7 @@
   &.combat {
     width: 100%;
   }
-  &.disabled {
-    filter: grayscale(100%);
-    cursor: not-allowed;
-  }
+  
   & h3 {
     margin-bottom: 10px;
   }
@@ -99,6 +96,9 @@
       padding: 10px;
       box-sizing: border-box;
   }
+  &.disabled {
+    filter: grayscale(100%);
+  }
   @media screen and (max-width: 768px) {
 
     min-width:35%;
@@ -110,7 +110,9 @@
   }
 }
 
-
+.disabled {
+  cursor: not-allowed;
+}
 
 .combat-info {
   display: flex;
@@ -202,8 +204,4 @@
   .no-combat .combat-info h2 {
     font-size: 0.8em;
   }
-}
-
-.max {
-  color: red;
 }

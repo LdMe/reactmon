@@ -6,6 +6,7 @@ import Gyms from "../../components/gym/Gyms";
 import '../../styles/Admin.css';
 import ShowUsers from "../../components/users/ShowUsers";
 import './Admin.css';
+import Zones from "../../components/zone/ZonesAdmin";
 const AdminView = ({ onFinish }) => {
     const [users, setUsers] = useState([]);
     const [state, setState] = useState("users");
@@ -51,6 +52,7 @@ const AdminView = ({ onFinish }) => {
                 <button onClick={() => setState("show-gym")}>Mostrar gimnasios</button>
                 <button onClick={() => setState("new-gym")}>Crear gimnasio</button>
                 <button onClick={() => setState("users")}>Usuarios</button>
+                <button onClick={() => setState("zones")}>Zonas</button>
                 <button onClick={() => setState("pokemons")}>Pokemons</button>
                 <button onClick={() => setState("items")}>Items</button>
             </section>
@@ -62,6 +64,9 @@ const AdminView = ({ onFinish }) => {
             }
             {state === "show-gym" &&
                 <Gyms onFinish={onFinish} onSelect={handleGymClick} />
+            }
+            {state === "zones" &&
+                <Zones onFinish={onFinish} />
             }
             <section className="pokemon-buttons button-footer">
                 <button onClick={() => onFinish("map")}>Volver</button>
