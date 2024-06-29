@@ -13,7 +13,7 @@ const Gyms = ({onSelect}) => {
             setGyms(data);
         });
     }, []);
-
+console.log("gyms", gyms)
     return (
         <div className="gyms">
             <h1>Gimnasios</h1>

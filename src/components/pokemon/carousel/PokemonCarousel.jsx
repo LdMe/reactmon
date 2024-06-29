@@ -1,6 +1,6 @@
 import Pokemon from "../PokemonComponent"
 import "../Pokemon.scss"
-const PokemonCarousel = ({pokemons,className="pokemon-container",showHp=true,selected=null,onSelect,children=()=>{},disabled=false,fullInfo=false,isCombat=false }) =>{
+const PokemonCarousel = ({pokemons,className="pokemon-container",pokemonClassName="",showHp=true,selected=null,onSelect,children=()=>{},disabled=false,fullInfo=false,isCombat=false }) =>{
     const handleIsPokemonDisabled = (pokemon) => {
         return disabled || ( pokemon.hp === 0)
     }
@@ -12,7 +12,7 @@ const PokemonCarousel = ({pokemons,className="pokemon-container",showHp=true,sel
                 data={pokemon}
                 onClick={() => onSelect(pokemon)}
                 isCombat={isCombat}
-                defaultClassName={handleIsPokemonDisabled(pokemon) ? "disabled" : ""}
+                defaultClassName={pokemonClassName + " " + (handleIsPokemonDisabled(pokemon) ? "disabled" : "")}
                 isSelected={selected !== null && selected._id === pokemon._id}
                 fullInfo={fullInfo}
                 showHp={showHp}

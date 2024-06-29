@@ -6,7 +6,7 @@ import Combat from "../components/combat/CombatComponent";
 
 
 const TrainerCombat = ({ pokemons = null, onFinish }) => {
-    const { misPokemons, addLevel, updatePokemon } = useContext(PokemonContext);
+    const { misPokemons, addLevel, updatePokemon,zone } = useContext(PokemonContext);
     const [trainer, setTrainer] = useState(null);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const [isWaiting, setIsWaiting] = useState(false);
@@ -73,7 +73,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
 
         const numMyPokemons = misPokemons.length;
         const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
-        const trainerPokemons = await getTrainerPkmns(pokemons,numMyPokemons,maxLevel);
+        const trainerPokemons = await getTrainerPkmns(pokemons,zone,numMyPokemons,maxLevel,);
         console.log("trainerPokemons", trainerPokemons);
         setTrainer({ pokemons: trainerPokemons });
     }

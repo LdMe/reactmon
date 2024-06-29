@@ -61,3 +61,11 @@
   .type__name:hover {
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
+  .types-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0.5rem;
+  }

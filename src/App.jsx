@@ -201,6 +201,7 @@ function App() {
     healPokemons: handleHealPokemons,
     getMisPokemons,
     setPokemons: handleSetPokemons,
+    zone: user?.zone
   }
   const login = (user) => {
     setIsLogged(true);

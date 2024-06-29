@@ -7,7 +7,7 @@ import Combat from "../components/combat/CombatComponent";
 
 const WildCombat = ({ onFinish }) => {
     const [wildPokemon, setWildPokemon] = useState(null);
-    const { misPokemons, updatePokemon, addPokemon, addLevel, getMisPokemons } = useContext(PokemonContext);
+    const { misPokemons, updatePokemon, addPokemon, addLevel, getMisPokemons,zone} = useContext(PokemonContext);
     const [isEnded, setIsEnded] = useState(false);
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const [isWaiting, setIsWaiting] = useState(false);

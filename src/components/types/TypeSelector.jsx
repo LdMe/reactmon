@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { getTypes } from '../../utils/fetchPokemons'
 import Type from './Type';
 
-const TypeSelector = ({ onChange, selectedTypes = []}) => {
+const TypeSelector = ({ onChange, selectedTypes = [] }) => {
     const [types, setTypes] = useState([]);
     useEffect(() => {
         getTypes().then((types) => {
@@ -24,17 +24,22 @@ const TypeSelector = ({ onChange, selectedTypes = []}) => {
         <div className="type-selector">
             <h3>Tipos</h3>
             <p>Seleccionados:</p>
-            {selectedTypes.map((type) => (
-                <span key={type.name} onClick={() => handleSelectType(type)}>
-                    <Type type={type} />
-                </span>
-            ))}
+            <div className="types-list">
+                {selectedTypes.map((type) => (
+                    <span key={type.name} onClick={() => handleSelectType(type)}>
+                        <Type type={type} />
+                    </span>
+                ))}
+            </div>
+
             <p>No seleccionados:</p>
-            {unselectedTypes.map((type) => (
-                <span key={type.name} onClick={() => handleSelectType(type)}>
-                    <Type type={type} />
-                </span>
-            ))}
+            <div className="types-list">
+                {unselectedTypes.map((type) => (
+                    <span key={type.name} onClick={() => handleSelectType(type)}>
+                        <Type type={type} />
+                    </span>
+                ))}
+            </div>
         </div>
     )
 }

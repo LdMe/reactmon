@@ -82,6 +82,8 @@ const ChoosePokemon = ({ onFinish }) => {
                     fullInfo={false}
                     isCombat={false}
                     showHp={false}
+                    className="pokemon-container column"
+                    pokemonClassName="full-size"
                 />
             </section>
             </div>

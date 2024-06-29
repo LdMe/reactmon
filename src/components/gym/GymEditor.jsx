@@ -6,20 +6,29 @@ import TypeSelector from '../types/TypeSelector';
 import { getGyms, createGym, updateGym } from '../../utils/fetchPokemons';
 import "./Gym.css";
 
-const GymEditor = ({ onFinish, originalGym = null }) => {
+const GymEditor = ({ onFinish, onCreate=null,originalGym = null , zone=null}) => {
     const [gymId, setGymId] = useState(originalGym ? originalGym._id : null);
     const [gymName, setGymName] = useState(originalGym ? originalGym.name : "");
     const [maxLevel, setMaxLevel] = useState(originalGym ? originalGym.maxLevel : 5);
-    const [trainers, setTrainers] = useState(originalGym ? originalGym.trainers.filter((t) => t) : []);
+    const [trainers, setTrainers] = useState((originalGym && originalGym.trainers) ? originalGym.trainers.filter((t) => t) : []);
     const [selectedTrainer, setSelectedTrainer] = useState(null);
     const [types, setTypes] = useState(originalGym ? originalGym.types : []);
-
+    useEffect(() => {
+        if(originalGym) {
+            setGymId(originalGym._id);
+            setGymName(originalGym.name);
+            setMaxLevel(originalGym.maxLevel);
+            setTrainers(originalGym.trainers || []);
+            setTypes(originalGym.types);
+        }
+    },[originalGym])
     const handleCreateGym = async () => {
         const gymData = {
             name: gymName,
             maxLevel,
             trainers,
-            types
+            types,
+            zone
         }
         console.log("gymData", gymData);
         let data = null;

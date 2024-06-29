@@ -8,6 +8,7 @@
 .pokemon-container {
   display: flex;
   gap:1rem;
+  width: 100%;
   //flex-direction: column;
   overflow-y: auto;
   &.combat {
@@ -19,6 +20,10 @@
     & .pokemon-card {
       width: 100%;
     }
+  }
+  &.column{
+    flex-direction: column;
+    height: 40vh;
   }
   
 }
@@ -116,8 +121,8 @@
   padding-top:0;
   width: 50%;
   & img {
-    height:5rem;
-    width: auto;
+    width:5rem;
+    height: auto;
     margin: auto;
     border-radius: 8px;
   }

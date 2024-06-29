@@ -21,7 +21,7 @@ const getPokemon = async (id = null, level = 5, trainer = false,save=false) => {
     const data = {
         level: level,
         trainer: trainer,
-        save:save
+        save:save,
     }
     console.log("datass", data);
     const result = await fetchData(`/api/pokemon/fetch/${id}`, "get", data);
@@ -89,26 +89,26 @@ const getWildPokemon = async (maxLevel) => {
         const pokemonLevel = Math.min(maxLevel, multiplier);
         //const pokemonLevel = 1;
         const id = "random";
-        const pokemonData = await getPokemon(id, pokemonLevel);
+        const pokemonData = await getPokemon(id,pokemonLevel,);
         return pokemonData;
     } catch (error) {
         console.error(error);
         return {error: "No ha habido suerte buscando pokemons salvajes"}
     }
 }
-const getRandomTrainerPokemons = async (numOfPokemons,maxLevel) => {
+const getRandomTrainerPokemons = async (numOfPokemons,maxLevel,zone) => {
     const pokemons = [];
     for (let i = 0; i < numOfPokemons; i++) {
         const randomLevel = Math.max(1, Math.floor(maxLevel * 0.75 + Math.random() * maxLevel * 0.50));
-        pokemons.push(getPokemon(null, randomLevel, true));
+        pokemons.push(getPokemon(null,randomLevel, true));
     }
     return await Promise.all(pokemons);
 
 }
-const getTrainerPokemons = async (pokemons=null,maxQuantity=6,maxLevel=10) => {
+const getTrainerPokemons = async (pokemons=null,zone,maxQuantity=6,maxLevel=10) => {
     if (pokemons === null) {
         const n = Math.min(6, Math.floor(Math.random() * maxQuantity) + 2);
-        return  await getRandomTrainerPokemons(n,maxLevel);
+        return  await getRandomTrainerPokemons(n,maxLevel,zone);
     }
     const newPokemons = await Promise.all(pokemons.map(async (pokemon) => {
         return  await getPokemon(pokemon.id, pokemon.level, true,true);
@@ -161,9 +161,21 @@ const getTypes = async () => {
     const data = await fetchData("/api/pokemon/types", "get");
     return data;
 }
+const getZones = async () => {
+    const data = await fetchData("/api/zone", "get");
+    return data;
+}
+const getZone = async (id) => {
+    const data = await fetchData("/api/zone/" + id, "get");
+    return data;
+}
 const setMaxLevel = async (maxLevel) => {
     console.log("maxLevel", maxLevel);
     const data = await fetchData("/api/user/maxlevel", "put", { maxLevel });
+    return data;
+}
+const setZone = async (zone) => {
+    const data = await fetchData("/api/user/zone", "put", { zone:zone.name });
     return data;
 }
 export {
@@ -191,5 +203,8 @@ export {
     createGym,
     updateGym,
     getTypes,
+    getZones,
+    getZone,
+    setZone,
     setMaxLevel
 }

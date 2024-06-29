@@ -1,0 +1,10 @@
+.zones {
+    background-color: #f5f5f5cc;
+}
+.zone-list{
+    display: flex;
+    gap:1rem;
+    &:hover{
+        cursor: pointer;
+    }
+}

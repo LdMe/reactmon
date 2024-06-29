@@ -5,6 +5,8 @@ import loggedInContext from '../../context/loggedInContext';
 import PokemonCarousel from '../pokemon/carousel/PokemonCarousel';
 import TypeSelector from '../types/TypeSelector';
 import Pokemon from '../pokemon/PokemonComponent';
+
+import "./Pokedex.scss";
 const Pokedex = ({ onFinish }) => {
 
     const [templatePokemons, setTemplatePokemons] = useState([]);
@@ -27,6 +29,7 @@ const Pokedex = ({ onFinish }) => {
         }
     };
     const handleChangeFilterTypes = (types) => {
+        setSelectedPokemon(null);
         setFilterTypes(types);
     }
     const isCaptured = (pokemon) => {
@@ -43,7 +46,8 @@ const Pokedex = ({ onFinish }) => {
             return true;
         }
         console.log("type", pokemon.types)
-        return filterTypes.some((type) => pokemon.types.includes(type.name));
+        const typeNames = pokemon.types.map((type) => type.name || type);
+        return filterTypes.some((type) => typeNames.includes(type.name));
     })
     const selectedPokeball = selectedPokemon && getPokeball(selectedPokemon);
     return (
@@ -69,6 +73,7 @@ const Pokedex = ({ onFinish }) => {
                     fullInfo={true}
                     showHp={false}
                     children={selectedPokeball}
+                    defaultClassName='full-size'
                 />
             }
             <section className="pokemon-buttons button-footer">

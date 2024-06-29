@@ -49,7 +49,7 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
             {fullInfo &&
                 <section className="pokemon-actions full">
                    {data.types.length && <Types types={handleTypes(data.types)} /> }
-                    {data.activeMoves.lengt && <Moves moves={data.activeMoves} />}
+                    {data.activeMoves.length && <Moves moves={data.activeMoves} />}
                     <Stats stats={data.stats} />
                 </section>
             }

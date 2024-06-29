@@ -10,6 +10,7 @@ import TrainerCombat from "../views/TrainerCombat";
 import GymsView from "../views/GymsView";
 import AdminView from "../views/admin/Admin";
 import Pokedex from "../components/pokedex/Pokedex";
+import Zones from "../components/zone/Zones";
 
 const gameStates = {
     "choose": {
@@ -47,6 +48,9 @@ const gameStates = {
     },
     "pokedex": {
         component: Pokedex
+    },
+    "zone": {
+        component: Zones
     }
 }
 
