@@ -146,6 +146,10 @@ const getGyms = async () => {
     const data = await fetchData("/api/gyms/", "get");
     return data;
 }
+const getGymByZone = async () => {
+    const data = await fetchData("/api/gyms/zone", "get");
+    return data;
+}
 
 const createGym = async (gym) => {
     const data = await fetchData("/api/gyms/", "post", gym);
@@ -200,6 +204,7 @@ export {
     getUsers,
     getTemplatePokemons,
     getGyms,
+    getGymByZone,
     createGym,
     updateGym,
     getTypes,

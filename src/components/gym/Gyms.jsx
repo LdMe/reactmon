@@ -1,30 +1,30 @@
 import { useEffect, useState } from "react"
-import { getGyms} from "../../utils/fetchPokemons"
+import { getGyms, getGymByZone } from "../../utils/fetchPokemons"
 import Type from "../types/Type";
 
 import './Gym.css';
 
-const Gyms = ({onSelect}) => {
+const Gyms = ({ onSelect }) => {
 
-    const [gyms, setGyms] = useState([]);
+    const [gym, setGym] = useState(null);
     useEffect(() => {
-        getGyms().then((data) => {
-            console.log("data", data);
-            setGyms(data);
-        });
+        handleGetGyms();
     }, []);
-console.log("gyms", gyms)
+    const handleGetGyms = async () => {
+        const data = await getGymByZone();
+        console.log("gym data", data);
+        setGym(data);
+    }
+    if(!gym) return null;
     return (
         <div className="gyms">
-            <h1>Gimnasios</h1>
-            {gyms.map((gym) => (
-                <div className="gym-instance" key={gym._id} onClick={() => onSelect(gym)}>
-                    <h3>{gym.name}</h3>
-                    <p>Entrenadores: {gym.trainers.length}</p>
-                    <p>Tipos: {gym.types.map((t) => <Type key={t.name} type={t} />)}</p>
-                    <p>Nivel maximo: {gym.maxLevel}</p>
-                </div>
-            ))}
+            <h1>Gimnasio</h1>
+            <div className="gym-instance" key={gym._id} onClick={() => onSelect(gym)}>
+                <h3>{gym.name}</h3>
+                <p>Entrenadores: {gym.trainers.length}</p>
+                <p>Tipos: {gym.types.map((t) => <Type key={t.name} type={t} />)}</p>
+                <p>Nivel maximo: {gym.maxLevel}</p>
+            </div>
         </div>
     )
 }
