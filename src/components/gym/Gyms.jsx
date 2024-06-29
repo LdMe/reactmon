@@ -13,9 +13,11 @@ const Gyms = ({ onSelect }) => {
     const handleGetGyms = async () => {
         const data = await getGymByZone();
         console.log("gym data", data);
-        setGym(data);
+        if(data && !data.error){
+            setGym(data);
+        }
     }
-    if(!gym) return null;
+    if(!gym) return <p>Esta zona no tiene gimnasios</p>
     return (
         <div className="gyms">
             <h1>Gimnasio</h1>

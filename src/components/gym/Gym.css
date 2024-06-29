@@ -1,6 +1,8 @@
 
 .gym,.gyms {
     background-color: #ffffffc1;
+    overflow-y: auto;
+    padding-bottom: 5rem;
 }
 
 .gym-instance{

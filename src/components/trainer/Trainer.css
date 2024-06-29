@@ -24,9 +24,14 @@
 .trainer {
     width: 100%;
 }
+.trainer-show{
+    overflow-y: auto;
+}
 .trainer__pokemons {
     display: flex;
     overflow-x: auto;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
+    overflow-x:auto;
     width: 100%;
 }

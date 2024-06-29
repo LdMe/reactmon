@@ -7,7 +7,7 @@ const Trainer = ({ trainer, onDelete, onSelect }) => {
             <h2>{trainer.name}</h2>
             <p>{trainer.pokemons.length} / 6</p>
             <div className="trainer__pokemons">
-                {trainer.pokemons.map((pokemon) => <Pokemon key={pokemon._id} data={pokemon}  isCombat={false} showJustLevel={true}/>)}
+                {trainer.pokemons.map((pokemon) => <Pokemon key={pokemon._id} data={pokemon}  isCombat={false} showJustLevel={true} showHp={false}/>)}
             </div>
             <div className="trainer__buttons">
                 <button onClick={() => onSelect(trainer)}>Editar</button>

@@ -8,6 +8,7 @@ import './Zone.scss';
 
 const Zone = ({ name, onFinish }) => {
     const [zone, setZone] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         getZone(name).then(data => {
             console.log("zone", data);
@@ -27,15 +28,18 @@ const Zone = ({ name, onFinish }) => {
             <h2>Zona: {zone.name}</h2>
             <h3>Habitat: {zone && <Habitat habitat={zone.habitat} />}</h3>
             
-
-            {/* <Modal>
+            {showModal ?
+            <Modal onClose={() => setShowModal(false)}>
                 <>
                     <h3>Pokemons:</h3>
                     {zone?.pokemon_species?.map((pokemon) => (
                         <p>{pokemon}</p>
                     ))}
                 </>
-            </Modal> */}
+            </Modal>
+            :
+            <button onClick={() => setShowModal(true)}>Pokemons</button>
+            }
             {zone &&
                 <>
                     <h3>Gimnasio</h3>
