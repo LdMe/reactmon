@@ -11,7 +11,7 @@ const Map = ({ onFinish }) => {
     }, []);
     return (
         <section className="map">
-            <h2>Zona: {zone}</h2>
+            {zone &&<h2>Zona: {zone}</h2>}
             <section className={"pokemon-buttons " + (isLogged ? "" : "button-footer")}>
                 {isLogged ?
                     <>

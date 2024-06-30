@@ -2,9 +2,9 @@
 import Pokemon from '../pokemon/PokemonComponent';
 import './Combat.css';
 const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = true, isPlayerTurn = true, buttons = [] }) => {
-    const style = {
+    /* const style = {
         backgroundImage: "url(/forest.jpg)"
-    }
+    } */
     const handleAttack = () => {
         if (!isPlayerTurn) {
             return;
@@ -18,7 +18,7 @@ const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = tru
         }
     }
     return (
-        <section className="combat" style={style}>
+        <section className="combat" >
             <Pokemon data={enemyPokemon} isEnemy={true} isCombat={true} />
             <Pokemon data={playerPokemon} isFront={false} isCombat={true}/>
             <section className="button-footer">

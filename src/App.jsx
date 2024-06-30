@@ -240,7 +240,7 @@ function App() {
 
   const GameStateComponent = gameStates[currentGameState].component;
   return (
-    <div className={`App ${currentGameState}`} >
+    <div className={`App ${currentGameState} ${user?.zone?.toLowerCase().replace(/\s/g, "-")}`} >
       <loggedInContext.Provider value={loggedInContextValue}>
         <SocketContext.Provider value={socket}>
           <PokemonContext.Provider value={pokemonContextValue}>
