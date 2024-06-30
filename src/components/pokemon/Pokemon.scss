@@ -79,7 +79,7 @@
     // width: 100%;
     background-color: #ffffffd5;
     & .combat-info {
-      width: 20vw;
+      // width: 20vw;
       & h2{
         width: 100%;
         text-align: center;
@@ -95,13 +95,28 @@
   &.disabled {
     filter: grayscale(100%);
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
 
     min-width:35%;
     &.full-info{
       width: 80%;
     }
     
+  }
+  @media screen and (min-width: 640px) {
+
+    min-width:20%;
+    &.full-info{
+      width: 50%;
+    }
+    
+  }
+  @media screen and (min-width: 1024px) {
+
+    min-width:10%;
+    &.full-info{
+      width: 30%;
+    }
     
   }
 }
@@ -118,7 +133,7 @@
   gap: 10px;
   padding-top:0;
   width: 50%;
-  & img {
+  & > img {
     width:5rem;
     height: auto;
     margin: auto;
@@ -196,8 +211,8 @@
 }
 
 
-@media screen and (max-width: 640px) {
+/* @media screen and (max-width: 640px) {
   .no-combat .combat-info h2 {
     font-size: 0.8em;
   }
-}
+} */

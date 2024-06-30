@@ -201,6 +201,8 @@ function App() {
     healPokemons: handleHealPokemons,
     getMisPokemons,
     setPokemons: handleSetPokemons,
+    seenPokemons: user?.seenPokemons,
+    capturedPokemons: user?.capturedPokemons,
     zone: user?.zone
   }
   const login = (user) => {

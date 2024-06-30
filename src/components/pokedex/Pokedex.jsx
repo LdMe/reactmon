@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 
 import { getTemplatePokemons } from '../../utils/fetchPokemons';
-import loggedInContext from '../../context/loggedInContext';
+import pokemonContext from '../../context/pokemonContext';
 import PokemonCarousel from '../pokemon/carousel/PokemonCarousel';
 import TypeSelector from '../types/TypeSelector';
 import Pokemon from '../pokemon/PokemonComponent';
@@ -13,13 +13,12 @@ const Pokedex = ({ onFinish }) => {
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [filterTypes, setFilterTypes] = useState([]);
     const [loaded, setLoaded] = useState(false);
-    const { user } = useContext(loggedInContext);
+    const { seenPokemons,capturedPokemons } = useContext(pokemonContext);
     useEffect(() => {
         getPokemons();
     }, []);
 
     const getPokemons = async () => {
-        const seenPokemons = user.seenPokemons;
         console.log("seenPokemons", seenPokemons);
         const pokemons = await getTemplatePokemons(seenPokemons);
         console.log("pokemons", pokemons);
@@ -33,7 +32,7 @@ const Pokedex = ({ onFinish }) => {
         setFilterTypes(types);
     }
     const isCaptured = (pokemon) => {
-        return user.capturedPokemons.includes(parseInt(pokemon.id));
+        return capturedPokemons.includes(parseInt(pokemon.id));
     }
     const getPokeball = (pokemon) => {
         if (isCaptured(pokemon)) {

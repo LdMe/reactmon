@@ -4,10 +4,12 @@ import Moves from "../moves/Moves";
 import Types from "../types/Types";
 import Stats from "../stats/Stats";
 import loggedInContext from "../../context/loggedInContext";
+import pokemonContext from "../../context/pokemonContext";
 import './Pokemon.scss';
-const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false}) => {
+const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false,showPokeball = false}) => {
     const [loaded, setLoaded] = useState(false);
     const {getMaxLevel, setMaxLevel} = useContext(loggedInContext);
+    const {capturedPokemons} = useContext(pokemonContext);
     let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (showHp ? " hp" : "no-hp") + (fullInfo ? " full-info" : "") + (isCombat ? " combat" : "") + (isEnemy ? " enemy" : "");
     /* if(!loaded){
         className += " hidden";
@@ -28,10 +30,20 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
         }
     }
     let image = data.sprites[frontOrBack];
+    const isCaptured = (pokemon) => {
+        return capturedPokemons.includes(parseInt(pokemon.id));
+    }
+    const getPokeball = (pokemon) => {
+        if (isCaptured(pokemon)) {
+            return <img className={"pokeball-button small"} src="/pokeball.svg" alt="capturado" title='capturado' />
+        }
+        return <img className={"pokeball-button disabled small"} src="/pokeball.svg" alt="no capturado" title='no capturado' />
+    }
     return (
         <article className={className + (loaded ? "" : " hidden")} onClick={onClick} >
             <section className="combat-info">
-                <h2>{data.name}</h2>
+                <h3>{data.name} {showPokeball && getPokeball(data)}</h3>
+                
                 {showHp &&
                     <>
                         <div className="combat-info__stats">

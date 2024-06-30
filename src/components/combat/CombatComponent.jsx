@@ -19,7 +19,7 @@ const Combat = ({ playerPokemon, enemyPokemon, onAttack, onFinish, canExit = tru
     }
     return (
         <section className="combat" >
-            <Pokemon data={enemyPokemon} isEnemy={true} isCombat={true} />
+            <Pokemon data={enemyPokemon} isEnemy={true} isCombat={true} showPokeball={true}/>
             <Pokemon data={playerPokemon} isFront={false} isCombat={true}/>
             <section className="button-footer">
                 <section className={"action-buttons" + (!canExit && buttons.length === 0 ? " center" : "")}>
