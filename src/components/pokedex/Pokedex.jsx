@@ -31,15 +31,7 @@ const Pokedex = ({ onFinish }) => {
         setSelectedPokemon(null);
         setFilterTypes(types);
     }
-    const isCaptured = (pokemon) => {
-        return capturedPokemons.includes(parseInt(pokemon.id));
-    }
-    const getPokeball = (pokemon) => {
-        if (isCaptured(pokemon)) {
-            return <img className={"pokeball-button"} src="/pokeball.svg" alt="capturado" title='capturado' />
-        }
-        return <img className={"pokeball-button disabled"} src="/pokeball.svg" alt="no capturado" title='no capturado' />
-    }
+    
     const filteredPokemons = templatePokemons.filter((pokemon) => {
         if (filterTypes.length === 0) {
             return true;
@@ -48,7 +40,6 @@ const Pokedex = ({ onFinish }) => {
         const typeNames = pokemon.types.map((type) => type.name || type);
         return filterTypes.some((type) => typeNames.includes(type.name));
     })
-    const selectedPokeball = selectedPokemon && getPokeball(selectedPokemon);
     return (
         <div className="pokedex">
 
@@ -58,8 +49,8 @@ const Pokedex = ({ onFinish }) => {
                     ? <PokemonCarousel
                         pokemons={filteredPokemons}
                         showHp={false}
-                        children={getPokeball}
                         onSelect={setSelectedPokemon}
+                        showPokeball={true}
                     />
                     : <h1>Cargando pokemons...</h1>
             }
@@ -71,7 +62,7 @@ const Pokedex = ({ onFinish }) => {
                     isCombat={true}
                     fullInfo={true}
                     showHp={false}
-                    children={selectedPokeball}
+                    showPokeball={true}
                     defaultClassName='full-size'
                 />
             }

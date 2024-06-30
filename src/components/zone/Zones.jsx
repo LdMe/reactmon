@@ -22,17 +22,25 @@ const Zones = ({ onFinish }) => {
         setZone(zone);
         onFinish("map");
     }
-
+    const getZoneImage = (zone) => {
+        const lowerCaseZone = zone.name.toLowerCase();
+        const zoneName = lowerCaseZone.replace(/\s/g, "-");
+        return `/${zoneName}.png`
+    }
     return (
         <section className="zones">
             <section className="zone-list">
                 {zones.map((zone) => (
                     < article key={zone.name} onClick={() => handleSelect(zone)} className={(zone.gym && zone.gym.maxLevel > getMaxLevel() ? "disabled" : "")}>
                         <p>{zone.name}</p>
-                        <Habitat habitat={zone.habitat} />
+                        <img className="zone-image" src={getZoneImage(zone)} />
+                        {/* <Habitat habitat={zone.habitat} /> */}
                         {zone.gym && <p>Nivel máximo: <span className={(zone.gym.maxLevel > getMaxLevel() ? "max" : "")}>{zone.gym.maxLevel}</span></p>}
                     </article>
                 ))}
+            </section>
+            <section className="pokemon-buttons button-footer">
+                <button onClick={() => onFinish("map")}>Volver</button>
             </section>
 
         </section>
