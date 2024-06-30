@@ -52,7 +52,7 @@ const trainerCreator = ({ onFinish,types,onClose=null,oldTrainer = null }) => {
         onFinish(trainerData);
     }
     const handlePokemonLevelChange = (index, level) => {
-        console.log("index", index, "level", level)
+
         if (level < 1 || level > 100) {
             return;
         }
@@ -67,7 +67,7 @@ const trainerCreator = ({ onFinish,types,onClose=null,oldTrainer = null }) => {
     }
     const handleClose = () => {
         setIsOpen(false);
-        console.log("onClose", onClose);
+
         onClose && onClose();
     }
     return (

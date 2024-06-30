@@ -12,7 +12,7 @@ const Gyms = ({ onSelect }) => {
     }, []);
     const handleGetGyms = async () => {
         const data = await getGymByZone();
-        console.log("gym data", data);
+
         if(data && !data.error){
             setGym(data);
         }

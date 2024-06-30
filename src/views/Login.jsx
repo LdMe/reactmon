@@ -8,6 +8,7 @@ const Login = ({ onFinish }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [ironMan, setIronMan] = useState(false);
     const { login } = useContext(loggedInContext);
 
     const handleLogin = async () => {
@@ -36,7 +37,7 @@ const Login = ({ onFinish }) => {
                 alert(data.error);
             }
             else {
-                console.log("user", data.user);
+
                 login(data.user);
                 onFinish("map");
             }
@@ -58,7 +59,7 @@ const Login = ({ onFinish }) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, password, passwordConfirm })
+                body: JSON.stringify({ username, password, passwordConfirm, ironMan })
             });
             if (response.status === 401) {
                 throw new Error("La contraseña no coincide");
@@ -88,6 +89,8 @@ const Login = ({ onFinish }) => {
                     <>
                         <label htmlFor="passwordConfirm">Confirmar Contraseña</label>
                         <input type="password" id="passwordConfirm" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+                        <label htmlFor="ironMan" title="Si tus pokemons se debilitan, empiezas de 0">Iron Man</label>
+                        <input type="checkbox" id="ironMan" checked={ironMan} onChange={(e) => setIronMan(e.target.checked)} />
                     </>
                 }
                 <button type="button" onClick={isRegister ? handleRegister : handleLogin}>{isRegister ? "Registrarse" : "Login"}</button>

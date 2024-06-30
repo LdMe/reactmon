@@ -17,7 +17,7 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
         frontOrBack = isFront ? "front_shiny" : "back_shiny";
     }
     const handleTypes = (types) => {
-        console.log("handle types",types)
+
         if(types.length > 0){
             if(!types[0].name){
                 return types.map((type) => {

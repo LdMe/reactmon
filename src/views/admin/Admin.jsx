@@ -14,7 +14,7 @@ const AdminView = ({ onFinish }) => {
     const { getUserRole } = useContext(loggedInContext);
 
     useEffect(() => {
-        console.log(getUserRole());
+
         if (getUserRole() !== "admin") {
             onFinish("login");
             return;
@@ -42,7 +42,7 @@ const AdminView = ({ onFinish }) => {
 
     }
     const handleGymClick = (gym) => {
-        console.log("gym", gym);
+
         setSelectedGym(gym);
     }
 

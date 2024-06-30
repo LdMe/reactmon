@@ -74,7 +74,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         const numMyPokemons = misPokemons.length;
         const maxLevel = Math.max(...misPokemons.map((pokemon) => pokemon.level));
         const trainerPokemons = await getTrainerPkmns(pokemons,zone,numMyPokemons,maxLevel,);
-        console.log("trainerPokemons", trainerPokemons);
+
         setTrainer({ pokemons: trainerPokemons });
     }
     const handleAttack = async () => {
@@ -121,7 +121,7 @@ const TrainerCombat = ({ pokemons = null, onFinish }) => {
         setIsWaiting(false);
     }
     const handleWaitNextTurn = () => {
-        console.log("waiting next turn");
+
         setIsWaiting(true);
         setIsPlayerTurn(false);
     }

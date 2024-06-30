@@ -37,7 +37,7 @@ const GymEditor = ({ onFinish, onCreate=null,originalGym = null , zone=null}) =>
             types,
             zone
         }
-        console.log("gymData", gymData);
+
         let data = null;
         if (gymId !== null) {
             gymData._id = gymId;
@@ -46,7 +46,7 @@ const GymEditor = ({ onFinish, onCreate=null,originalGym = null , zone=null}) =>
         else {
             data = await createGym(gymData);
         }
-        console.log("data", data)
+
         if (data.error) {
             alert(data.error);
             return;

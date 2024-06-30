@@ -9,7 +9,7 @@ const Zones = ({ onFinish }) => {
     const {refreshUserData} = useContext(loggedInContext);
     useEffect(() => {
         getZones().then(data => {
-            console.log("zones data", data);
+
             setZones(data);
         })
     }, [])

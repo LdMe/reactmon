@@ -27,11 +27,11 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disable
     const handleGetPc = async () => {
         try {
             const pokemons = await getPc();
-            console.log("pokemons", pokemons);
+
             setPcPokemons(pokemons);
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     const handlePokemonClick = async (pokemon) => {
@@ -69,7 +69,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disable
             if (pcPokemonsIndex !== -1) {
                 const { error, savedPokemons } = await removeFromPc(selectedPokemon);
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                     setWaitingOrDisabled(false);
                     return;
                 }
@@ -99,7 +99,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disable
         const { error, savedPokemons } = await saveToPc(pokemon);
         if (error) {
             alert(error);
-            console.log(error);
+            console.error(error);
             setWaitingOrDisabled(false);
             return;
         }
@@ -113,7 +113,7 @@ const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disable
         filteredPokemons = filteredPokemons.filter((pokemon) => pokemon._id !== misPokemons[0]._id);
     }
     const getPokemonManagementButtons = (pokemon) => {
-        console.log("manage pokemon",pokemon);
+
         if (isView) {
             return (
                 <section className="pokemon-buttons">

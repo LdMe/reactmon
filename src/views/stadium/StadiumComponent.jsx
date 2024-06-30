@@ -37,34 +37,34 @@ const Stadium = ({ onFinish }) => {
             return;
         }
         const handleConnect = () => {
-            console.log("connected");
+
         }
         const handleDisconnect = () => {
-            console.log("disconnected");
+
         }
         function handleNewMessage(message) {
-            console.log(message);
+
         }
         function handleNewUser(user) {
-            console.log(user);
+
         }
         function handleUserLeft(username) {
-            console.log("usuario ha entrado:", username);
+
             setUsers(users.filter((u) => u !== username));
         }
         function handleUserJoined(username) {
-            console.log("usuario ha entrado:", username);
+
             setUsers(users => [...users, username]);
         }
         function handleUserList(users) {
-            console.log(users);
+
         }
         const handleUsers = (users) => {
-            console.log(users);
+
             setUsers(users.filter((user) => user !== myUsername));
         }
         const handleAskToFight = async(username) => {
-            console.log("ask to fight", username)
+
             if (confirm(`El usuario ${username} quiere luchar`)) {
                 socket.emit("accept-fight", { room: "main", username });
                 await setRival(username);
@@ -76,7 +76,7 @@ const Stadium = ({ onFinish }) => {
             }
         }
         const handleAcceptFight = async (username) => {
-            console.log("accept fight", username)
+
             alert(`El usuario ${username} ha aceptado luchar`);
             await setRival(username);
             setIsCombat(true);

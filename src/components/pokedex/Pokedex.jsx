@@ -19,9 +19,9 @@ const Pokedex = ({ onFinish }) => {
     }, []);
 
     const getPokemons = async () => {
-        console.log("seenPokemons", seenPokemons);
+
         const pokemons = await getTemplatePokemons(seenPokemons);
-        console.log("pokemons", pokemons);
+
         if (pokemons.length > 0) {
             setTemplatePokemons(pokemons);
             setLoaded(true);
@@ -36,7 +36,7 @@ const Pokedex = ({ onFinish }) => {
         if (filterTypes.length === 0) {
             return true;
         }
-        console.log("type", pokemon.types)
+
         const typeNames = pokemon.types.map((type) => type.name || type);
         return filterTypes.some((type) => typeNames.includes(type.name));
     })

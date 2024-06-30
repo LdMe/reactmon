@@ -13,7 +13,7 @@ const GymCombat = ({gym,onFinish}) => {
         }
     }, [trainerIndex]);
     const handleChangeTurn = () => {
-        console.log("cambio de turno" , trainerIndex);
+
         if(trainerIndex === gym.trainers.length - 1) {
             alert(`Has superado el gimnasio ${gym.name}!`);
             setMaxLevelApi(gym.maxLevel + 10);

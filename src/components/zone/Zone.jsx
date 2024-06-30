@@ -11,7 +11,7 @@ const Zone = ({ name, onFinish }) => {
     const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         getZone(name).then(data => {
-            console.log("zone", data);
+
             setZone(data);
         })
     }, [name])

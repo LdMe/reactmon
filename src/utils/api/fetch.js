@@ -25,7 +25,7 @@ const fetchData = async(route,method,inputData=null)=>{
         const data  = await result.json();
         return data;
     } catch (error) {
-        console.log("error",error);
+        console.error("error",error);
         return ({error:error.message})
     }
 }
@@ -33,7 +33,7 @@ function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
         return response;
     } else {
-        console.log("response",response);
+
         const error = new Error(response.statusText);
         error.response = response;
         error.status = response.status;

@@ -13,7 +13,7 @@ const Zones = ({ onFinish }) => {
     }, [])
     const handleSelect = (zone) => {
         setZone(zone);
-        console.log("selected zone", zone);
+
         setSelectedZone(zone);
     }
     return (

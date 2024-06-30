@@ -12,7 +12,7 @@ const getPokemons = async () => {
 
 const getStarters = async () => {
     const data = await fetchData("/api/pokemon/starter", "get");
-    console.log("data", data);
+
     return data;
 }
 
@@ -23,9 +23,9 @@ const getPokemon = async (id = null, level = 5, trainer = false,save=false) => {
         trainer: trainer,
         save:save,
     }
-    console.log("datass", data);
+
     const result = await fetchData(`/api/pokemon/fetch/${id}`, "get", data);
-    console.log("result", result);
+
     return result;
 }
 
@@ -174,12 +174,16 @@ const getZone = async (id) => {
     return data;
 }
 const setMaxLevel = async (maxLevel) => {
-    console.log("maxLevel", maxLevel);
+
     const data = await fetchData("/api/user/maxlevel", "put", { maxLevel });
     return data;
 }
 const setZone = async (zone) => {
     const data = await fetchData("/api/user/zone", "put", { zone:zone.name });
+    return data;
+}
+const resetUser = async () => {
+    const data = await fetchData("/api/user/reset", "put");
     return data;
 }
 export {
@@ -211,5 +215,6 @@ export {
     getZones,
     getZone,
     setZone,
-    setMaxLevel
+    setMaxLevel,
+    resetUser
 }

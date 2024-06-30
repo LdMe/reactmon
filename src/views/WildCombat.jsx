@@ -17,7 +17,7 @@ const WildCombat = ({ onFinish }) => {
      * Al finalizar la pelea, se limpia el combate
      */
     useEffect(() => {
-        getMisPokemons();
+        //getMisPokemons();
         getWildPokemon();
         return () => {
             clearFight();
@@ -112,7 +112,7 @@ const WildCombat = ({ onFinish }) => {
         setIsWaiting(false);
     }
     const handleWaitNextTurn = () => {
-        console.log("waiting next turn");
+
         setIsWaiting(true);
         setIsPlayerTurn(false);
     }

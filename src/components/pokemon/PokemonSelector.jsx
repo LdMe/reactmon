@@ -33,7 +33,7 @@ const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
         setSelectedPokemon(pokemon);
     }
     const filterByType = (pokemons) => {
-        console.log("types", types);
+
         const reducedTypes = types.map((type) => type.name || type);
         if(reducedTypes.length === 0){
             return pokemons;
@@ -41,7 +41,7 @@ const PokemonSelector = ({onFinish, pokemons=null,types=[]}) => {
         return pokemons.filter((pokemon) => reducedTypes.some((type) => pokemonHasType(pokemon,type)));
     }
     const pokemonHasType = (pokemon,type) => {
-        console.log("pokemonHasType", pokemon.types, type);
+
         return pokemon.types.some((pokemonType) => (pokemonType.name || pokemonType) === (type.name || type));
     }
     const handleNext = () => {

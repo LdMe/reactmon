@@ -8,7 +8,7 @@ const PokemonCarousel = ({pokemons,className="pokemon-container",pokemonClassNam
         <section className={className}>
         {pokemons.map((pokemon) => (
             <Pokemon
-                key={pokemon._id}
+                key={pokemon._id || pokemon.id}
                 data={pokemon}
                 onClick={() => onSelect(pokemon)}
                 isCombat={isCombat}

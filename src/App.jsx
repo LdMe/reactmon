@@ -5,7 +5,7 @@ import PokemonContext from './context/pokemonContext';
 import loggedInContext from './context/loggedInContext';
 import dialogContext from './context/dialogContext';
 import misPokemonsReducer from './reducers/MispokemonsReducer';
-import { addPokemon, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons,getUserData } from './utils/fetchPokemons';
+import { addPokemon, healPokemons, addLevel, swapPokemons, removePokemon, getPokemons, getUserData, resetUser } from './utils/fetchPokemons';
 
 import socket from './utils/socket';
 import SocketContext from './context/socketContext';
@@ -14,7 +14,6 @@ function App() {
 
   const [error, setError] = useState("");
   const [currentGameState, setCurrentGameState] = useState("map");
-  const [hardcoreMode, setHardcoreMode] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
@@ -33,6 +32,8 @@ function App() {
   }, [isLogged]);
 
   useEffect(() => {
+
+    getMisPokemons();
     if (misPokemons.length !== 0 && misPokemons.filter((pokemon) => pokemon.hp > 0).length === 0) {
       setCurrentGameState("heal");
     }
@@ -61,7 +62,7 @@ function App() {
         }
         return [];
       }
-      
+
       if (!Array.isArray(pokemons)) {
         return [];
       }
@@ -158,13 +159,16 @@ function App() {
     if (alivePokemons.length === 0) {
       return new Promise((resolve) => {
         setTimeout(async () => {
-          if (hardcoreMode) {
-            alert("Has perdido todos tus pokemons");
-            //
+
+          alert("Tus pokemons se han desmayado");
+
+          if (user.ironMan) {
+            await resetUser();
+            await handleGetUserData();
             handleStateChange("choose");
+            return null;
           }
           else {
-            alert("Tus pokemons se han desmayado");
             //await handleSetPokemons(pokemons);
             handleStateChange("heal");
           }
@@ -229,7 +233,7 @@ function App() {
   const getUserRole = () => {
     return user?.role || localStorage.getItem("role");
   }
-  
+
   const loggedInContextValue = {
     user,
     isLogged,

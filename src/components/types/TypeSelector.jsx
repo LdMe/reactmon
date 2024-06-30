@@ -6,7 +6,7 @@ const TypeSelector = ({ onChange, selectedTypes = [] }) => {
     const [types, setTypes] = useState([]);
     useEffect(() => {
         getTypes().then((types) => {
-            console.log("types", types);
+
             setTypes(types);
         })
     }, []);
