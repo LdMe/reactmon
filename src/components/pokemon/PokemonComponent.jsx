@@ -53,7 +53,7 @@ const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, 
                 }
                 {showJustLevel && <p>nivel: <span className={!isEnemy && (data.level >= getMaxLevel() ? "max" : "")}>{data.level}</span></p>}
             </section>
-            <section className="combat-info">
+            <section className="combat-info image">
                 <img src={image} alt={`imagen de ${data.name}`} onLoad={() => setLoaded(true)} />
             </section>
             {fullInfo &&

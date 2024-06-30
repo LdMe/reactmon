@@ -49,8 +49,6 @@ const AdminView = ({ onFinish }) => {
     return (
         <div className="admin-view">
             <section className="pokemon-navbar ">
-                <button onClick={() => setState("show-gym")}>Mostrar gimnasios</button>
-                <button onClick={() => setState("new-gym")}>Crear gimnasio</button>
                 <button onClick={() => setState("users")}>Usuarios</button>
                 <button onClick={() => setState("zones")}>Zonas</button>
                 <button onClick={() => setState("pokemons")}>Pokemons</button>
