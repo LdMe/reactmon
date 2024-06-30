@@ -120,6 +120,10 @@ body {
   background-image: url("/forest2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  & h2 {
+    background-color: #ffffffc1;
+    padding: 0.5rem;
+  }
 }
 
 .App.login {
