@@ -4,10 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import PokemonContext from "../context/pokemonContext";
 import Pokemon from "../components/pokemon/PokemonComponent";
 import { getPc, saveToPc, removeFromPc } from "../utils/fetchPokemons";
-import loggedInContext from "../context/loggedInContext";
 import PokemonCarousel from "../components/pokemon/carousel/PokemonCarousel";
+import pokemonContext from "../context/pokemonContext";
 const MisPokemons = ({ onFinish, isView = true, onUpdate, onUpdateStart, disabled = false ,isCombat = false}) => {
-    const { getMaxLevel } = useContext(loggedInContext);
+    const { getMaxLevel } = useContext(pokemonContext);
     const { misPokemons, swapPokemons, removePokemon, getMisPokemons } = useContext(PokemonContext);
     const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [pcPokemons, setPcPokemons] = useState([]);

@@ -1,10 +1,10 @@
 import TrainerCombat from "../../views/TrainerCombat";
 import {  useEffect, useState,useContext } from "react";
 import { setMaxLevel as setMaxLevelApi } from "../../utils/fetchPokemons"; 
-import loggedInContext from "../../context/loggedInContext";
+import pokemonContext from "../../context/pokemonContext";
 const GymCombat = ({gym,onFinish}) => {
     const [trainerIndex, setTrainerIndex] = useState(0);
-    const { setMaxLevel } = useContext(loggedInContext);
+    const { setMaxLevel } = useContext(pokemonContext);
 
     useEffect(() => {
         if (trainerIndex === gym.trainers.length) {

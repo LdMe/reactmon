@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { getZones, setZone } from '../../utils/fetchPokemons';
-import Habitat from '../habitat/Habitat';
 import Zone from './Zone';
+import ZoneCard from './ZoneCard';
 
 const Zones = ({ onFinish }) => {
     const [zones, setZones] = useState([]);
@@ -20,10 +20,7 @@ const Zones = ({ onFinish }) => {
         <section className="zones">
             <section className="zone-list">
                 {zones.map((zone) => (
-                    < article key={zone.name} onClick={() => handleSelect(zone)}>
-                        <p>{zone.name}</p>
-                        <Habitat habitat={zone.habitat} />
-                    </article>
+                    <ZoneCard key={zone.name} zone={zone} onClick={handleSelect} />
                 ))}
 
             </section>

@@ -3,13 +3,11 @@ import HealthBar from "../healthBar/HealthBar";
 import Moves from "../moves/Moves";
 import Types from "../types/Types";
 import Stats from "../stats/Stats";
-import loggedInContext from "../../context/loggedInContext";
 import pokemonContext from "../../context/pokemonContext";
 import './Pokemon.scss';
 const Pokemon = ({ data, onClick, isFront = true, showHp = true,isCombat=false, isSelected = false, isEnemy = false, showJustLevel = false, children, defaultClassName = "" ,fullInfo = false,showPokeball = false}) => {
     const [loaded, setLoaded] = useState(false);
-    const {getMaxLevel, setMaxLevel} = useContext(loggedInContext);
-    const {capturedPokemons} = useContext(pokemonContext);
+    const {capturedPokemons,getMaxLevel,} = useContext(pokemonContext);
     let className = "pokemon-card " + defaultClassName + (isSelected ? " selected" : "") + (isFront ? " " : " reverse") + (showHp ? " hp" : "no-hp") + (fullInfo ? " full-info" : "") + (isCombat ? " combat" : "") + (isEnemy ? " enemy" : "");
     /* if(!loaded){
         className += " hidden";

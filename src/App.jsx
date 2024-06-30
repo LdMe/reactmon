@@ -190,7 +190,12 @@ function App() {
   const handleSetPokemons = async (pokemons) => {
     dispatch({ type: "set", payload: pokemons });
   }
-
+  const getMaxLevel = () => {
+    return user.maxLevel;
+  }
+  const setMaxLevel = (level) => {
+    user.maxLevel = level;
+  }
   const pokemonContextValue = {
     misPokemons: misPokemons,
     addPokemon: handleAddPokemon,
@@ -200,6 +205,8 @@ function App() {
     swapPokemons: handleSwapPokemons,
     healPokemons: handleHealPokemons,
     getMisPokemons,
+    getMaxLevel,
+    setMaxLevel,
     setPokemons: handleSetPokemons,
     seenPokemons: user?.seenPokemons,
     capturedPokemons: user?.capturedPokemons,
@@ -222,12 +229,7 @@ function App() {
   const getUserRole = () => {
     return user?.role || localStorage.getItem("role");
   }
-  const getMaxLevel = () => {
-    return user.maxLevel;
-  }
-  const setMaxLevel = (level) => {
-    user.maxLevel = level;
-  }
+  
   const loggedInContextValue = {
     user,
     isLogged,
@@ -235,8 +237,6 @@ function App() {
     logout,
     getUserName,
     getUserRole,
-    getMaxLevel,
-    setMaxLevel,
     refreshUserData: handleGetUserData,
   }
 
