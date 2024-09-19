@@ -65,7 +65,7 @@ If you have any questions about the project or would like to connect, feel free 
 - Portfolio: https://lafuentedanel.com
 
 
-## Play Reactmon
+## 🎮 Play Reactmon
 
 You can play Reactmon here:
 
