@@ -1,6 +1,5 @@
 # Reactmon
 
-![Reactmon Logo](/api/placeholder/200/100)
 
 Reactmon is a web-based game inspired by Pokémon battles, bringing the excitement to your browser! This project is built with React and showcases modern web development techniques.
 
