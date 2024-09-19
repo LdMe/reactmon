@@ -64,11 +64,13 @@ If you have any questions about the project or would like to connect, feel free 
 - LinkedIn: https://www.linkedin.com/in/danel-lafuente/
 - Portfolio: https://lafuentedanel.com
 
----
+
 ## Play Reactmon
 
 You can play Reactmon here:
 
 - [https://reactmon.lafuentedanel.com](https://reactmon.lafuentedanel.com)
+
+---
 
 Enjoy your Pokémon battles in Reactmon! 🎉
